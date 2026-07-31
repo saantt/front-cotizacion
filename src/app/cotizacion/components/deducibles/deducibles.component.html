@@ -1,1 +1,65 @@
-<p>deducibles works!</p>
+<div>
+  <!-- Tabla de deducibles -->
+  <table>
+    <thead>
+      <tr>
+        <th>id_deducible</th>
+        <th>porcentaje</th>
+        <th>monto_minimo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of deducibles">
+        <td>#{{ d.id_deducible }}</td>
+        <td>{{ d.porcentaje }}</td>
+        <td>{{ d.monto_minimo }}</td>
+        <td>
+          <button (click)="ver(d)">Ver</button>
+          <button (click)="editar(d)">Editar</button>
+          <button (click)="eliminar(d)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button (click)="nuevo()">Nuevo deducible</button>
+
+  <!-- Formulario -->
+  <div *ngIf="modo">
+    <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
+    <span *ngIf="registroSeleccionado">registro #{{ registroSeleccionado.id_deducible }}</span>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+
+      <div>
+        <label>id_deducible</label>
+        <input type="text" [value]="registroSeleccionado?.id_deducible || 'autogenerado'" disabled>
+      </div>
+
+      <div>
+        <label>porcentaje *</label>
+        <input type="number" formControlName="porcentaje">
+        <div *ngIf="form.get('porcentaje')?.invalid && form.get('porcentaje')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>monto_minimo *</label>
+        <input type="number" formControlName="monto_minimo">
+        <div *ngIf="form.get('monto_minimo')?.invalid && form.get('monto_minimo')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div *ngIf="modo !== 'ver'">
+        <button type="submit">Guardar</button>
+        <button type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+
+      <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">Eliminar</button>
+
+    </form>
+  </div>
+</div>
