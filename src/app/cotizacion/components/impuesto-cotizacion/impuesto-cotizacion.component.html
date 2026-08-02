@@ -1,0 +1,100 @@
+<section class="impuestos-page">
+  <header class="page-header">
+    <div>
+      <h1>Impuestos de cotizacion</h1>
+      <p>Administra los impuestos asociados a las cotizaciones.</p>
+    </div>
+
+    <button type="button" class="primary" (click)="nuevo()">Nuevo impuesto</button>
+  </header>
+
+  <div class="alert error" *ngIf="error">{{ error }}</div>
+  <div class="alert success" *ngIf="mensaje">{{ mensaje }}</div>
+
+  <div class="content-grid">
+    <div class="table-panel">
+      <div class="table-status" *ngIf="cargando">Cargando impuestos...</div>
+
+      <table *ngIf="!cargando && impuestos.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cotizacion</th>
+            <th>Concepto</th>
+            <th>Valor</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let impuesto of impuestos">
+            <td>#{{ impuesto.idImpuestoCot }}</td>
+            <td>{{ impuesto.idCotizacion }}</td>
+            <td>{{ impuesto.concepto }}</td>
+            <td>{{ impuesto.valor | currency:'COP':'symbol-narrow':'1.2-2' }}</td>
+            <td class="actions">
+              <button type="button" (click)="ver(impuesto)">Ver</button>
+              <button type="button" (click)="editar(impuesto)">Editar</button>
+              <button type="button" class="danger" (click)="eliminar(impuesto)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="empty-state" *ngIf="!cargando && impuestos.length === 0">
+        No hay impuestos registrados.
+      </div>
+    </div>
+
+    <aside class="form-panel" *ngIf="modo">
+      <h2>{{ modo === 'crear' ? 'Nuevo impuesto' : (modo === 'editar' ? 'Editar impuesto' : 'Detalle del impuesto') }}</h2>
+      <span class="record-id" *ngIf="registroSeleccionado">Registro #{{ registroSeleccionado.idImpuestoCot }}</span>
+
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div class="field">
+          <label>ID impuesto</label>
+          <input type="text" [value]="registroSeleccionado?.idImpuestoCot || 'Autogenerado'" disabled>
+        </div>
+
+        <div class="field">
+          <label for="idCotizacion">ID cotizacion *</label>
+          <input id="idCotizacion" type="text" formControlName="idCotizacion" maxlength="50">
+          <small *ngIf="form.get('idCotizacion')?.hasError('required') && form.get('idCotizacion')?.touched">
+            El id de la cotizacion es obligatorio.
+          </small>
+          <small *ngIf="form.get('idCotizacion')?.hasError('maxlength')">
+            Maximo 50 caracteres.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="concepto">Concepto *</label>
+          <input id="concepto" type="text" formControlName="concepto" maxlength="50">
+          <small *ngIf="form.get('concepto')?.hasError('required') && form.get('concepto')?.touched">
+            El concepto es obligatorio.
+          </small>
+          <small *ngIf="form.get('concepto')?.hasError('maxlength')">
+            Maximo 50 caracteres.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="valor">Valor *</label>
+          <input id="valor" type="number" formControlName="valor" min="0.01" step="0.01">
+          <small *ngIf="form.get('valor')?.invalid && form.get('valor')?.touched">
+            El valor debe ser mayor que cero.
+          </small>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="primary" *ngIf="modo !== 'ver'" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" (click)="cancelar()">Cancelar</button>
+          <button type="button" class="danger" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">
+            Eliminar
+          </button>
+        </div>
+      </form>
+    </aside>
+  </div>
+</section>
