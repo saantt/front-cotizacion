@@ -1,3 +1,11 @@
-<app-form-datos-riesgo></app-form-datos-riesgo>
+<div class="crud-container">
 
-<app-list-datos-riesgos></app-list-datos-riesgos>
+    <app-list-datos-riesgos
+        (onSelect)="onRiesgoSeleccionado($event)">
+    </app-list-datos-riesgos>
+
+    <app-form-datos-riesgo
+        [datos]="riesgoSeleccionado">
+    </app-form-datos-riesgo>
+
+</div>

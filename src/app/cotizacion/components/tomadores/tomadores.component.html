@@ -1,176 +1,376 @@
-<div class="main-container">
+<div class="crud-container">
 
-  <!-- TARJETA DEL FORMULARIO -->
-  <div class="card-form">
+    <!-- ==========================================
+         PANEL IZQUIERDO
+    =========================================== -->
 
-    <div class="card-header-custom">
-      <h3>👤 Gestión de Tomadores</h3>
-    </div>
+    <div class="table-panel">
 
-    <div class="card-body-custom">
-      <form (ngSubmit)="guardar()">
+        <!-- Barra Superior -->
 
-        <!-- GRID DEL FORMULARIO -->
-        <div class="form-grid">
+        <div class="toolbar">
 
-          <!-- FILA 1 -->
-          <div class="form-group col-4">
-            <label>Cédula</label>
-            <input
-              type="number"
-              (keydown)="bloquearTeclasInvalidas($event)"
-              class="form-control-custom"
-              [(ngModel)]="tomador.ccTomador"
-              name="cctomador"
-              placeholder="Ej: 12345678"
-              [disabled]="editando">
-          </div>
+            <h2>Tomadores</h2>
 
-          <div class="form-group col-8">
-            <label>Nombre</label>
             <input
               type="text"
-              class="form-control-custom"
-              [(ngModel)]="tomador.nombreTomador"
-              name="nombreTomador"
-              placeholder="Nombre completo">
-          </div>
+              class="search"
+              placeholder="Buscar tomador...">
 
-          <!-- FILA 2 -->
-          <div class="form-group col-6">
-            <label>Email</label>
-            <input
-              type="email"
-              class="form-control-custom"
-              [(ngModel)]="tomador.email"
-              name="email"
-              placeholder="correo@ejemplo.com">
-          </div>
+            <button class="btn-filter">
+                Filtros ▼
+            </button>
 
-          <div class="form-group col-6">
-            <label>Teléfono</label>
-            <input
-              type="number"
-              (keydown)="bloquearTeclasInvalidas($event)"
-              class="form-control-custom"
-              [(ngModel)]="tomador.telefono"
-              name="telefono"
-              placeholder="Ej: 3001234567">
-          </div>
+            <button
+                class="btn-new"
+                (click)="limpiarFormulario()">
 
-          <!-- FILA 3 -->
-          <div class="form-group col-4">
-            <label>Fecha Nacimiento</label>
-            <input
-              type="date"
-              class="form-control-custom"
-              [(ngModel)]="tomador.fecNacimiento"
-              name="fecNacimiento">
-          </div>
+                + Nuevo
 
-          <div class="form-group col-4">
-            <label>Ocupación</label>
-            <input
-              type="text"
-              class="form-control-custom"
-              [(ngModel)]="tomador.ocupacion"
-              name="ocupacion"
-              placeholder="Ej: Contador">
-          </div>
-
-          <div class="form-group col-4">
-            <label>Género</label>
-            <select
-              class="form-control-custom"
-              [(ngModel)]="tomador.genero"
-              name="genero">
-              <option value="">Seleccione...</option>
-              <option value="M">Masculino</option>
-              <option value="F">Femenino</option>
-            </select>
-          </div>
-
-          <!-- FILA 4 -->
-          <div class="form-group col-8">
-            <label>Dirección</label>
-            <input
-              type="text"
-              class="form-control-custom"
-              [(ngModel)]="tomador.direccion"
-              name="direccion"
-              placeholder="Dirección de residencia">
-          </div>
-
-          <div class="form-group col-4">
-            <label>Tipo Persona</label>
-            <select
-              class="form-control-custom"
-              [(ngModel)]="tomador.tipPersona"
-              name="tipPersona">
-              <option value="">Seleccione...</option>
-              <option value="NATURAL">Natural</option>
-              <option value="JURIDICA">Jurídica</option>
-            </select>
-          </div>
+            </button>
 
         </div>
 
-        <!-- ACCIONES -->
-        <div class="actions-container">
-          <button type="submit" class="btn-primary-red">
-            💾 {{editando ? 'Actualizar' : 'Guardar'}}
-          </button>
+        <!-- Tabla -->
 
-          <button
-            type="button"
-            class="btn-secondary-gray"
-            (click)="limpiarFormulario()">
-            🆕 Nuevo
-          </button>
+        <div class="table-wrapper">
+
+            <table class="custom-table">
+
+                <thead>
+
+                <tr>
+
+                    <th>C.C</th>
+
+                    <th>Nombre</th>
+
+                    <th>Email</th>
+
+                    <th>Teléfono</th>
+
+                    <th>Fecha Nacimiento</th>
+
+                    <th>Ocupación</th>
+
+                    <th>Dirección</th>
+
+                    <th>Género</th>
+
+                    <th>Tipo Persona</th>
+
+                    <th>Acciones</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr
+
+                    *ngFor="let t of tomadores"
+
+                    [class.selected]="tomador.ccTomador==t.ccTomador">
+
+                    <td>{{t.ccTomador}}</td>
+
+                    <td>{{t.nombreTomador}}</td>
+
+                    <td>{{t.email}}</td>
+
+                    <td>{{t.telefono}}</td>
+
+                    <td>{{t.fecNacimiento}}</td>
+
+                    <td>{{t.ocupacion}}</td>
+
+                    <td>{{t.direccion}}</td>
+
+                    <td>{{t.genero}}</td>
+
+                    <td>{{t.tipPersona}}</td>
+
+                    <td class="acciones">
+
+                        <button
+                            class="btn-icon btn-view"
+                            title="Ver"
+                            (click)="ver(t)">
+
+                            👁
+
+                        </button>
+
+                        <button
+                            class="btn-icon btn-edit"
+                            title="Editar"
+                            (click)="editar(t)">
+
+                            ✏️
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
         </div>
 
-      </form>
-    </div>
-  </div>
+        <!-- Paginación -->
 
-  <!-- TARJETA DE LA TABLA -->
-  <div class="card-table">
-    <div class="table-responsive">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>CÉDULA</th>
-            <th>NOMBRE</th>
-            <th>GÉNERO</th>
-            <th>OCUPACIÓN</th>
-            <th>EMAIL</th>
-            <th>TELÉFONO</th>
-            <th>TIPO</th>
-            <th class="text-center">ACCIONES</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let t of tomadores">
-            <td><strong>{{t.ccTomador}}</strong></td>
-            <td>{{t.nombreTomador}}</td>
-            <td>{{t.genero}}</td>
-            <td>{{t.ocupacion}}</td>
-            <td>{{t.email}}</td>
-            <td>{{t.telefono}}</td>
-            <td>
-              <span class="badge" [ngClass]="t.tipPersona=='NATURAL' ? 'badge-natural' : 'badge-juridica'">
-                {{t.tipPersona}}
-              </span>
-            </td>
-            <td class="text-center">
-              <button class="btn-tbl btn-tbl-edit" (click)="editar(t)">✏️ Editar</button>
-              <button class="btn-tbl btn-tbl-delete" (click)="eliminar(t)">🗑️ Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="pagination">
+
+            <span>
+
+                Mostrando
+
+                {{tomadores.length}}
+
+                registros
+
+            </span>
+
+            <div>
+
+                <button>&lt;</button>
+
+                <button class="active">1</button>
+
+                <button>2</button>
+
+                <button>3</button>
+
+                <button>&gt;</button>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
+
+    <!-- ==========================================
+         PANEL DERECHO
+    =========================================== -->
+
+    <div class="form-panel">
+
+        <div class="form-header">
+
+            <h2>Editar registro</h2>
+
+            <span *ngIf="editando">
+
+                REG {{tomador.ccTomador}}
+
+            </span>
+
+        </div>
+
+        <form (ngSubmit)="guardar()">
+
+            <div class="form-group">
+
+                <label>C.C Tomador</label>
+
+                <input
+
+                    type="number"
+
+                    [(ngModel)]="tomador.ccTomador"
+
+                    name="ccTomador"
+
+                    [disabled]="editando">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Nombre</label>
+
+                <input
+
+                    type="text"
+
+                    [(ngModel)]="tomador.nombreTomador"
+
+                    name="nombreTomador">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Email</label>
+
+                <input
+
+                    type="email"
+
+                    [(ngModel)]="tomador.email"
+
+                    name="email">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Teléfono</label>
+
+                <input
+
+                    type="number"
+
+                    [(ngModel)]="tomador.telefono"
+
+                    name="telefono">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Fecha Nacimiento</label>
+
+                <input
+
+                    type="date"
+
+                    [(ngModel)]="tomador.fecNacimiento"
+
+                    name="fecha">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Ocupación</label>
+
+                <input
+
+                    type="text"
+
+                    [(ngModel)]="tomador.ocupacion"
+
+                    name="ocupacion">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Dirección</label>
+
+                <input
+
+                    type="text"
+
+                    [(ngModel)]="tomador.direccion"
+
+                    name="direccion">
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Género</label>
+
+                <select
+
+                    [(ngModel)]="tomador.genero"
+
+                    name="genero">
+
+                    <option value="">Seleccione</option>
+
+                    <option value="M">
+
+                        Masculino
+
+                    </option>
+
+                    <option value="F">
+
+                        Femenino
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Tipo Persona</label>
+
+                <select
+
+                    [(ngModel)]="tomador.tipPersona"
+
+                    name="tipPersona">
+
+                    <option value="">Seleccione</option>
+
+                    <option value="NATURAL">
+
+                        Natural
+
+                    </option>
+
+                    <option value="JURIDICA">
+
+                        Jurídica
+
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="buttons">
+
+                <button
+
+                    class="btn-save"
+
+                    type="submit">
+
+                    Guardar
+
+                </button>
+
+                <button
+
+                    class="btn-cancel"
+
+                    type="button"
+
+                    (click)="limpiarFormulario()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+
+                    *ngIf="editando"
+
+                    class="btn-delete"
+
+                    type="button"
+
+                    (click)="eliminar(tomador)">
+
+                    Eliminar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
-

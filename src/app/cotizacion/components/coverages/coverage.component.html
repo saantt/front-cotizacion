@@ -1,60 +1,251 @@
-<button (click)="newCoverage()">Nueva cobertura</button>
+<div class="crud-container">
 
-<div *ngIf="mode">
-  <h2>{{ mode === 'create' ? 'Nuevo registro' : (mode === 'edit' ? 'Editar registro' : 'Ver registro') }}</h2>
+    <!-- ==========================================
+         PANEL IZQUIERDO
+    ========================================== -->
 
-  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="table-panel">
 
-    <div>
-      <label>Id Cobertura</label>
-      <input type="text" formControlName="id_cobertura">
+        <!-- Barra Superior -->
+
+        <div class="toolbar">
+
+            <h2>Coberturas</h2>
+
+            <input
+                type="text"
+                class="search"
+                placeholder="Buscar cobertura...">
+
+            <button class="btn-filter">
+                Filtros ▼
+            </button>
+
+            <button
+                class="btn-new"
+                (click)="newCoverage()">
+
+                + Nuevo
+
+            </button>
+
+        </div>
+
+        <!-- TABLA -->
+
+        <div class="table-wrapper">
+
+            <table class="custom-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Nombre Cobertura</th>
+
+                        <th>Tasa Público</th>
+
+                        <th>Tasa Particular</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr
+                        *ngFor="let c of coverages"
+                        [class.selected]="form.get('id_cobertura')?.value === c.id_cobertura">
+
+                        <td>#{{c.id_cobertura}}</td>
+
+                        <td>{{c.nombre_cobertura}}</td>
+
+                        <td>{{c.tasa_publico}}</td>
+
+                        <td>{{c.tasa_particular}}</td>
+
+                        <td class="acciones">
+
+                            <button
+                                class="btn-icon btn-view"
+                                (click)="view(c)"
+                                title="Ver">
+
+                                👁
+
+                            </button>
+
+                            <button
+                                class="btn-icon btn-edit"
+                                (click)="edit(c)"
+                                title="Editar">
+
+                                ✏️
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- PAGINACIÓN -->
+
+        <div class="pagination">
+
+            <span>
+
+                Mostrando {{coverages.length}} registros
+
+            </span>
+
+            <div>
+
+                <button>&lt;</button>
+
+                <button class="active">1</button>
+
+                <button>2</button>
+
+                <button>3</button>
+
+                <button>&gt;</button>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div>
-      <label>Nombre Cobertura</label>
-      <input type="text" formControlName="nombre_cobertura">
+    <!-- ==========================================
+         PANEL DERECHO
+    ========================================== -->
+
+    <div class="form-panel">
+
+        <div class="form-header">
+
+            <h2>
+
+                {{ mode === 'create'
+                    ? 'Nuevo registro'
+                    : (mode === 'edit'
+                        ? 'Editar registro'
+                        : 'Ver registro') }}
+
+            </h2>
+
+            <span *ngIf="form.get('id_cobertura')?.value">
+
+                REG {{form.get('id_cobertura')?.value}}
+
+            </span>
+
+        </div>
+
+        <form
+            [formGroup]="form"
+            (ngSubmit)="save()">
+
+            <!-- ID -->
+
+            <div class="form-group">
+
+                <label>ID Cobertura</label>
+
+                <input
+                    type="text"
+                    formControlName="id_cobertura"
+                    [readonly]="mode !== 'create'">
+
+            </div>
+
+            <!-- Nombre -->
+
+            <div class="form-group">
+
+                <label>Nombre Cobertura *</label>
+
+                <input
+                    type="text"
+                    formControlName="nombre_cobertura"
+                    [readonly]="mode === 'view'">
+
+            </div>
+
+            <!-- Tasa Público -->
+
+            <div class="form-group">
+
+                <label>Tasa Público *</label>
+
+                <input
+                    type="number"
+                    formControlName="tasa_publico"
+                    [readonly]="mode === 'view'">
+
+            </div>
+
+            <!-- Tasa Particular -->
+
+            <div class="form-group">
+
+                <label>Tasa Particular *</label>
+
+                <input
+                    type="number"
+                    formControlName="tasa_particular"
+                    [readonly]="mode === 'view'">
+
+            </div>
+
+            <!-- BOTONES -->
+
+            <div
+                class="buttons"
+                *ngIf="mode !== 'view'">
+
+                <button
+                    class="btn-save"
+                    type="submit">
+
+                    {{ mode === 'edit' ? 'Actualizar' : 'Guardar' }}
+
+                </button>
+
+                <button
+                    class="btn-cancel"
+                    type="button"
+                    (click)="newCoverage()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    *ngIf="mode === 'edit'"
+                    class="btn-delete"
+                    type="button"
+                    (click)="delete(form.value)">
+
+                    Eliminar
+
+                </button>
+
+            </div>
+
+        </form>
+
     </div>
 
-    <div>
-      <label>Tasa Publico</label>
-      <input type="number" formControlName="tasa_publico">
-    </div>
-
-    <div>
-      <label>Tasa Particular</label>
-      <input type="number" formControlName="tasa_particular">
-    </div>
-
-    <div *ngIf="mode !== 'view'">
-      <button type="submit">Guardar</button>
-    </div>
-
-  </form>
-</div>
-
-<div>
-  <table>
-    <thead>
-      <tr>
-        <th>id_cobertura</th>
-        <th>nombre_cobertura</th>
-        <th>tasa_publico</th>
-        <th>tasa_particular</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let c of coverages">
-        <td>#{{ c.id_cobertura }}</td>
-        <td>{{ c.nombre_cobertura }}</td>
-        <td>{{ c.tasa_publico }}</td>
-        <td>{{ c.tasa_particular }}</td>
-        <td>
-          <button (click)="view(c)">Ver</button>
-          <button (click)="edit(c)">Editar</button>
-          <button (click)="delete(c)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

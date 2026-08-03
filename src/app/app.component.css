@@ -1,0 +1,46 @@
+html,
+body{
+    margin:0;
+    height:100%;
+}
+
+app-root{
+    display:block;
+    height:100vh;
+}
+
+.app-layout{
+
+    display:flex;
+
+    height:100vh;
+
+    overflow:hidden;
+
+    background:#f7f3ec;
+
+}
+
+app-menu{
+
+    width:260px;
+
+    min-width:260px;
+
+    border-right:1px solid #d8d1c4;
+
+    background:#f8f4ed;
+
+}
+
+.content{
+
+    flex:1;
+
+    overflow:auto;
+
+    padding:8px;
+
+    background:#fbfaf7;
+
+}

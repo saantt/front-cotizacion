@@ -5,7 +5,8 @@ import { CoverageService } from '../../services/coverage.service';
 
 @Component({
   selector: 'coverage',
-  templateUrl: './coverage.component.html'
+  templateUrl: './coverage.component.html',
+  styleUrls: ['./coverage.component.css']
 })
 
 export class CoverageComponent implements OnInit {
@@ -45,10 +46,10 @@ export class CoverageComponent implements OnInit {
 
     this.form.get('id_cobertura')?.enable();
 
-    this.form.reset({ 
+    this.form.reset({
       id_cobertura: '',
-      tasa_publico: 0, 
-      tasa_particular: 0 
+      tasa_publico: 0,
+      tasa_particular: 0
     });
   }
 
