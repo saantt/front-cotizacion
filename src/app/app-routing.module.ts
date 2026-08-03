@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DeducibleComponent } from './cotizacion/components/deducibles/deducibles.component';
+import { TomadoresComponent } from './cotizacion/components/tomadores/tomadores.component';
 
 const routes: Routes = [
-  {path: '',redirectTo: '',pathMatch: 'full'},
-  { path: 'deducibles', loadChildren: () => import('./cotizacion/cotizacion.module').then(m => m.CotizacionModule)}
+  { path: '', redirectTo: '', pathMatch: 'full' },
+  { path: 'deducibles', component: DeducibleComponent },
+  { path: 'tomadores', component: TomadoresComponent }
 ];
 
 @NgModule({
