@@ -12,6 +12,7 @@ import { TomadoresComponent } from './components/tomadores/tomadores.component';
 import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehiculo.component';
 import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
+import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/im
     TomadoresComponent,
     MarcaVehiculoComponent,
     CoverageComponent,
-    ImpuestoCotizacionComponent
+    ImpuestoCotizacionComponent,
+    EstadoCotizacionComponent
+
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,8 @@ import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/im
     DeducibleComponent,
     MarcaVehiculoComponent,
     CoverageComponent,
-    ImpuestoCotizacionComponent
+    ImpuestoCotizacionComponent,
+    EstadoCotizacionComponent
   ]
 })
 export class CotizacionModule { }
