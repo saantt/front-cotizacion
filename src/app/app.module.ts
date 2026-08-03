@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { CotizacionModule } from './cotizacion/cotizacion.module';
 import { SharedModule } from './shared/shared.module';
 
-
 @NgModule({
   declarations: [
     AppComponent
@@ -19,8 +18,7 @@ import { SharedModule } from './shared/shared.module';
     ReactiveFormsModule,
     HttpClientModule,
     CotizacionModule,
-    SharedModule,
-    HttpClientModule
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,93 @@
+<section>
+  <header>
+    <h1>Impuestos de cotizacion</h1>
+    <p>Administra los impuestos asociados a las cotizaciones.</p>
+    <button type="button" (click)="nuevo()">Nuevo impuesto</button>
+  </header>
+
+  <div *ngIf="error">{{ error }}</div>
+  <div *ngIf="mensaje">{{ mensaje }}</div>
+
+  <div *ngIf="cargando">Cargando impuestos...</div>
+
+  <table *ngIf="!cargando && impuestos.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cotizacion</th>
+            <th>Concepto</th>
+            <th>Valor</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let impuesto of impuestos">
+            <td>#{{ impuesto.idImpuestoCot }}</td>
+            <td>{{ impuesto.idCotizacion }}</td>
+            <td>{{ impuesto.concepto }}</td>
+            <td>{{ impuesto.valor | currency:'COP':'symbol-narrow':'1.2-2' }}</td>
+            <td>
+              <button type="button" (click)="ver(impuesto)">Ver</button>
+              <button type="button" (click)="editar(impuesto)">Editar</button>
+              <button type="button" (click)="eliminar(impuesto)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+  </table>
+
+  <div *ngIf="!cargando && impuestos.length === 0">
+    No hay impuestos registrados.
+  </div>
+
+  <aside *ngIf="modo">
+      <h2>{{ modo === 'crear' ? 'Nuevo impuesto' : (modo === 'editar' ? 'Editar impuesto' : 'Detalle del impuesto') }}</h2>
+      <span *ngIf="registroSeleccionado">Registro #{{ registroSeleccionado.idImpuestoCot }}</span>
+
+      <form [formGroup]="form" (ngSubmit)="guardar()">
+        <div>
+          <label>ID impuesto</label>
+          <input type="text" [value]="registroSeleccionado?.idImpuestoCot || 'Autogenerado'" disabled>
+        </div>
+
+        <div>
+          <label for="idCotizacion">ID cotizacion *</label>
+          <input id="idCotizacion" type="text" formControlName="idCotizacion" maxlength="50">
+          <small *ngIf="form.get('idCotizacion')?.hasError('required') && form.get('idCotizacion')?.touched">
+            El id de la cotizacion es obligatorio.
+          </small>
+          <small *ngIf="form.get('idCotizacion')?.hasError('maxlength')">
+            Maximo 50 caracteres.
+          </small>
+        </div>
+
+        <div>
+          <label for="concepto">Concepto *</label>
+          <input id="concepto" type="text" formControlName="concepto" maxlength="50">
+          <small *ngIf="form.get('concepto')?.hasError('required') && form.get('concepto')?.touched">
+            El concepto es obligatorio.
+          </small>
+          <small *ngIf="form.get('concepto')?.hasError('maxlength')">
+            Maximo 50 caracteres.
+          </small>
+        </div>
+
+        <div>
+          <label for="valor">Valor *</label>
+          <input id="valor" type="number" formControlName="valor" min="0.01" step="0.01">
+          <small *ngIf="form.get('valor')?.invalid && form.get('valor')?.touched">
+            El valor debe ser mayor que cero.
+          </small>
+        </div>
+
+        <div>
+          <button type="submit" *ngIf="modo !== 'ver'" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Guardar' }}
+          </button>
+          <button type="button" (click)="cancelar()">Cancelar</button>
+          <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">
+            Eliminar
+          </button>
+        </div>
+      </form>
+  </aside>
+</section>
