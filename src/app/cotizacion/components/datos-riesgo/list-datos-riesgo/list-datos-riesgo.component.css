@@ -1,4 +1,4 @@
-* {
+/*  {
     box-sizing: border-box;
     font-family: "Segoe UI", Arial, sans-serif;
 }
@@ -11,7 +11,6 @@
 }
 
 
-/* Encabezado */
 
 .header {
     margin-bottom: 25px;
@@ -29,7 +28,6 @@
 }
 
 
-/* Tarjeta */
 
 .card {
     background: white;
@@ -39,7 +37,6 @@
 }
 
 
-/* Tabla */
 
 .table-container {
     width: 100%;
@@ -83,7 +80,6 @@ tbody tr:hover {
 }
 
 
-/* Estados */
 
 .estado {
     padding: 6px 12px;
@@ -105,7 +101,6 @@ tbody tr:hover {
 }
 
 
-/* Servicio */
 
 .servicio {
     background: #dbeafe;
@@ -128,7 +123,6 @@ tbody tr:hover {
     font-style: italic;
 }
 
-/* Responsive */
 
 @media(max-width:768px){
 
@@ -146,4 +140,4 @@ tbody tr:hover {
         font-size: 13px;
     }
 
-}
+} */

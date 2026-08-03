@@ -4,8 +4,8 @@ import { DatosRiesgoResponse } from 'src/app/cotizacion/models/datos-riesgos/dat
 
 @Component({
   selector: 'app-list-datos-riesgos',
-  templateUrl: './list-datos-riesgos.component.html',
-  styleUrls: ['./list-datos-riesgos.component.css']
+  templateUrl: './list-datos-riesgo.component.html',
+  styleUrls: ['./list-datos-riesgo.component.css']
 })
 export class ListDatosRiesgosComponent implements OnInit {
 

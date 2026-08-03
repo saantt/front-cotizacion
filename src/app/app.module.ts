@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CotizacionModule } from './cotizacion/cotizacion.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { CotizacionModule } from './cotizacion/cotizacion.module';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CotizacionModule
+    CotizacionModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
