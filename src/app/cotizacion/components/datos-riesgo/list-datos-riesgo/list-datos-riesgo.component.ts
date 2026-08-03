@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DatosRiesgoService } from '../../../services/datos-riesgo.service';
 import { DatosRiesgoResponse } from 'src/app/cotizacion/models/datos-riesgos/datosRiesgoResponse.model';
 
@@ -8,6 +8,8 @@ import { DatosRiesgoResponse } from 'src/app/cotizacion/models/datos-riesgos/dat
   styleUrls: ['./list-datos-riesgo.component.css']
 })
 export class ListDatosRiesgosComponent implements OnInit {
+
+  @Output() edit = new EventEmitter<any>();
 
   datosRiesgos: DatosRiesgoResponse[] = [];
 
@@ -39,6 +41,10 @@ export class ListDatosRiesgosComponent implements OnInit {
         console.error('Error al eliminar datos de riesgo:', error);
       }
     });
+  }
+
+  editDatosRiesgo(datosRiesgo: any): void {
+    this.edit.emit(datosRiesgo);
   }
 
 }

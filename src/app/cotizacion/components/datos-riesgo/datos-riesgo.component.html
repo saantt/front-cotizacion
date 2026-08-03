@@ -1,3 +1,7 @@
-<app-form-datos-riesgo></app-form-datos-riesgo>
+<app-form-datos-riesgo 
+[selectedDatosRiesgo]="selectedDatosRiesgo" 
+(formSubmit)="onFormSubmit()"
+(cancelEdit)="onCancelEdit()">
+</app-form-datos-riesgo>
 
-<app-list-datos-riesgos></app-list-datos-riesgos>
+<app-list-datos-riesgos (edit)="onEdit($event)"></app-list-datos-riesgos>
