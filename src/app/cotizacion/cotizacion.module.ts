@@ -9,6 +9,7 @@ import { DatosRiesgoComponent } from './components/datos-riesgo/datos-riesgo.com
 import { FormDatosRiesgoComponent } from './components/datos-riesgo/form-datos-riesgo/form-datos-riesgo.component';
 import { ListDatosRiesgosComponent } from './components/datos-riesgo/list-datos-riesgo/list-datos-riesgo.component';
 import { TomadoresComponent } from './components/tomadores/tomadores.component';
+import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehiculo.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { TomadoresComponent } from './components/tomadores/tomadores.component';
     DatosRiesgoComponent,
     FormDatosRiesgoComponent,
     ListDatosRiesgosComponent,
-    TomadoresComponent
+    TomadoresComponent,
+    MarcaVehiculoComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import { TomadoresComponent } from './components/tomadores/tomadores.component';
   exports: [
     DatosRiesgoComponent,
     TomadoresComponent,
-    DeducibleComponent
+    DeducibleComponent,
+    MarcaVehiculoComponent
   ]
 })
 export class CotizacionModule { }
