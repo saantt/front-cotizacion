@@ -3,19 +3,25 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { CotizacionRoutingModule } from './cotizacion-routing.module';
-import { DeducibleComponent } from './components/deducibles/deducibles.component';
+import { DeduciblesComponent } from './components/deducibles/deducibles.component';
+import { TomadoresComponent } from './components/tomadores/tomadores.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
-    DeducibleComponent
+    DeduciblesComponent,
+    TomadoresComponent
   ],
   imports: [
     CommonModule,
     CotizacionRoutingModule,
-    ReactiveFormsModule
+    FormsModule,
+    HttpClientModule
   ],
   exports: [
-    DeducibleComponent 
+    TomadoresComponent
   ]
 })
 export class CotizacionModule { }
