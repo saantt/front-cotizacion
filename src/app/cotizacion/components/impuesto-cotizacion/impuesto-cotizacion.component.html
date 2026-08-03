@@ -1,93 +1,205 @@
-<section>
-  <header>
-    <h1>Impuestos de cotizacion</h1>
-    <p>Administra los impuestos asociados a las cotizaciones.</p>
-    <button type="button" (click)="nuevo()">Nuevo impuesto</button>
-  </header>
+<div class="crud-container">
 
-  <div *ngIf="error">{{ error }}</div>
-  <div *ngIf="mensaje">{{ mensaje }}</div>
+  <!-- ================= PANEL IZQUIERDO: LISTADO & TABLA ================= -->
+  <div class="table-panel">
 
-  <div *ngIf="cargando">Cargando impuestos...</div>
+    <!-- Toolbar superior con Título, Buscador y Botón Nuevo -->
+    <div class="toolbar">
+      <h2>Impuestos de Cotización</h2>
 
-  <table *ngIf="!cargando && impuestos.length > 0">
+      <!-- Buscador dinámico -->
+      <input
+        type="text"
+        class="search"
+        placeholder="Buscar por concepto o ID..."
+        #txtSearch>
+
+      <button type="button" class="btn-filter">Filtrar</button>
+
+      <button type="button" class="btn-new" (click)="nuevo()">
+        + Nuevo Impuesto
+      </button>
+    </div>
+
+    <!-- Mensajes de estado / Feedback -->
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <div *ngIf="mensaje" class="alert alert-success">{{ mensaje }}</div>
+    <div *ngIf="cargando" class="loading-state">Cargando impuestos...</div>
+
+    <!-- Contenedor de la Tabla -->
+    <div class="table-wrapper" *ngIf="!cargando && impuestos.length > 0">
+      <table class="custom-table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Cotizacion</th>
+            <th>Cotización</th>
             <th>Concepto</th>
             <th>Valor</th>
-            <th>Acciones</th>
+            <th style="text-align: center;">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let impuesto of impuestos">
+          <tr
+            *ngFor="let impuesto of impuestos"
+            [class.selected]="registroSeleccionado?.idImpuestoCot === impuesto.idImpuestoCot">
+
             <td>#{{ impuesto.idImpuestoCot }}</td>
             <td>{{ impuesto.idCotizacion }}</td>
             <td>{{ impuesto.concepto }}</td>
             <td>{{ impuesto.valor | currency:'COP':'symbol-narrow':'1.2-2' }}</td>
+
             <td>
-              <button type="button" (click)="ver(impuesto)">Ver</button>
-              <button type="button" (click)="editar(impuesto)">Editar</button>
-              <button type="button" (click)="eliminar(impuesto)">Eliminar</button>
+              <div class="acciones">
+                <button
+                  type="button"
+                  class="btn-icon btn-view"
+                  title="Ver detalle"
+                  (click)="ver(impuesto)">
+                  👁️
+                </button>
+                <button
+                  type="button"
+                  class="btn-icon btn-edit"
+                  title="Editar"
+                  (click)="editar(impuesto)">
+                  ✏️
+                </button>
+                <button
+                  type="button"
+                  class="btn-icon btn-delete"
+                  title="Eliminar"
+                  (click)="eliminar(impuesto)">
+                  🗑️
+                </button>
+              </div>
             </td>
+
           </tr>
         </tbody>
-  </table>
+      </table>
+    </div>
 
-  <div *ngIf="!cargando && impuestos.length === 0">
-    No hay impuestos registrados.
+    <!-- Estado Vacío -->
+    <div class="empty-state" *ngIf="!cargando && impuestos.length === 0">
+      <p>No hay impuestos registrados.</p>
+    </div>
+
+    <!-- Paginación Inferior -->
+    <div class="pagination">
+      <span>Mostrando {{ impuestos.length }} registros de impuestos</span>
+      <div>
+        <button class="active">1</button>
+        <button>></button>
+      </div>
+    </div>
+
   </div>
 
-  <aside *ngIf="modo">
-      <h2>{{ modo === 'crear' ? 'Nuevo impuesto' : (modo === 'editar' ? 'Editar impuesto' : 'Detalle del impuesto') }}</h2>
-      <span *ngIf="registroSeleccionado">Registro #{{ registroSeleccionado.idImpuestoCot }}</span>
 
-      <form [formGroup]="form" (ngSubmit)="guardar()">
-        <div>
-          <label>ID impuesto</label>
-          <input type="text" [value]="registroSeleccionado?.idImpuestoCot || 'Autogenerado'" disabled>
-        </div>
+  <!-- ================= PANEL DERECHO: FORMULARIO ================= -->
+  <div class="form-panel" *ngIf="modo">
 
-        <div>
-          <label for="idCotizacion">ID cotizacion *</label>
-          <input id="idCotizacion" type="text" formControlName="idCotizacion" maxlength="50">
-          <small *ngIf="form.get('idCotizacion')?.hasError('required') && form.get('idCotizacion')?.touched">
-            El id de la cotizacion es obligatorio.
-          </small>
-          <small *ngIf="form.get('idCotizacion')?.hasError('maxlength')">
-            Maximo 50 caracteres.
-          </small>
-        </div>
+    <!-- Encabezado del Formulario -->
+    <div class="form-header">
+      <h2>
+        {{ modo === 'crear' ? 'Nuevo Impuesto' : (modo === 'editar' ? 'Editar Impuesto' : 'Detalle del Impuesto') }}
+      </h2>
+      <span *ngIf="registroSeleccionado">
+        #{{ registroSeleccionado.idImpuestoCot }}
+      </span>
+    </div>
 
-        <div>
-          <label for="concepto">Concepto *</label>
-          <input id="concepto" type="text" formControlName="concepto" maxlength="50">
-          <small *ngIf="form.get('concepto')?.hasError('required') && form.get('concepto')?.touched">
-            El concepto es obligatorio.
-          </small>
-          <small *ngIf="form.get('concepto')?.hasError('maxlength')">
-            Maximo 50 caracteres.
-          </small>
-        </div>
+    <form [formGroup]="form" (ngSubmit)="guardar()">
 
-        <div>
-          <label for="valor">Valor *</label>
-          <input id="valor" type="number" formControlName="valor" min="0.01" step="0.01">
-          <small *ngIf="form.get('valor')?.invalid && form.get('valor')?.touched">
-            El valor debe ser mayor que cero.
-          </small>
-        </div>
+      <!-- Campo: ID Impuesto (Solo Lectura) -->
+      <div class="form-group">
+        <label>ID Impuesto</label>
+        <input
+          type="text"
+          [value]="registroSeleccionado?.idImpuestoCot || 'Autogenerado'"
+          disabled>
+      </div>
 
-        <div>
-          <button type="submit" *ngIf="modo !== 'ver'" [disabled]="guardando">
-            {{ guardando ? 'Guardando...' : 'Guardar' }}
-          </button>
-          <button type="button" (click)="cancelar()">Cancelar</button>
-          <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">
-            Eliminar
-          </button>
-        </div>
-      </form>
-  </aside>
-</section>
+      <!-- Campo: ID Cotización -->
+      <div class="form-group">
+        <label for="idCotizacion">ID Cotización *</label>
+        <input
+          id="idCotizacion"
+          type="text"
+          formControlName="idCotizacion"
+          placeholder="Ej: COT-2026-0001"
+          maxlength="50">
+
+        <small class="error-msg" *ngIf="form.get('idCotizacion')?.hasError('required') && form.get('idCotizacion')?.touched">
+          El ID de la cotización es obligatorio.
+        </small>
+        <small class="error-msg" *ngIf="form.get('idCotizacion')?.hasError('maxlength')">
+          Máximo 50 caracteres.
+        </small>
+      </div>
+
+      <!-- Campo: Concepto -->
+      <div class="form-group">
+        <label for="concepto">Concepto *</label>
+        <input
+          id="concepto"
+          type="text"
+          formControlName="concepto"
+          placeholder="Ej: IVA 19%"
+          maxlength="50">
+
+        <small class="error-msg" *ngIf="form.get('concepto')?.hasError('required') && form.get('concepto')?.touched">
+          El concepto es obligatorio.
+        </small>
+        <small class="error-msg" *ngIf="form.get('concepto')?.hasError('maxlength')">
+          Máximo 50 caracteres.
+        </small>
+      </div>
+
+      <!-- Campo: Valor -->
+      <div class="form-group">
+        <label for="valor">Valor *</label>
+        <input
+          id="valor"
+          type="number"
+          formControlName="valor"
+          placeholder="0.00"
+          min="0.01"
+          step="0.01">
+
+        <small class="error-msg" *ngIf="form.get('valor')?.invalid && form.get('valor')?.touched">
+          El valor debe ser mayor que cero.
+        </small>
+      </div>
+
+      <!-- Botones de Acción del Formulario -->
+      <div class="buttons">
+        <button
+          type="submit"
+          class="btn-save"
+          *ngIf="modo !== 'ver'"
+          [disabled]="guardando || form.invalid">
+          {{ guardando ? 'Guardando...' : 'Guardar' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="cancelar()">
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn-delete-form"
+          *ngIf="registroSeleccionado"
+          (click)="eliminar(registroSeleccionado)">
+          Eliminar
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

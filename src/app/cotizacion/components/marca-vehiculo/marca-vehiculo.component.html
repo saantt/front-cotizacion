@@ -1,75 +1,293 @@
-<div>
-  <!-- Tabla de marca de vehículos -->
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Marca</th>
-        <th>País</th>
-        <th>Abreviatura</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let mv of marcavehiculo; trackBy: trackById">
-        <td>#{{ mv.id_marca_vehiculo }}</td>
-        <td>{{ mv.nombre_marca_vehiculo }}</td>
-        <td>{{ mv.pais_origen_vehiculo }}</td>
-        <td>{{ mv.abreviatura_vehiculo }}</td>
-        <td>
-          <button (click)="ver(mv)">Ver</button>
-          <button (click)="editar(mv)">Editar</button>
-          <button (click)="eliminar(mv)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+<div class="crud-container">
 
-  <button (click)="nuevo()">Nueva marca de vehículo</button>
+    <!-- ==========================================
+         PANEL IZQUIERDO
+    ========================================== -->
 
-  <!-- Formulario -->
-  <div *ngIf="modo">
-    <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
-    <span *ngIf="registroSeleccionado">registro #{{ registroSeleccionado.id_marca_vehiculo }}</span>
+    <div class="table-panel">
 
-    <form [formGroup]="form" (ngSubmit)="guardar()">
+        <!-- Barra Superior -->
 
-      <div>
-        <label>id_marca_vehiculo</label>
-        <input type="text" [value]="registroSeleccionado?.id_marca_vehiculo || 'autogenerado'" disabled>
-      </div>
+        <div class="toolbar">
 
-      <div>
-        <label>nombre_marca_vehiculo *</label>
-        <input type="text" formControlName="nombre_marca_vehiculo">
-        <div *ngIf="form.get('nombre_marca_vehiculo')?.invalid && form.get('nombre_marca_vehiculo')?.touched">
-          Este campo es obligatorio
+            <h2>Marcas de Vehículo</h2>
+
+            <input
+                type="text"
+                class="search"
+                placeholder="Buscar marca...">
+
+            <button class="btn-filter">
+                Filtros ▼
+            </button>
+
+            <button
+                class="btn-new"
+                (click)="nuevo()">
+
+                + Nuevo
+
+            </button>
+
         </div>
-      </div>
 
-      <div>
-        <label>pais_origen_vehiculo *</label>
-        <input type="text" formControlName="pais_origen_vehiculo">
-        <div *ngIf="form.get('pais_origen_vehiculo')?.invalid && form.get('pais_origen_vehiculo')?.touched">
-          Este campo es obligatorio
+        <!-- TABLA -->
+
+        <div class="table-wrapper">
+
+            <table class="custom-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Marca</th>
+
+                        <th>País</th>
+
+                        <th>Abreviatura</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr
+                        *ngFor="let mv of marcavehiculo; trackBy: trackById"
+                        [class.selected]="registroSeleccionado?.id_marca_vehiculo === mv.id_marca_vehiculo">
+
+                        <td>
+
+                            #{{mv.id_marca_vehiculo}}
+
+                        </td>
+
+                        <td>
+
+                            {{mv.nombre_marca_vehiculo}}
+
+                        </td>
+
+                        <td>
+
+                            {{mv.pais_origen_vehiculo}}
+
+                        </td>
+
+                        <td>
+
+                            {{mv.abreviatura_vehiculo}}
+
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn-icon"
+                                (click)="ver(mv)">
+
+                                👁
+
+                            </button>
+
+                            <button
+                                class="btn-icon edit"
+                                (click)="editar(mv)">
+
+                                ✏️
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
         </div>
-      </div>
 
-      <div>
-        <label>abreviatura_vehiculo *</label>
-        <input type="text" formControlName="abreviatura_vehiculo">
-        <div *ngIf="form.get('abreviatura_vehiculo')?.invalid && form.get('abreviatura_vehiculo')?.touched">
-          Este campo es obligatorio
+        <!-- PAGINACIÓN -->
+
+        <div class="pagination">
+
+            <span>
+
+                Mostrando
+
+                {{marcavehiculo.length}}
+
+                registros
+
+            </span>
+
+            <div>
+
+                <button>&lt;</button>
+
+                <button class="active">1</button>
+
+                <button>2</button>
+
+                <button>3</button>
+
+                <button>&gt;</button>
+
+            </div>
+
         </div>
-      </div>
 
-      <div *ngIf="modo !== 'ver'">
-        <button type="submit">Guardar</button>
-        <button type="button" (click)="cancelar()">Cancelar</button>
-      </div>
+    </div>
 
-      <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">Eliminar</button>
+    <!-- ==========================================
+         PANEL DERECHO
+    ========================================== -->
 
-    </form>
-  </div>
+    <div class="form-panel">
+
+        <div class="form-header">
+
+            <h2>
+
+                {{ modo === 'crear'
+                    ? 'Nuevo registro'
+                    : (modo === 'editar'
+                        ? 'Editar registro'
+                        : 'Ver registro') }}
+
+            </h2>
+
+            <span *ngIf="registroSeleccionado">
+
+                REG {{registroSeleccionado.id_marca_vehiculo}}
+
+            </span>
+
+        </div>
+
+        <form
+            [formGroup]="form"
+            (ngSubmit)="guardar()">
+
+            <!-- ID -->
+
+            <div class="form-group">
+
+                <label>ID Marca</label>
+
+                <input
+                    type="text"
+                    [value]="registroSeleccionado?.id_marca_vehiculo || 'Autogenerado'"
+                    disabled>
+
+            </div>
+
+            <!-- Marca -->
+
+            <div class="form-group">
+
+                <label>Nombre Marca *</label>
+
+                <input
+                    type="text"
+                    formControlName="nombre_marca_vehiculo">
+
+                <small
+                    class="error"
+                    *ngIf="form.get('nombre_marca_vehiculo')?.invalid &&
+                           form.get('nombre_marca_vehiculo')?.touched">
+
+                    Este campo es obligatorio
+
+                </small>
+
+            </div>
+
+            <!-- País -->
+
+            <div class="form-group">
+
+                <label>País Origen *</label>
+
+                <input
+                    type="text"
+                    formControlName="pais_origen_vehiculo">
+
+                <small
+                    class="error"
+                    *ngIf="form.get('pais_origen_vehiculo')?.invalid &&
+                           form.get('pais_origen_vehiculo')?.touched">
+
+                    Este campo es obligatorio
+
+                </small>
+
+            </div>
+
+            <!-- Abreviatura -->
+
+            <div class="form-group">
+
+                <label>Abreviatura *</label>
+
+                <input
+                    type="text"
+                    formControlName="abreviatura_vehiculo">
+
+                <small
+                    class="error"
+                    *ngIf="form.get('abreviatura_vehiculo')?.invalid &&
+                           form.get('abreviatura_vehiculo')?.touched">
+
+                    Este campo es obligatorio
+
+                </small>
+
+            </div>
+
+            <!-- BOTONES -->
+
+            <div
+                class="buttons"
+                *ngIf="modo !== 'ver'">
+
+                <button
+                    class="btn-save"
+                    type="submit">
+
+                    Guardar
+
+                </button>
+
+                <button
+                    class="btn-cancel"
+                    type="button"
+                    (click)="cancelar()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    *ngIf="registroSeleccionado"
+                    class="btn-delete"
+                    type="button"
+                    (click)="eliminar(registroSeleccionado)">
+
+                    Eliminar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>

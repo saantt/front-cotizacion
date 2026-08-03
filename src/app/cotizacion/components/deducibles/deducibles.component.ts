@@ -6,8 +6,10 @@ import { DeducibleService } from '../../services/deducible-service.service';
 
 @Component({
   selector: 'deducible',
-  templateUrl: './deducibles.component.html'
+  templateUrl: './deducibles.component.html',
+  styleUrls: ['./deducibles.component.css']
 })
+
 export class DeducibleComponent implements OnInit {
 
   deducibles: Deducible[] = [];

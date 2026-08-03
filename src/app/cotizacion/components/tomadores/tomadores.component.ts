@@ -110,4 +110,10 @@ export class TomadoresComponent implements OnInit {
   }
   }
 
+  ver(t: any): void {
+  this.tomador = { ...t };
+  this.editando = false;
+
+}
+
 }

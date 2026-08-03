@@ -1,61 +1,93 @@
-<div class="container">
-    <div class="header">
-        <h1>Listado de Datos de Riesgo</h1>
-        <p>Consulta de vehículos registrados en el sistema</p>
+<div class="table-panel">
+    <!-- Toolbar superior con buscador y botones de acción -->
+    <div class="toolbar">
+        <h2>Datos de Riesgo</h2>
+        <input
+            type="text"
+            class="search"
+            placeholder="Buscar por placa, cédula..."
+        />
+        <button class="btn-filter" type="button">Filtrar</button>
+        <button class="btn-new" type="button">Nuevo Registro</button>
     </div>
 
-    <div class="card">
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Identificación</th>
-                        <th>Matrícula</th>
-                        <th>Cédula</th>
-                        <th>Estado</th>
-                        <th>Modelo</th>
-                        <th>Servicio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let riesgo of datosRiesgos">
-                        <td>{{ riesgo.id }}</td>
-                        <td>{{ riesgo.matricula }}</td>
-                        <td>{{ riesgo.cedula }}</td>
-                        <td>
-                            <span 
-                              class="estado"
-                              [ngClass]="{
-                                'activo': riesgo.estadoId === 1,
-                                'pendiente': riesgo.estadoId !== 1
-                              }">
-                                {{ riesgo.estadoId }}
-                            </span>
-                        </td>
-                        <td>{{ riesgo.modelo }}</td>
-                        <td>
-                            <span 
-                              class="servicio"
-                              [ngClass]="{
-                                'publico': riesgo.servicio === 'publico'
-                              }">
-                                {{ riesgo.servicio }}
-                            </span>
-                        </td>
-                        <td colspan="6" class="empty">
-                            <button class="btn btn-primary" (click)="editDatosRiesgo(riesgo)">Editar</button>
-                            <button class="btn btn-primary" (click)="deleteDatosRiesgo(riesgo.id)">Eliminar</button>
-                        </td>
-                    </tr>
+    <!-- Contenedor con scroll para la tabla -->
+    <div class="table-wrapper">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Identificación</th>
+                    <th>Matrícula</th>
+                    <th>Cédula</th>
+                    <th>Estado</th>
+                    <th>Modelo</th>
+                    <th>Servicio</th>
+                    <th style="text-align: center;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let riesgo of datosRiesgos">
+                    <td>{{ riesgo.id }}</td>
+                    <td><strong>{{ riesgo.matricula }}</strong></td>
+                    <td>{{ riesgo.cedula }}</td>
+                    <td>
+                        <span
+                            class="badge"
+                            [ngClass]="{
+                                'badge-natural': riesgo.estadoId === 1,
+                                'badge-juridica': riesgo.estadoId !== 1
+                            }">
+                            {{ riesgo.estadoId === 1 ? 'Activo' : 'Pendiente' }}
+                        </span>
+                    </td>
+                    <td>{{ riesgo.modelo }}</td>
+                    <td>
+                        <span
+                            class="badge"
+                            [ngClass]="{
+                                'badge-juridica': riesgo.servicio?.toLowerCase() === 'publico',
+                                'badge-natural': riesgo.servicio?.toLowerCase() === 'particular'
+                            }">
+                            {{ riesgo.servicio | titlecase }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="acciones">
+                            <button
+                                class="btn-icon btn-view"
+                                type="button"
+                                title="Ver / Editar"
+                                (click)="editDatosRiesgo(riesgo)">
+                                👁
+                            </button>
+                            <button
+                                class="btn-icon btn-edit"
+                                type="button"
+                                title="Eliminar"
+                                (click)="deleteDatosRiesgo(riesgo.id)">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
 
-                    <tr *ngIf="datosRiesgos.length === 0">
-                        <td colspan="6" class="empty">
-                            No hay datos de riesgo disponibles
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                <!-- Mensaje cuando la lista está vacía -->
+                <tr *ngIf="datosRiesgos?.length === 0">
+                    <td colspan="7" style="text-align: center; color: #888; padding: 30px;">
+                        No hay datos de riesgo disponibles.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pagination">
+        <span>Mostrando registros de riesgo</span>
+        <div>
+            <button type="button" class="active">1</button>
+            <button type="button">2</button>
+            <button type="button">></button>
         </div>
     </div>
 </div>

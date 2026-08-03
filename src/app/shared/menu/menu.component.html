@@ -1,13 +1,44 @@
-<nav>
-  <a routerLink="/datos-riesgo" routerLinkActive="active">Datos de Riesgo</a>
-  <br>
-  <a routerLink="/deducibles" routerLinkActive="active">Deducibles</a>
-  <br>
-  <a  routerLink="/tomadores" routerLinkActive="active">Tomadores</a>
-  <br>
-  <a  routerLink="/marcavehiculo" routerLinkActive="active">Marca Vehículo</a>
-  <br>
-  <a  routerLink="/coberturas" routerLinkActive="active">Coberturas</a>
+<div class="sidebar">
 
-  <a routerLink="/impuestos-cotizacion" routerLinkActive="active">Impuestos</a>
-</nav>
+  <div class="logo">
+    <h2>CRUDs · Cotización</h2>
+    <p>Sistema de riesgos vehiculares</p>
+  </div>
+
+  <h4>ENTIDADES</h4>
+
+  <nav>
+
+    <a routerLink="/datos-riesgo" routerLinkActive="active">
+      <span class="dot blue"></span>
+      Datos del Riesgo
+    </a>
+
+    <a routerLink="/tomadores" routerLinkActive="active">
+      <span class="dot orange"></span>
+      Tomadores
+    </a>
+
+    <a routerLink="/marcavehiculo" routerLinkActive="active">
+      <span class="dot cyan"></span>
+      Marcas de Vehículo
+    </a>
+
+    <a routerLink="/coberturas" routerLinkActive="active">
+      <span class="dot green"></span>
+      Coberturas
+    </a>
+
+    <a routerLink="/deducibles" routerLinkActive="active">
+      <span class="dot violet"></span>
+      Deducibles
+    </a>
+
+    <a routerLink="/impuestos-cotizacion" routerLinkActive="active">
+      <span class="dot red"></span>
+      Impuestos de Cotización
+    </a>
+
+  </nav>
+
+</div>

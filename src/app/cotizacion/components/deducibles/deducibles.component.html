@@ -1,67 +1,252 @@
+<div class="crud-container">
 
+    <!-- ==========================================
+         PANEL IZQUIERDO
+    ========================================== -->
 
-<div>
-  <!-- Tabla de deducibles -->
-  <table>
-    <thead>
-      <tr>
-        <th>id_deducible</th>
-        <th>porcentaje</th>
-        <th>monto_minimo</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let d of deducibles">
-        <td>#{{ d.id_deducible }}</td>
-        <td>{{ d.porcentaje }}</td>
-        <td>{{ d.monto_minimo }}</td>
-        <td>
-          <button (click)="ver(d)">Ver</button>
-          <button (click)="editar(d)">Editar</button>
-          <button (click)="eliminar(d)">Eliminar</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <div class="table-panel">
 
-  <button (click)="nuevo()">Nuevo deducible</button>
+        <!-- Barra Superior -->
 
-  <!-- Formulario -->
-  <div *ngIf="modo">
-    <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
-    <span *ngIf="registroSeleccionado">registro #{{ registroSeleccionado.id_deducible }}</span>
+        <div class="toolbar">
 
-    <form [formGroup]="form" (ngSubmit)="guardar()">
+            <h2>Deducibles</h2>
 
-      <div>
-        <label>id_deducible</label>
-        <input type="text" [value]="registroSeleccionado?.id_deducible || 'autogenerado'" disabled>
-      </div>
+            <input
+                type="text"
+                class="search"
+                placeholder="Buscar deducible...">
 
-      <div>
-        <label>porcentaje *</label>
-        <input type="number" formControlName="porcentaje">
-        <div *ngIf="form.get('porcentaje')?.invalid && form.get('porcentaje')?.touched">
-          Este campo es obligatorio
+            <button class="btn-filter">
+                Filtros ▼
+            </button>
+
+            <button
+                class="btn-new"
+                (click)="nuevo()">
+
+                + Nuevo
+
+            </button>
+
         </div>
-      </div>
 
-      <div>
-        <label>monto_minimo *</label>
-        <input type="number" formControlName="monto_minimo">
-        <div *ngIf="form.get('monto_minimo')?.invalid && form.get('monto_minimo')?.touched">
-          Este campo es obligatorio
+        <!-- TABLA -->
+
+        <div class="table-wrapper">
+
+            <table class="custom-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Porcentaje</th>
+
+                        <th>Monto Mínimo</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr
+                        *ngFor="let d of deducibles"
+                        [class.selected]="registroSeleccionado?.id_deducible === d.id_deducible">
+
+                        <td>#{{d.id_deducible}}</td>
+
+                        <td>{{d.porcentaje}} %</td>
+
+                        <td>{{d.monto_minimo | currency:'COP':'symbol':'1.0-0'}}</td>
+
+                        <td class="acciones">
+
+                            <button
+                                class="btn-icon btn-view"
+                                (click)="ver(d)"
+                                title="Ver">
+
+                                👁
+
+                            </button>
+
+                            <button
+                                class="btn-icon btn-edit"
+                                (click)="editar(d)"
+                                title="Editar">
+
+                                ✏️
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
         </div>
-      </div>
 
-      <div *ngIf="modo !== 'ver'">
-        <button type="submit">Guardar</button>
-        <button type="button" (click)="cancelar()">Cancelar</button>
-      </div>
+        <!-- PAGINACIÓN -->
 
-      <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">Eliminar</button>
+        <div class="pagination">
 
-    </form>
-  </div>
+            <span>
+
+                Mostrando {{deducibles.length}} registros
+
+            </span>
+
+            <div>
+
+                <button>&lt;</button>
+
+                <button class="active">1</button>
+
+                <button>2</button>
+
+                <button>3</button>
+
+                <button>&gt;</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ==========================================
+         PANEL DERECHO
+    ========================================== -->
+
+    <div class="form-panel">
+
+        <div class="form-header">
+
+            <h2>
+
+                {{ modo === 'crear'
+                    ? 'Nuevo registro'
+                    : (modo === 'editar'
+                        ? 'Editar registro'
+                        : 'Ver registro') }}
+
+            </h2>
+
+            <span *ngIf="registroSeleccionado">
+
+                REG {{registroSeleccionado.id_deducible}}
+
+            </span>
+
+        </div>
+
+        <form
+            [formGroup]="form"
+            (ngSubmit)="guardar()">
+
+            <!-- ID -->
+
+            <div class="form-group">
+
+                <label>ID Deducible</label>
+
+                <input
+                    type="text"
+                    [value]="registroSeleccionado?.id_deducible || 'Autogenerado'"
+                    disabled>
+
+            </div>
+
+            <!-- Porcentaje -->
+
+            <div class="form-group">
+
+                <label>Porcentaje *</label>
+
+                <input
+                    type="number"
+                    formControlName="porcentaje"
+                    [readonly]="modo === 'ver'">
+
+                <small
+                    class="error"
+                    *ngIf="form.get('porcentaje')?.invalid &&
+                           form.get('porcentaje')?.touched">
+
+                    Este campo es obligatorio
+
+                </small>
+
+            </div>
+
+            <!-- Monto -->
+
+            <div class="form-group">
+
+                <label>Monto Mínimo *</label>
+
+                <input
+                    type="number"
+                    formControlName="monto_minimo"
+                    [readonly]="modo === 'ver'">
+
+                <small
+                    class="error"
+                    *ngIf="form.get('monto_minimo')?.invalid &&
+                           form.get('monto_minimo')?.touched">
+
+                    Este campo es obligatorio
+
+                </small>
+
+            </div>
+
+            <!-- BOTONES -->
+
+            <div
+                class="buttons"
+                *ngIf="modo !== 'ver'">
+
+                <button
+                    class="btn-save"
+                    type="submit">
+
+                    Guardar
+
+                </button>
+
+                <button
+                    class="btn-cancel"
+                    type="button"
+                    (click)="cancelar()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                    *ngIf="registroSeleccionado"
+                    class="btn-delete"
+                    type="button"
+                    (click)="eliminar(registroSeleccionado)">
+
+                    Eliminar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
 </div>
