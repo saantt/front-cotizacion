@@ -38,10 +38,7 @@
             </div>
 
             <button type="submit" [disabled]="!datosRiesgoForm.valid">
-                {{ isEditMode ? 'Editar' : 'Enviar' }}
-            </button>
-            <button type="button" *ngIf="isEditMode" (click)="onCancel()">
-                Cancelar
+                Enviar
             </button>
 
         </form>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DatosRiesgoService } from '../../../services/datos-riesgo.service';
 import { DatosRiesgoResponse } from 'src/app/cotizacion/models/datos-riesgos/datosRiesgoResponse.model';
 
@@ -9,7 +9,6 @@ import { DatosRiesgoResponse } from 'src/app/cotizacion/models/datos-riesgos/dat
 })
 export class ListDatosRiesgosComponent implements OnInit {
 
-  @Output() edit = new EventEmitter<DatosRiesgoResponse>();
   datosRiesgos: DatosRiesgoResponse[] = [];
 
   constructor(private datosRiesgoService: DatosRiesgoService) { }
@@ -28,10 +27,6 @@ export class ListDatosRiesgosComponent implements OnInit {
         console.error('Error al cargar datos de riesgos:', error);
       }
     });
-  }
-
-  editDatosRiesgo(riesgo: DatosRiesgoResponse): void {
-    this.edit.emit(riesgo);
   }
 
   deleteDatosRiesgo(id: string): void {

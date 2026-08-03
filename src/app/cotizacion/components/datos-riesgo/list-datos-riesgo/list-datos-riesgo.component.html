@@ -43,14 +43,13 @@
                                 {{ riesgo.servicio }}
                             </span>
                         </td>
-                        <td class="empty">
-                            <button class="btn btn-secondary" (click)="editDatosRiesgo(riesgo)">Editar</button>
+                        <td colspan="6" class="empty">
                             <button class="btn btn-primary" (click)="deleteDatosRiesgo(riesgo.id)">Eliminar</button>
                         </td>
                     </tr>
 
                     <tr *ngIf="datosRiesgos.length === 0">
-                        <td colspan="7" class="empty">
+                        <td colspan="6" class="empty">
                             No hay datos de riesgo disponibles
                         </td>
                     </tr>
