@@ -1,0 +1,68 @@
+<div>
+  <!-- Tabla de estados cotizacion -->
+  <table>
+    <thead>
+      <tr>
+        <th>id_estado</th>
+        <th>descripcion</th>  
+        <th>estado</th>
+        <th>fec_inicio</th>
+        <th>fec_fin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let d of estados_cotizacion">
+        <td>#{{ d.id_estado }}</td>
+        <td>{{ d.descripcion }}</td>
+        <td>{{ d.estado }}</td>
+        <td>{{ d.fec_inicio }}</td>
+        <td>{{ d.fec_fin }}</td>                
+        <td>
+          <button (click)="ver(d)">Ver</button>
+          <button (click)="editar(d)">Editar</button>
+          <button (click)="eliminar(d)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button (click)="nuevo()">Nuevo estado cotización</button>
+
+  <!-- Formulario -->
+  <div *ngIf="modo">
+    <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
+    <span *ngIf="registroSeleccionado">registro #{{ registroSeleccionado.id_estado }}</span>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+
+      <div>
+        <label>id_estado</label>
+        <input type="text" [value]="registroSeleccionado?.id_estado || 'autogenerado'" disabled>
+      </div>
+
+      <div>
+        <label>Descripción *</label>
+        <input type="text" formControlName="descripcion">
+        <div *ngIf="form.get('descripcion')?.invalid && form.get('descripcion')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>Estado *</label>
+        <input type="text" formControlName="estado">
+        <div *ngIf="form.get('estado')?.invalid && form.get('estado')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div *ngIf="modo !== 'ver'">
+        <button type="submit">Guardar</button>
+        <button type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+
+      <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">Eliminar</button>
+
+    </form>
+  </div>
+</div>

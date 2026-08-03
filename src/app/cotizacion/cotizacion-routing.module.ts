@@ -6,6 +6,7 @@ import { TomadoresComponent } from './components/tomadores/tomadores.component';
 import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehiculo.component';
 import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
+import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'datos-riesgo', pathMatch: 'full' },
@@ -14,7 +15,8 @@ const routes: Routes = [
   { path: 'tomadores', component: TomadoresComponent },
   { path: 'marcavehiculo', component: MarcaVehiculoComponent },
   { path: 'coberturas', component: CoverageComponent },
-  { path: 'impuestos-cotizacion', component: ImpuestoCotizacionComponent }
+  { path: 'impuestos-cotizacion', component: ImpuestoCotizacionComponent },
+  { path: 'estados-cotizacion', component: EstadoCotizacionComponent }
 ];
 
 @NgModule({
