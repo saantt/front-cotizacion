@@ -4,10 +4,17 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { CotizacionRoutingModule } from './cotizacion-routing.module';
 import { DeducibleComponent } from './components/deducibles/deducibles.component';
+import { DatosRiesgoComponent } from './components/datos-riesgo/datos-riesgo.component';
+import { FormDatosRiesgoComponent } from './components/datos-riesgo/form-datos-riesgo/form-datos-riesgo.component';
+import { ListDatosRiesgosComponent } from './components/datos-riesgo/list-datos-riesgo/list-datos-riesgo.component';
+
 
 @NgModule({
   declarations: [
-    DeducibleComponent
+    DeducibleComponent,
+    DatosRiesgoComponent,
+    FormDatosRiesgoComponent,
+    ListDatosRiesgosComponent
   ],
   imports: [
     CommonModule,
@@ -15,7 +22,8 @@ import { DeducibleComponent } from './components/deducibles/deducibles.component
     ReactiveFormsModule
   ],
   exports: [
-    DeducibleComponent 
+    DatosRiesgoComponent,
+    DeducibleComponent
   ]
 })
 export class CotizacionModule { }

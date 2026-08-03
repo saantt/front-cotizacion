@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="header">
+        <h1>Listado de Datos de Riesgo</h1>
+        <p>Consulta de vehículos registrados en el sistema</p>
+    </div>
+
+    <div class="card">
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Identificación</th>
+                        <th>Matrícula</th>
+                        <th>Cédula</th>
+                        <th>Estado</th>
+                        <th>Modelo</th>
+                        <th>Servicio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let riesgo of datosRiesgos">
+                        <td>{{ riesgo.id }}</td>
+                        <td>{{ riesgo.matricula }}</td>
+                        <td>{{ riesgo.cedula }}</td>
+                        <td>
+                            <span 
+                              class="estado"
+                              [ngClass]="{
+                                'activo': riesgo.estadoId === 1,
+                                'pendiente': riesgo.estadoId !== 1
+                              }">
+                                {{ riesgo.estadoId }}
+                            </span>
+                        </td>
+                        <td>{{ riesgo.modelo }}</td>
+                        <td>
+                            <span 
+                              class="servicio"
+                              [ngClass]="{
+                                'publico': riesgo.servicio === 'publico'
+                              }">
+                                {{ riesgo.servicio }}
+                            </span>
+                        </td>
+                        <td colspan="6" class="empty">
+                            <button class="btn btn-primary" (click)="deleteDatosRiesgo(riesgo.id)">Eliminar</button>
+                        </td>
+                    </tr>
+
+                    <tr *ngIf="datosRiesgos.length === 0">
+                        <td colspan="6" class="empty">
+                            No hay datos de riesgo disponibles
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
