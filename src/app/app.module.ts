@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CotizacionModule } from './cotizacion/cotizacion.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { CotizacionModule } from './cotizacion/cotizacion.module';
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    CotizacionModule
+    CotizacionModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
