@@ -11,6 +11,7 @@ import { ListDatosRiesgosComponent } from './components/datos-riesgo/list-datos-
 import { TomadoresComponent } from './components/tomadores/tomadores.component';
 import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehiculo.component';
 import { CoverageComponent } from './components/coverages/coverage.component';
+import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { CoverageComponent } from './components/coverages/coverage.component';
     ListDatosRiesgosComponent,
     TomadoresComponent,
     MarcaVehiculoComponent,
-    CoverageComponent
+    CoverageComponent,
+    ImpuestoCotizacionComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { CoverageComponent } from './components/coverages/coverage.component';
     TomadoresComponent,
     DeducibleComponent,
     MarcaVehiculoComponent,
-    CoverageComponent
+    CoverageComponent,
+    ImpuestoCotizacionComponent
   ]
 })
 export class CotizacionModule { }
