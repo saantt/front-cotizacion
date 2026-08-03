@@ -9,8 +9,8 @@ import { DatosRiesgoComponent } from './components/datos-riesgo/datos-riesgo.com
 import { FormDatosRiesgoComponent } from './components/datos-riesgo/form-datos-riesgo/form-datos-riesgo.component';
 import { ListDatosRiesgosComponent } from './components/datos-riesgo/list-datos-riesgo/list-datos-riesgo.component';
 import { TomadoresComponent } from './components/tomadores/tomadores.component';
+import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehiculo.component';
 import { CoverageComponent } from './components/coverages/coverage.component';
-
 
 @NgModule({
   declarations: [
@@ -19,6 +19,7 @@ import { CoverageComponent } from './components/coverages/coverage.component';
     FormDatosRiesgoComponent,
     ListDatosRiesgosComponent,
     TomadoresComponent,
+    MarcaVehiculoComponent,
     CoverageComponent
   ],
   imports: [
@@ -32,6 +33,7 @@ import { CoverageComponent } from './components/coverages/coverage.component';
     DatosRiesgoComponent,
     TomadoresComponent,
     DeducibleComponent,
+    MarcaVehiculoComponent,
     CoverageComponent
   ]
 })

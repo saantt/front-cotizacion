@@ -1,0 +1,75 @@
+<div>
+  <!-- Tabla de marca de vehículos -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Marca</th>
+        <th>País</th>
+        <th>Abreviatura</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let mv of marcavehiculo; trackBy: trackById">
+        <td>#{{ mv.id_marca_vehiculo }}</td>
+        <td>{{ mv.nombre_marca_vehiculo }}</td>
+        <td>{{ mv.pais_origen_vehiculo }}</td>
+        <td>{{ mv.abreviatura_vehiculo }}</td>
+        <td>
+          <button (click)="ver(mv)">Ver</button>
+          <button (click)="editar(mv)">Editar</button>
+          <button (click)="eliminar(mv)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button (click)="nuevo()">Nueva marca de vehículo</button>
+
+  <!-- Formulario -->
+  <div *ngIf="modo">
+    <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
+    <span *ngIf="registroSeleccionado">registro #{{ registroSeleccionado.id_marca_vehiculo }}</span>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+
+      <div>
+        <label>id_marca_vehiculo</label>
+        <input type="text" [value]="registroSeleccionado?.id_marca_vehiculo || 'autogenerado'" disabled>
+      </div>
+
+      <div>
+        <label>nombre_marca_vehiculo *</label>
+        <input type="text" formControlName="nombre_marca_vehiculo">
+        <div *ngIf="form.get('nombre_marca_vehiculo')?.invalid && form.get('nombre_marca_vehiculo')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>pais_origen_vehiculo *</label>
+        <input type="text" formControlName="pais_origen_vehiculo">
+        <div *ngIf="form.get('pais_origen_vehiculo')?.invalid && form.get('pais_origen_vehiculo')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>abreviatura_vehiculo *</label>
+        <input type="text" formControlName="abreviatura_vehiculo">
+        <div *ngIf="form.get('abreviatura_vehiculo')?.invalid && form.get('abreviatura_vehiculo')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div *ngIf="modo !== 'ver'">
+        <button type="submit">Guardar</button>
+        <button type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+
+      <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">Eliminar</button>
+
+    </form>
+  </div>
+</div>
