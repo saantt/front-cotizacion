@@ -1,132 +1,103 @@
 /* Barra lateral */
 
-.sidebar{
-    width:260px;
-    height:100vh;
-    background:#f7f3ec;
-    border-right:1px solid #ddd;
-    padding:18px 12px;
-    font-family:'Segoe UI', sans-serif;
+.sidebar {
+    width: 100%;
+    min-height: 100vh;
+    background: #eef3f9;
+    padding: 28px 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 /* Logo */
 
-.logo{
-    margin-bottom:25px;
+.logo {
+    margin-bottom: 12px;
 }
 
-.logo h2{
-    margin:0;
-    font-size:30px;
-    font-family:cursive;
-    color:#1f2d3d;
+.logo h2 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1d365f;
 }
 
-.logo p{
-    margin-top:4px;
-    font-size:13px;
-    color:#666;
+.logo p {
+    margin-top: 8px;
+    font-size: 0.95rem;
+    color: #4f5668;
 }
 
 /* Titulo */
 
-.sidebar h4{
-    color:#b99c74;
-    font-size:12px;
-    letter-spacing:1px;
-    margin-bottom:10px;
+.sidebar h4 {
+    color: #6b7280;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    margin-bottom: 18px;
+    text-transform: uppercase;
 }
 
 /* Menu */
 
-nav{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-nav a{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    text-decoration:none;
-    color:#222;
-    padding:11px 12px;
-    border-radius:10px;
-    transition:.25s;
-    font-size:16px;
+nav a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: transparent;
+    color: #1f2937;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: background 0.25s ease, color 0.25s ease;
 }
 
-nav a:hover{
-    background:#ebe5db;
+nav a:hover {
+    background: rgba(29, 78, 216, 0.08);
+    color: #0f172a;
 }
 
-/* Activo */
-
-nav a.active{
-    background:#2d2c2c;
-    color:#fff;
-    font-weight:600;
+nav a.active {
+    background: #1d4ed8;
+    color: #ffffff;
 }
 
-/* Círculos */
-
-.dot{
-    width:12px;
-    height:12px;
-    border-radius:50%;
-    border:1px solid #333;
-    flex-shrink:0;
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid rgba(15, 23, 42, 0.18);
 }
 
-/* Colores */
+.blue { background: #3b82f6; }
+.orange { background: #fb923c; }
+.cyan { background: #06b6d4; }
+.purple { background: #8b5cf6; }
+.green { background: #22c55e; }
+.violet { background: #a855f7; }
+.red { background: #f97316; }
+.indigo { background: #4f46e5; }
+.yellow { background: #facc15; }
 
-.blue{
-    background:#43c7ff;
+@media (max-width: 1024px) {
+    .sidebar {
+        min-height: auto;
+        padding: 20px;
+    }
 }
 
-.orange{
-    background:#ffa142;
-}
-
-.cyan{
-    background:#2fd1c6;
-}
-
-.purple{
-    background:#c26dff;
-}
-
-.green{
-    background:#4dc96c;
-}
-
-.violet{
-    background:#8d7cff;
-}
-
-.red{
-    background:#ff6b6b;
-}
-
-.indigo{
-    background:#6278df;
-}
-
-.yellow{
-    background:#ffd230;
-}
-
-.sidebar{
-
-    width:100%;
-
-    height:100vh;
-
-    background:#f8f4ed;
-
-    padding:16px;
-
-    box-sizing:border-box;
-
+@media (max-width: 768px) {
+    .sidebar {
+        padding: 16px;
+    }
 }
