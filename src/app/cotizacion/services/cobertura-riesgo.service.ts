@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { CoberturaRiesgo } from '../models/cobertura-riesgo.model';
+import { CoberturaRiesgo, CoberturaRiesgoRequest } from '../models/cobertura-riesgo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,10 +18,10 @@ export class CoberturaRiesgoService {
 
   cargarCoberturasRiesgo(): void {
     this.http.get<CoberturaRiesgo[]>(this.apiUrl)
-      .subscribe((lista: any) => this.coberturasSubject.next(lista));
+      .subscribe((lista: CoberturaRiesgo[]) => this.coberturasSubject.next(lista));
   }
 
-  crearCoberturaRiesgo(cobertura: CoberturaRiesgo): Observable<CoberturaRiesgo> {
+  crearCoberturaRiesgo(cobertura: CoberturaRiesgoRequest): Observable<CoberturaRiesgo> {
     return this.http.post<CoberturaRiesgo>(this.apiUrl, cobertura)
       .pipe(tap(() => this.cargarCoberturasRiesgo()));
   }
@@ -29,7 +29,7 @@ export class CoberturaRiesgoService {
   actualizarCoberturaRiesgo(
     idCotizacion: string,
     idCobertura: string,
-    cobertura: CoberturaRiesgo
+    cobertura: CoberturaRiesgoRequest
   ): Observable<CoberturaRiesgo> {
     return this.http.put<CoberturaRiesgo>(
       `${this.apiUrl}/${idCotizacion}/${idCobertura}`,

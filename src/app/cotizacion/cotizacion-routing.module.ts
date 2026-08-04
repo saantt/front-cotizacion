@@ -7,9 +7,11 @@ import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehicu
 import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
+import { CoberturaRiesgoComponent } from './components/cobertura-riesgo/cobertura-riesgo.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'datos-riesgo', pathMatch: 'full' },
+  { path: 'cobertura-riesgo', component: CoberturaRiesgoComponent },
   { path: 'datos-riesgo', component: DatosRiesgoComponent },
   { path: 'deducibles', component: DeducibleComponent },
   { path: 'tomadores', component: TomadoresComponent },

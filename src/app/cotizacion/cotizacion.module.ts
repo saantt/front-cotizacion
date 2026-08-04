@@ -13,10 +13,12 @@ import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehicu
 import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
+import { CoberturaRiesgoComponent } from './components/cobertura-riesgo/cobertura-riesgo.component';
 
 @NgModule({
   declarations: [
     DeducibleComponent,
+    CoberturaRiesgoComponent,
     DatosRiesgoComponent,
     FormDatosRiesgoComponent,
     ListDatosRiesgosComponent,
@@ -35,6 +37,7 @@ import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado
     ReactiveFormsModule
   ],
   exports: [
+    CoberturaRiesgoComponent,
     DatosRiesgoComponent,
     TomadoresComponent,
     DeducibleComponent,

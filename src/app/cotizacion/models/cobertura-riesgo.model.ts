@@ -4,3 +4,9 @@ export interface CoberturaRiesgo {
     idDeducible: number | null;
     primaCobertura: number;
 }
+export interface CoberturaRiesgoRequest {
+    idCotizacion: string;
+    idCobertura: string;
+    idDeducible: number | null;
+    primaCobertura: number;
+}
