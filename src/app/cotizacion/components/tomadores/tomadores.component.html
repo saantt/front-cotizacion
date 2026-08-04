@@ -161,7 +161,7 @@
                     [(ngModel)]="tomador.ccTomador"
                     name="ccTomador"
                     #ccTomador="ngModel"
-                    [readonly]="vista"
+                    [disabled]="vista"
                     required
                     pattern="^[0-9]+$"
                     (keydown)="bloquearTeclasInvalidas($event)"
@@ -183,7 +183,7 @@
                     name="nombreTomador"
                     #nombreTomador="ngModel"
                     required
-                    [readonly]="vista"
+                    [disabled]="vista"
                     minlength="3">
 
                 <small class="error-msg" *ngIf="nombreTomador.invalid && (nombreTomador.touched || tomadorForm.submitted)">
@@ -201,7 +201,7 @@
                     name="email"
                     #email="ngModel"
                     required
-                    [readonly]="vista"
+                    [disabled]="vista"
                     email>
                 <small class="error-msg" *ngIf="email.invalid && (email.touched || tomadorForm.submitted)">
                     <span *ngIf="email.hasError('required')" class="mensaje-error">El correo es obligatorio.</span>
@@ -217,7 +217,7 @@
                     [(ngModel)]="tomador.telefono"
                     name="telefono"
                     #telefono="ngModel"
-                    [readonly]="vista"
+                    [disabled]="vista"
                     required
                     pattern="^[0-9]{7,10}$"
                     (keydown)="bloquearTeclasInvalidas($event)"
@@ -251,7 +251,7 @@
                     [(ngModel)]="tomador.ocupacion"
                     name="ocupacion"
                     #ocupacion="ngModel"
-                    [readonly]="vista"
+                    [disabled]="vista"
                     required>
                 <small class="error-msg" *ngIf="ocupacion.invalid && (ocupacion.touched || tomadorForm.submitted)">
                     <span *ngIf="ocupacion.hasError('required')" class="mensaje-error">La ocupación es obligatoria.</span>
@@ -266,7 +266,7 @@
                     [(ngModel)]="tomador.direccion"
                     name="direccion"
                     #direccion="ngModel"
-                    [readonly]="vista"
+                    [disabled]="vista"
                     required>
                 <small class="error-msg" *ngIf="direccion.invalid && (direccion.touched || tomadorForm.submitted)">
                     <span *ngIf="direccion.hasError('required')" class="mensaje-error">La dirección es obligatoria.</span>
