@@ -1,0 +1,24 @@
+( :host ){
+	display: block;
+	width: 100%;
+	height: 100%;
+	font-family: inherit;
+}
+
+/* Small adjustments local to this component; most visual styles come from global styles.css */
+.crud-container{
+	gap: 0;
+}
+
+.custom-table td, .custom-table th{
+	vertical-align: middle;
+}
+
+.acciones button{
+	margin-left: 6px;
+}
+
+.form-panel {
+	min-width: 320px;
+}
+

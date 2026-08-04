@@ -22,12 +22,14 @@
     font-size: 1.75rem;
     font-weight: 700;
     color: #1d365f;
+    font-family: inherit;
 }
 
 .logo p {
     margin-top: 8px;
     font-size: 0.95rem;
     color: #4f5668;
+    font-family: inherit;
 }
 
 /* Titulo */
@@ -59,6 +61,7 @@ nav a {
     font-size: 0.95rem;
     font-weight: 600;
     transition: background 0.25s ease, color 0.25s ease;
+    font-family: inherit;
 }
 
 nav a:hover {

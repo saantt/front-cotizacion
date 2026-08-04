@@ -30,7 +30,7 @@
     margin: 0;
     font-size: 22px;
     color: #2b2b2b;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: inherit;
 }
 
 .form-header span {
