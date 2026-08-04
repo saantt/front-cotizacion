@@ -12,9 +12,9 @@
   <h4 *ngIf="!menuColapsado">ENTIDADES</h4>
 
   <nav>
-    <a routerLink="/cobertura-riesgo" routerLinkActive="active">
-      <span class="dot purple"></span>
-      Coberturas del Riesgo
+    <a class="menu-link" routerLink="/cobertura-riesgo" routerLinkActive="active">
+      <span class="dot red"></span>
+      <span *ngIf="!menuColapsado">Coberturas del Riesgo</span>
     </a>
 
     <a class="menu-link" routerLink="/datos-riesgo" routerLinkActive="active">

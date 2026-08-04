@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 import { CotizacionRoutingModule } from './cotizacion-routing.module';
 import { DeducibleComponent } from './components/deducibles/deducibles.component';
@@ -13,12 +15,7 @@ import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehicu
 import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
-<<<<<<< HEAD
 import { CoberturaRiesgoComponent } from './components/cobertura-riesgo/cobertura-riesgo.component';
-=======
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
->>>>>>> 418f95a48e297a66f3737694f7695742771fd2ff
 
 @NgModule({
   declarations: [
