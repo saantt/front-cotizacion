@@ -770,3 +770,10 @@ BOTONES DE ACCIÓN
     border-color:#f4b400;
 
 }
+
+.mensaje-error {
+  color: #dc3545 !important; /* Rojo estándar de error */
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.25rem;
+}

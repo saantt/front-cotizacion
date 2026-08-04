@@ -24,6 +24,7 @@ export class TomadoresComponent implements OnInit {
   };
 
   editando = false;
+  vista = false;
 
   constructor(private tomadorService: TomadorServiceService) { }
 
@@ -66,6 +67,7 @@ export class TomadoresComponent implements OnInit {
 
     this.tomador = { ...t };
     this.editando = true;
+    this.vista = false;
 
   }
 
@@ -101,6 +103,7 @@ export class TomadoresComponent implements OnInit {
     };
 
     this.editando = false;
+    this.vista = false;
 
   }
 
@@ -118,6 +121,7 @@ export class TomadoresComponent implements OnInit {
 
   ver(t: any): void {
   this.tomador = { ...t };
+  this.vista = true;
   this.editando = false;
   }
 
