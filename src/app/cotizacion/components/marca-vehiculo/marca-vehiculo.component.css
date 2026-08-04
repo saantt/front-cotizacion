@@ -2,25 +2,25 @@
    CONTENEDOR PRINCIPAL
 ========================================================== */
 
-*{
+* {
     box-sizing: border-box;
 }
 
-.crud-container{
+.crud-container {
 
-    display:flex;
+    display: flex;
 
-    height:calc(100vh - 20px);
+    height: calc(100vh - 20px);
 
-    width:100%;
+    width: 100%;
 
-    background:#f8f5ef;
+    background: #f8f5ef;
 
-    border:1px solid #d7d0c5;
+    border: 1px solid #d7d0c5;
 
-    border-radius:8px;
+    border-radius: 8px;
 
-    overflow:hidden;
+    overflow: hidden;
 
 }
 
@@ -28,17 +28,17 @@
    PANEL IZQUIERDO
 ========================================================== */
 
-.table-panel{
+.table-panel {
 
-    width:60%;
+    width: 60%;
 
-    display:flex;
+    display: flex;
 
-    flex-direction:column;
+    flex-direction: column;
 
-    border-right:1px solid #d6d0c6;
+    border-right: 1px solid #d6d0c6;
 
-    background:#faf8f5;
+    background: #faf8f5;
 
 }
 
@@ -46,103 +46,89 @@
    TOOLBAR
 ========================================================== */
 
-.toolbar{
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 18px;
+    border-bottom: 1px solid #d8d2c7;
+    background: #fcfaf7;
+}
 
-    display:flex;
+.toolbar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    align-items:center;
+.toolbar h2 {
 
-    gap:12px;
+    margin: 0;
 
-    padding:14px 18px;
+    font-size: 18px;
 
-    border-bottom:1px solid #d8d2c7;
+    font-weight: 700;
 
-    background:#fcfaf7;
+    color: #222;
 
 }
 
-.toolbar h2{
+.search {
+    width: 100%;
+    max-width: 350px;
+}
 
-    margin:0;
+.search:focus {
 
-    font-size:18px;
-
-    font-weight:700;
-
-    color:#222;
+    border-color: #222;
 
 }
 
-.search{
+.btn-filter {
 
-    width:250px;
+    height: 36px;
 
-    height:36px;
+    padding: 0 16px;
 
-    border:1px solid #bcbcbc;
+    border-radius: 8px;
 
-    border-radius:8px;
+    border: 1px solid #bcbcbc;
 
-    padding:0 12px;
+    background: #fff;
 
-    outline:none;
-
-    transition:.2s;
+    cursor: pointer;
 
 }
 
-.search:focus{
+.btn-filter:hover {
 
-    border-color:#222;
-
-}
-
-.btn-filter{
-
-    height:36px;
-
-    padding:0 16px;
-
-    border-radius:8px;
-
-    border:1px solid #bcbcbc;
-
-    background:#fff;
-
-    cursor:pointer;
+    background: #f3f3f3;
 
 }
 
-.btn-filter:hover{
+.btn-new {
 
-    background:#f3f3f3;
+    margin-left: auto;
 
-}
+    background: #222;
 
-.btn-new{
+    color: white;
 
-    margin-left:auto;
+    border: none;
 
-    background:#222;
+    border-radius: 8px;
 
-    color:white;
+    padding: 10px 18px;
 
-    border:none;
+    cursor: pointer;
 
-    border-radius:8px;
-
-    padding:10px 18px;
-
-    cursor:pointer;
-
-    font-weight:600;
+    font-weight: 600;
 
 }
 
-.btn-new:hover{
+.btn-new:hover {
 
-    background:#111;
+    background: #111;
 
 }
 
@@ -150,81 +136,76 @@
    TABLA
 ========================================================== */
 
-.table-wrapper{
+.table-wrapper {
 
-    flex:1;
+    flex: 1;
 
-    overflow:auto;
-
-}
-
-.custom-table{
-
-    width:max-content;
-
-    min-width:1300px;
-
-    border-collapse:collapse;
+    overflow: auto;
 
 }
 
-.custom-table thead{
+.custom-table {
+    width: auto;
+    border-collapse: collapse;
+}
 
-    position:sticky;
+.custom-table thead {
 
-    top:0;
+    position: sticky;
 
-    z-index:5;
+    top: 0;
+
+    z-index: 5;
 
 }
 
-.custom-table th{
+.custom-table th {
 
-    background:#f3efe9;
+    background: #f3efe9;
 
-    color:#333;
+    color: #333;
 
-    padding:12px 14px;
+    padding: 12px 14px;
 
-    text-align:left;
+    text-align: left;
 
-    border-bottom:2px solid #d8d2c7;
+    border-bottom: 2px solid #d8d2c7;
 
-    white-space:nowrap;
+    white-space: nowrap;
 
-    font-size:13px;
-
-}
-
-.custom-table td{
-
-    padding:12px 14px;
-
-    border-bottom:1px solid #ece7df;
-
-    white-space:nowrap;
-
-    font-size:14px;
+    font-size: 13px;
 
 }
 
-.custom-table tbody tr{
+.custom-table td {
 
-    transition:.2s;
+    padding: 12px 14px;
 
-}
+    border-bottom: 1px solid #ece7df;
 
-.custom-table tbody tr:hover{
+    white-space: nowrap;
 
-    background:#eef5ff;
-
-    cursor:pointer;
+    font-size: 14px;
 
 }
 
-.custom-table tbody tr.selected{
+.custom-table tbody tr {
 
-    background:#dce9fb;
+    transition: .2s;
+
+}
+
+.custom-table tbody tr:hover {
+
+    background: #eef5ff;
+
+    cursor: pointer;
+
+}
+
+.custom-table tbody tr.selected {
+
+    background: #dce9fb;
 
 }
 
@@ -233,84 +214,85 @@
 ========================================================== */
 
 .btn-icon{
-
-    width:36px;
-
-    height:36px;
-
-    border-radius:8px;
-
-    border:1px solid #888;
-
-    background:white;
-
-    cursor:pointer;
-
+    border-color: #0d6efd;
+    color: #0d6efd;
 }
 
-.btn-icon:hover{
+/* Editar */
+.btn-icon.edit{
+    border-color: #ffc107;
+    color: #ffc107;
+}
 
-    background:#f0f0f0;
+.btn-icon:hover {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
 
+.btn-icon.edit:hover{
+    background: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
 }
 
 /* ==========================================================
    PAGINACIÓN
 ========================================================== */
 
-.pagination{
+.pagination {
 
-    display:flex;
+    display: flex;
 
-    justify-content:space-between;
+    justify-content: space-between;
 
-    align-items:center;
+    align-items: center;
 
-    padding:10px 14px;
+    padding: 10px 14px;
 
-    border-top:1px solid #ddd;
+    border-top: 1px solid #ddd;
 
-    background:#faf8f4;
-
-}
-
-.pagination span{
-
-    font-size:13px;
-
-    color:#666;
+    background: #faf8f4;
 
 }
 
-.pagination div{
+.pagination span {
 
-    display:flex;
+    font-size: 13px;
 
-    gap:6px;
-
-}
-
-.pagination button{
-
-    width:30px;
-
-    height:30px;
-
-    border-radius:6px;
-
-    border:1px solid #999;
-
-    background:white;
-
-    cursor:pointer;
+    color: #666;
 
 }
 
-.pagination button.active{
+.pagination div {
 
-    background:#2f2f2f;
+    display: flex;
 
-    color:white;
+    gap: 6px;
+
+}
+
+.pagination button {
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 6px;
+
+    border: 1px solid #999;
+
+    background: white;
+
+    cursor: pointer;
+
+}
+
+.pagination button.active {
+
+    background: #2f2f2f;
+
+    color: white;
 
 }
 
@@ -318,19 +300,19 @@
    PANEL DERECHO
 ========================================================== */
 
-.form-panel{
+.form-panel {
 
-    width:40%;
+    width: 40%;
 
-    background:#ffffff;
+    background: #ffffff;
 
-    display:flex;
+    display: flex;
 
-    flex-direction:column;
+    flex-direction: column;
 
-    padding:24px;
+    padding: 24px;
 
-    overflow-y:auto;
+    overflow-y: auto;
 
 }
 
@@ -338,45 +320,45 @@
    ENCABEZADO DEL FORMULARIO
 ========================================================== */
 
-.form-header{
+.form-header {
 
-    display:flex;
+    display: flex;
 
-    justify-content:space-between;
+    justify-content: space-between;
 
-    align-items:center;
+    align-items: center;
 
-    margin-bottom:24px;
+    margin-bottom: 24px;
 
-    padding-bottom:12px;
+    padding-bottom: 12px;
 
-    border-bottom:1px solid #e5e5e5;
-
-}
-
-.form-header h2{
-
-    margin:0;
-
-    font-size:22px;
-
-    color:#2b2b2b;
+    border-bottom: 1px solid #e5e5e5;
 
 }
 
-.form-header span{
+.form-header h2 {
 
-    background:#f1f3f5;
+    margin: 0;
 
-    color:#555;
+    font-size: 22px;
 
-    padding:6px 12px;
+    color: #2b2b2b;
 
-    border-radius:20px;
+}
 
-    font-size:12px;
+.form-header span {
 
-    font-weight:600;
+    background: #f1f3f5;
+
+    color: #555;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
 
 }
 
@@ -384,86 +366,86 @@
    FORMULARIO
 ========================================================== */
 
-form{
+form {
 
-    display:flex;
+    display: flex;
 
-    flex-direction:column;
+    flex-direction: column;
 
-    gap:16px;
-
-}
-
-.form-group{
-
-    display:flex;
-
-    flex-direction:column;
+    gap: 16px;
 
 }
 
-.form-group label{
+.form-group {
 
-    margin-bottom:6px;
+    display: flex;
 
-    font-size:13px;
+    flex-direction: column;
 
-    font-weight:600;
+}
 
-    color:#444;
+.form-group label {
+
+    margin-bottom: 6px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #444;
 
 }
 
 .form-group input,
-.form-group select{
+.form-group select {
 
-    width:100%;
+    width: 100%;
 
-    height:42px;
+    height: 42px;
 
-    padding:0 12px;
+    padding: 0 12px;
 
-    border:1px solid #cfcfcf;
+    border: 1px solid #cfcfcf;
 
-    border-radius:8px;
+    border-radius: 8px;
 
-    outline:none;
+    outline: none;
 
-    font-size:14px;
+    font-size: 14px;
 
-    transition:.25s;
+    transition: .25s;
 
-    background:white;
+    background: white;
 
 }
 
-.form-group textarea{
+.form-group textarea {
 
-    width:100%;
+    width: 100%;
 
-    min-height:90px;
+    min-height: 90px;
 
-    padding:12px;
+    padding: 12px;
 
-    resize:vertical;
+    resize: vertical;
 
-    border:1px solid #cfcfcf;
+    border: 1px solid #cfcfcf;
 
-    border-radius:8px;
+    border-radius: 8px;
 
-    outline:none;
+    outline: none;
 
-    transition:.25s;
+    transition: .25s;
 
 }
 
 .form-group input:focus,
 .form-group select:focus,
-.form-group textarea:focus{
+.form-group textarea:focus {
 
-    border-color:#222;
+    border-color: #222;
 
-    box-shadow:0 0 0 3px rgba(0,0,0,.08);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, .08);
 
 }
 
@@ -471,83 +453,83 @@ form{
    BOTONES
 ========================================================== */
 
-.buttons{
+.buttons {
 
-    display:flex;
+    display: flex;
 
-    gap:12px;
+    gap: 12px;
 
-    margin-top:30px;
+    margin-top: 30px;
 
 }
 
-.buttons button{
+.buttons button {
 
-    height:42px;
+    height: 42px;
 
-    padding:0 20px;
+    padding: 0 20px;
 
-    border-radius:8px;
+    border-radius: 8px;
 
-    border:none;
+    border: none;
 
-    cursor:pointer;
+    cursor: pointer;
 
-    font-weight:600;
+    font-weight: 600;
 
-    transition:.25s;
+    transition: .25s;
 
 }
 
 /* Guardar */
 
-.btn-save{
+.btn-save {
 
-    background:#1d1d1d;
+    background: #1d1d1d;
 
-    color:white;
+    color: white;
 
 }
 
-.btn-save:hover{
+.btn-save:hover {
 
-    background:#000;
+    background: #000;
 
 }
 
 /* Cancelar */
 
-.btn-cancel{
+.btn-cancel {
 
-    background:#f3f3f3;
+    background: #f3f3f3;
 
-    color:#333;
+    color: #333;
 
-    border:1px solid #d0d0d0 !important;
+    border: 1px solid #d0d0d0 !important;
 
 }
 
-.btn-cancel:hover{
+.btn-cancel:hover {
 
-    background:#e9e9e9;
+    background: #e9e9e9;
 
 }
 
 /* Eliminar */
 
-.btn-delete{
+.btn-delete {
 
-    margin-left:auto;
+    margin-left: auto;
 
-    background:#dc3545;
+    background: #dc3545;
 
-    color:white;
+    color: white;
 
 }
 
-.btn-delete:hover{
+.btn-delete:hover {
 
-    background:#bb2d3b;
+    background: #bb2d3b;
 
 }
 
@@ -555,33 +537,33 @@ form{
    BADGES
 ========================================================== */
 
-.badge{
+.badge {
 
-    display:inline-block;
+    display: inline-block;
 
-    padding:4px 10px;
+    padding: 4px 10px;
 
-    border-radius:20px;
+    border-radius: 20px;
 
-    font-size:12px;
+    font-size: 12px;
 
-    font-weight:600;
-
-}
-
-.badge-natural{
-
-    background:#d1fae5;
-
-    color:#065f46;
+    font-weight: 600;
 
 }
 
-.badge-juridica{
+.badge-natural {
 
-    background:#dbeafe;
+    background: #d1fae5;
 
-    color:#1e3a8a;
+    color: #065f46;
+
+}
+
+.badge-juridica {
+
+    background: #dbeafe;
+
+    color: #1e3a8a;
 
 }
 
@@ -590,27 +572,27 @@ form{
 ========================================================== */
 
 .table-wrapper::-webkit-scrollbar,
-.form-panel::-webkit-scrollbar{
+.form-panel::-webkit-scrollbar {
 
-    width:8px;
+    width: 8px;
 
-    height:8px;
+    height: 8px;
 
 }
 
 .table-wrapper::-webkit-scrollbar-thumb,
-.form-panel::-webkit-scrollbar-thumb{
+.form-panel::-webkit-scrollbar-thumb {
 
-    background:#bfbfbf;
+    background: #bfbfbf;
 
-    border-radius:10px;
+    border-radius: 10px;
 
 }
 
 .table-wrapper::-webkit-scrollbar-thumb:hover,
-.form-panel::-webkit-scrollbar-thumb:hover{
+.form-panel::-webkit-scrollbar-thumb:hover {
 
-    background:#999;
+    background: #999;
 
 }
 
@@ -618,44 +600,44 @@ form{
    RESPONSIVE
 ========================================================== */
 
-@media(max-width:1200px){
+@media(max-width:1200px) {
 
-    .crud-container{
+    .crud-container {
 
-        flex-direction:column;
+        flex-direction: column;
 
-        height:auto;
+        height: auto;
 
     }
 
     .table-panel,
-    .form-panel{
+    .form-panel {
 
-        width:100%;
-
-    }
-
-    .toolbar{
-
-        flex-wrap:wrap;
+        width: 100%;
 
     }
 
-    .search{
+    .toolbar {
 
-        width:100%;
-
-    }
-
-    .buttons{
-
-        flex-wrap:wrap;
+        flex-wrap: wrap;
 
     }
 
-    .btn-delete{
+    .search {
 
-        margin-left:0;
+        width: 100%;
+
+    }
+
+    .buttons {
+
+        flex-wrap: wrap;
+
+    }
+
+    .btn-delete {
+
+        margin-left: 0;
 
     }
 
@@ -663,32 +645,45 @@ form{
 
 /* Iconos */
 
-.btn-icon.edit{
+.btn-icon.edit {
 
-    margin-left:6px;
+    margin-left: 6px;
 
 }
 
 /* Errores */
 
-.error{
+.error {
 
-    color:#dc3545;
+    color: #dc3545;
 
-    font-size:12px;
+    font-size: 12px;
 
-    margin-top:4px;
+    margin-top: 4px;
 
-    display:block;
+    display: block;
 
 }
 
 /* Solo lectura */
 
-.form-panel input:disabled{
+.form-panel input:disabled {
 
-    background:#f4f4f4;
+    background: #f4f4f4;
 
-    color:#666;
+    color: #666;
 
+}
+
+/* Botón eliminar */
+
+.btn-icon.delete {
+    margin-left: 6px;
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-icon.delete:hover {
+    background: #dc3545;
+    color: white;
 }
