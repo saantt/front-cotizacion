@@ -18,8 +18,9 @@
             />
             <div class="error-message" *ngIf="isControlInvalid('matricula')">
                 <span *ngIf="getControl('matricula')?.errors?.required">La matrícula es obligatoria.</span>
-                <span *ngIf="getControl('matricula')?.errors?.minlength">La matrícula es demasiado corta.</span>
-                <span *ngIf="getControl('matricula')?.errors?.maxlength">La matrícula es demasiado larga.</span>
+                <span *ngIf="getControl('matricula')?.errors?.minlength">La matrícula debe tener 7 caracteres.</span>
+                <span *ngIf="getControl('matricula')?.errors?.maxlength">La matrícula debe tener 7 caracteres.</span>
+                <span *ngIf="getControl('matricula')?.errors?.pattern">La matrícula debe tener el formato UFO-924.</span>
             </div>
         </div>
 

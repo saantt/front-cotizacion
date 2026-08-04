@@ -1,46 +1,31 @@
 html,
-body{
-    margin:0;
-    height:100%;
+body {
+    margin: 0;
+    height: 100vh;
 }
 
-app-root{
-    display:block;
-    height:100vh;
+app-root {
+    display: block;
+    height: 100vh;
 }
 
-.app-layout{
-
-    display:flex;
-
-    height:100vh;
-
-    overflow:hidden;
-
-    background:#f7f3ec;
-
+/* Contenedor general */
+.app-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: #f8fafc;
 }
 
-app-menu{
-
-    width:260px;
-
-    min-width:260px;
-
-    border-right:1px solid #d8d1c4;
-
-    background:#f8f4ed;
-
+/* Contenido de las páginas */
+.content {
+    flex: 1;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
-.content{
-
-    flex:1;
-
-    overflow:auto;
-
-    padding:8px;
-
-    background:#fbfaf7;
-
+menu {
+    margin-left: -20px;
 }
+
