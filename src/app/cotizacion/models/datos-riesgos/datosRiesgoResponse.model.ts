@@ -6,4 +6,5 @@ export interface DatosRiesgoResponse {
   fecha: Date;
   modelo: number;
   tipoServicio: string;
+  marcaId: number;
 }

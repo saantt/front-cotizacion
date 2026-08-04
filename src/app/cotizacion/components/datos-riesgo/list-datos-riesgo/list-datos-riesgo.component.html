@@ -20,6 +20,7 @@
                     <th>Matrícula</th>
                     <th>Cédula</th>
                     <th>Estado</th>
+                    <th>Marca</th>
                     <th>Modelo</th>
                     <th>Servicio</th>
                     <th>Fecha</th>
@@ -40,6 +41,9 @@
                             }">
                             {{ riesgo.estadoId === 1 ? 'Activo' : 'Pendiente' }}
                         </span>
+                    </td>
+                    <td>
+                        {{ getMarcaNombre(riesgo.marcaId) }}
                     </td>
                     <td>{{ riesgo.modelo }}</td>
                     <td>

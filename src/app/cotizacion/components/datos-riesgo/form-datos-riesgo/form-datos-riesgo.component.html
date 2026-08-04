@@ -49,6 +49,19 @@
         </div>
 
         <div class="form-group">
+            <label for="marcaId">Marca</label>
+            <select id="marcaId" formControlName="marcaId">
+                <option value="" disabled>Seleccione una marca</option>
+                <option *ngFor="let marca of marcasVehiculo" [value]="marca.id_marca_vehiculo">
+                    {{ marca.nombre_marca_vehiculo }}
+                </option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('marcaId')">
+                <span *ngIf="getControl('marcaId')?.errors?.required">La marca es obligatoria.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label for="modelo">Modelo</label>
             <input
                 type="text"
@@ -63,13 +76,13 @@
         </div>
 
         <div class="form-group">
-            <label for="servicio">Servicio</label>
-            <select id="servicio" formControlName="servicio">
+            <label for="tipoServicio">Servicio</label>
+            <select id="tipoServicio" formControlName="tipoServicio">
                 <option value="PARTICULAR">Particular</option>
                 <option value="PUBLICO">Público</option>
             </select>
-            <div class="error-message" *ngIf="isControlInvalid('servicio')">
-                <span *ngIf="getControl('servicio')?.errors?.required">El servicio es obligatorio.</span>
+            <div class="error-message" *ngIf="isControlInvalid('tipoServicio')">
+                <span *ngIf="getControl('tipoServicio')?.errors?.required">El servicio es obligatorio.</span>
             </div>
         </div>
 
