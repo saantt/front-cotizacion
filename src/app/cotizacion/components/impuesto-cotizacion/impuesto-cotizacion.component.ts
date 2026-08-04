@@ -36,7 +36,7 @@ export class ImpuestoCotizacionComponent implements OnInit {
   initForm(): void {
     this.form = this.fb.group({
       idCotizacion: ['', [Validators.required, Validators.maxLength(50)]],
-      concepto: ['', [Validators.required, Validators.maxLength(50)]],
+      concepto: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
       valor: [null, [Validators.required, Validators.min(0.01)]]
     });
   }

@@ -63,38 +63,6 @@
     white-space: nowrap;
 }
 
-.search {
-    flex: 1;
-    max-width: 220px;
-    height: 36px;
-    border: 1px solid #bcbcbc;
-    border-radius: 8px;
-    padding: 0 10px;
-    outline: none;
-    font-size: 13px;
-    background: #fff;
-    transition: .2s;
-}
-
-.search:focus {
-    border-color: #222;
-}
-
-.btn-filter {
-    height: 36px;
-    padding: 0 12px;
-    border-radius: 8px;
-    border: 1px solid #bcbcbc;
-    background: #fff;
-    cursor: pointer;
-    font-size: 13px;
-    white-space: nowrap;
-}
-
-.btn-filter:hover {
-    background: #f3f3f3;
-}
-
 .btn-new {
     margin-left: auto;
     background: #222;
