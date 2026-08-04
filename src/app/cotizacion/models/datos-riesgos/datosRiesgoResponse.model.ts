@@ -5,5 +5,5 @@ export interface DatosRiesgoResponse {
   estadoId: number;
   fecha: Date;
   modelo: number;
-  TipoServicio: string;
+  tipoServicio: string;
 }

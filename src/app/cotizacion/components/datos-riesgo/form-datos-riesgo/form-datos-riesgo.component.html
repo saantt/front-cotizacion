@@ -9,16 +9,6 @@
     <form [formGroup]="datosRiesgoForm" (ngSubmit)="onSubmit()">
 
         <div class="form-group">
-            <label for="id">Identificación</label>
-            <input
-                type="text"
-                id="id"
-                formControlName="id"
-                placeholder="ID de riesgo"
-            />
-        </div>
-
-        <div class="form-group">
             <label for="matricula">Matrícula</label>
             <input
                 type="text"
@@ -26,26 +16,36 @@
                 formControlName="matricula"
                 placeholder="Ej: ABC123"
             />
+            <div class="error-message" *ngIf="isControlInvalid('matricula')">
+                <span *ngIf="getControl('matricula')?.errors?.required">La matrícula es obligatoria.</span>
+                <span *ngIf="getControl('matricula')?.errors?.minlength">La matrícula es demasiado corta.</span>
+                <span *ngIf="getControl('matricula')?.errors?.maxlength">La matrícula es demasiado larga.</span>
+            </div>
         </div>
 
         <div class="form-group">
             <label for="cedula">Cédula del Propietario</label>
-            <input
-                type="text"
-                id="cedula"
-                formControlName="cedula"
-                placeholder="Número de cédula"
-            />
+            <select id="cedula" formControlName="cedula">
+                <option value="" disabled>Seleccione una cédula</option>
+                <option *ngFor="let tomador of tomadores" [value]="tomador.ccTomador.toString()">
+                    {{ tomador.ccTomador }} - {{ tomador.nombreTomador }}
+                </option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('cedula')">
+                <span *ngIf="getControl('cedula')?.errors?.required">La cédula es obligatoria.</span>
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="isEditMode">
             <label for="estadoId">Estado</label>
-            <input
-                type="text"
-                id="estadoId"
-                formControlName="estadoId"
-                placeholder="Estado del registro"
-            />
+            <select id="estadoId" formControlName="estadoId">
+                <option [value]="1">Activo</option>
+                <option [value]="2">Pendiente</option>
+                <option [value]="3">Inactivo</option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('estadoId')">
+                <span *ngIf="getControl('estadoId')?.errors?.required">El estado es obligatorio.</span>
+            </div>
         </div>
 
         <div class="form-group">
@@ -56,6 +56,10 @@
                 formControlName="modelo"
                 placeholder="Ej: 2024"
             />
+            <div class="error-message" *ngIf="isControlInvalid('modelo')">
+                <span *ngIf="getControl('modelo')?.errors?.required">El modelo es obligatorio.</span>
+                <span *ngIf="getControl('modelo')?.errors?.maxlength">El modelo no puede tener más de 4 caracteres.</span>
+            </div>
         </div>
 
         <div class="form-group">
@@ -64,6 +68,9 @@
                 <option value="PARTICULAR">Particular</option>
                 <option value="PUBLICO">Público</option>
             </select>
+            <div class="error-message" *ngIf="isControlInvalid('servicio')">
+                <span *ngIf="getControl('servicio')?.errors?.required">El servicio es obligatorio.</span>
+            </div>
         </div>
 
         <!-- Botones de Acción -->
@@ -75,7 +82,7 @@
             >
                 {{ isEditMode ? 'Actualizar' : 'Guardar' }}
             </button>
-           <button type="submit" *ngIf="isEditMode" (click)="onCancel()">
+           <button type="button" *ngIf="isEditMode" (click)="onCancel()">
               Cancelar
           </button>
         </div>

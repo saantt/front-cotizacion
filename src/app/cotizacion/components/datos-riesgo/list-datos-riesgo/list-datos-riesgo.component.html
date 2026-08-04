@@ -46,10 +46,10 @@
                         <span
                             class="badge"
                             [ngClass]="{
-                                'badge-juridica': riesgo.servicio?.toLowerCase() === 'publico',
-                                'badge-natural': riesgo.servicio?.toLowerCase() === 'particular'
+                                'badge-juridica': riesgo.tipoServicio?.toLowerCase() === 'publico',
+                                'badge-natural': riesgo.tipoServicio?.toLowerCase() === 'particular'
                             }">
-                            {{ riesgo.servicio | titlecase }}
+                            {{ riesgo.tipoServicio | titlecase }}
                         </span>
                     </td>
                     <td>{{ riesgo.fecha | date: 'dd/MM/yyyy' }}</td>
@@ -60,14 +60,23 @@
                                 type="button"
                                 title="Editar"
                                 (click)="editDatosRiesgo(riesgo)">
-                                ✏️
+
+                                <svg data-dc-tpl="54" viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="2">
+                                    <path data-dc-tpl="55" d="M4 20h4L18 10l-4-4L4 16v4z"></path>
+                                    <path data-dc-tpl="56" d="M14 6l4 4"></path>
+                                </svg>
+
                             </button>
                             <button
                                 class="btn-icon btn-edit"
                                 type="button"
                                 title="Eliminar"
                                 (click)="deleteDatosRiesgo(riesgo.id)">
-                                🗑️
+                                
+                                <svg data-dc-tpl="58" viewBox="0 0 24 24" fill="none" stroke="#c0392b" stroke-width="2">
+                                    <path data-dc-tpl="59" d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path>
+                                </svg>
+
                             </button>
                         </div>
                     </td>
