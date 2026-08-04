@@ -13,6 +13,7 @@ import { MarcaVehiculoComponent } from './components/marca-vehiculo/marca-vehicu
 import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -25,14 +26,14 @@ import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado
     CoverageComponent,
     ImpuestoCotizacionComponent,
     EstadoCotizacionComponent
-
   ],
   imports: [
     CommonModule,
     CotizacionRoutingModule,
     FormsModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule
   ],
   exports: [
     DatosRiesgoComponent,
