@@ -153,3 +153,7 @@ nav a.active {
 .yellow {
     background: #facc15;
 }
+
+.menu-link {
+    text-decoration: none;
+}

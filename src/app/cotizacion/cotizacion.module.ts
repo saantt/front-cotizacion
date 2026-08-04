@@ -14,6 +14,7 @@ import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,9 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule,
+
   ],
   exports: [
     DatosRiesgoComponent,

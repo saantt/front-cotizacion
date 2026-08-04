@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Coverage } from '../../models/coverage.model';
 import { CoverageService } from '../../services/coverage.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'coverage',
@@ -10,6 +11,12 @@ import { CoverageService } from '../../services/coverage.service';
 })
 
 export class CoverageComponent implements OnInit {
+  showForm = false;
+
+  pageSize = 7;
+  currentPage = 1;
+  paginatedCoverages: Coverage[] = [];
+  pages: number[] = [];
 
   coverages: Coverage[] = [];
   form!: FormGroup;
@@ -41,15 +48,56 @@ export class CoverageComponent implements OnInit {
 
   listCoverages(): void {
     this.coverageService.getAll().subscribe({
-      next: (data: Coverage[]) => this.coverages = data,
+      next: (data: Coverage[]) => {
+        this.coverages = data,
+        this.changePage();
+      },
       error: (err: any) => console.error('Error listing Coverages: ', err)
     });
   }
 
+  changePage(): void {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    this.paginatedCoverages = this.coverages.slice(start, end);
+
+    this.pages = Array.from(
+      { length: this.totalPages() },
+      (_, index) => index + 1
+    );
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
+      this.changePage();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.changePage();
+    }
+  }
+
+  totalPages(): number {
+    return Math.ceil(this.coverages.length / this.pageSize);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.changePage();
+  }
+
   newCoverage(): void {
+    this.showForm = true;
+
     this.mode = 'create';
     this.selectedRecord = null;
 
+    this.form.enable();
     this.form.get('id_cobertura')?.enable();
 
     this.form.reset({
@@ -59,7 +107,12 @@ export class CoverageComponent implements OnInit {
     });
   }
 
+  closeForm() {
+    this.showForm = false;
+  }
+
   view(coverage: Coverage): void {
+    this.showForm = true;
     this.mode = 'view';
     this.selectedRecord = coverage;
     this.form.patchValue(coverage);
@@ -67,6 +120,7 @@ export class CoverageComponent implements OnInit {
   }
 
   edit(coverage: Coverage): void {
+    this.showForm = true;
     this.mode = 'edit';
     this.selectedRecord = coverage;
     this.form.enable();
@@ -75,12 +129,43 @@ export class CoverageComponent implements OnInit {
   }
 
   delete(coverage: Coverage): void {
-    this.coverageService.delete(coverage.id_cobertura).subscribe({
-      next: () => {
-        this.listCoverages();
-        this.clearForm();
-      },
-      error: (err: any) => console.error('Error deleting Coverage: ', err)
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `¿Desea eliminar la cobertura ${coverage.nombre_cobertura}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2563EB',
+      cancelButtonColor: '#6B7280'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.coverageService.delete(coverage.id_cobertura).subscribe({
+          next: () => {
+            this.listCoverages();
+            this.clearForm();
+
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'La cobertura fue eliminada correctamente',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          },
+          error: (err: any) => {
+            Swal.fire({
+              title: 'Error',
+              text: 'La cobertura no se elimino correctamente',
+              icon: 'error',
+              timer: 2000,
+              showConfirmButton: false
+            });
+            console.error('Error deleting Coverage: ', err)
+          }
+        });
+      }
     });
   }
 
@@ -97,6 +182,14 @@ export class CoverageComponent implements OnInit {
         next: () => {
           this.listCoverages();
           this.clearForm();
+          this.showForm = false;
+          Swal.fire({
+            title: 'Guardado',
+            text: 'La cobertura fue guardada correctamente',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
         },
         error: (err: any) => console.error('Error creating Coverage: ', err)
       });
@@ -105,6 +198,14 @@ export class CoverageComponent implements OnInit {
         next: () => {
           this.listCoverages();
           this.clearForm();
+          this.showForm = false;
+          Swal.fire({
+            title: 'Editado',
+            text: 'La cobertura fue editada correctamente',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
         },
         error: (err: any) => console.error('Error updating Coverage: ', err)
       });
