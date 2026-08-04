@@ -3,18 +3,9 @@
   <!-- ================= PANEL IZQUIERDO: LISTADO & TABLA ================= -->
   <div class="table-panel">
 
-    <!-- Toolbar superior con Título, Buscador y Botón Nuevo -->
+    <!-- Toolbar superior con Título y Botón Nuevo -->
     <div class="toolbar">
       <h2>Impuestos de Cotización</h2>
-
-      <!-- Buscador dinámico -->
-      <input
-        type="text"
-        class="search"
-        placeholder="Buscar por concepto o ID..."
-        #txtSearch>
-
-      <button type="button" class="btn-filter">Filtrar</button>
 
       <button type="button" class="btn-new" (click)="nuevo()">
         + Nuevo Impuesto
@@ -31,7 +22,6 @@
       <table class="custom-table">
         <thead>
           <tr>
-            <th>ID</th>
             <th>Cotización</th>
             <th>Concepto</th>
             <th>Valor</th>
@@ -43,7 +33,6 @@
             *ngFor="let impuesto of impuestos"
             [class.selected]="registroSeleccionado?.idImpuestoCot === impuesto.idImpuestoCot">
 
-            <td>#{{ impuesto.idImpuestoCot }}</td>
             <td>{{ impuesto.idCotizacion }}</td>
             <td>{{ impuesto.concepto }}</td>
             <td>{{ impuesto.valor | currency:'COP':'symbol-narrow':'1.2-2' }}</td>
@@ -128,7 +117,8 @@
           type="text"
           formControlName="idCotizacion"
           placeholder="Ej: COT-2026-0001"
-          maxlength="50">
+          minlength="5"
+          maxlength="20">
 
         <small class="error-msg" *ngIf="form.get('idCotizacion')?.hasError('required') && form.get('idCotizacion')?.touched">
           El ID de la cotización es obligatorio.
@@ -151,8 +141,11 @@
         <small class="error-msg" *ngIf="form.get('concepto')?.hasError('required') && form.get('concepto')?.touched">
           El concepto es obligatorio.
         </small>
+        <small class="error-msg" *ngIf="form.get('concepto')?.hasError('minlength')">
+          Mínimo 5 caracteres.
+        </small>
         <small class="error-msg" *ngIf="form.get('concepto')?.hasError('maxlength')">
-          Máximo 50 caracteres.
+          Máximo 20 caracteres.
         </small>
       </div>
 
