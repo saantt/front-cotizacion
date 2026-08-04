@@ -32,7 +32,7 @@ export class FormDatosRiesgoComponent implements OnInit {
   ngOnInit(): void {
     this.datosRiesgoForm = this.formBuilder.group({
       id: [{ value: '', disabled: true }, [Validators.required, Validators.maxLength(50)]],
-      matricula: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10)]],
+      matricula: ['', [Validators.required, Validators.minLength(7), Validators.maxLength(7), Validators.pattern(/^[A-Z]{3}-\d{3}$/)]],
       cedula: ['', Validators.required],
       estadoId: [1, Validators.required],
       marcaId: [null, Validators.required],

@@ -1,0 +1,75 @@
+<div>
+  <!-- Tabla de coberturas de riesgo -->
+  <table>
+    <thead>
+      <tr>
+        <th>ID Cotización</th>
+        <th>ID Cobertura</th>
+        <th>ID Deducible</th>
+        <th>Prima Cobertura</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cr of coberturasriesgo; trackBy: trackById">
+        <td>{{ cr.idCotizacion }}</td>
+        <td>{{ cr.idCobertura }}</td>
+        <td>{{ cr.id_deducible !== null && cr.id_deducible !== undefined ? cr.id_deducible : '-' }}</td>
+        <td>{{ cr.primaCobertura | currency:'COP' }}</td>
+        <td>
+          <button (click)="ver(cr)">Ver</button>
+          <button (click)="editar(cr)">Editar</button>
+          <button (click)="eliminar(cr)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button (click)="nuevo()">Nueva cobertura de riesgo</button>
+
+  <!-- Formulario -->
+  <div *ngIf="modo">
+    <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
+    <span *ngIf="registroSeleccionado">
+      registro {{ registroSeleccionado.idCotizacion }} / {{ registroSeleccionado.idCobertura }}
+    </span>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <div>
+        <label>id_cotizacion *</label>
+        <input type="text" formControlName="idCotizacion">
+        <div *ngIf="form.get('idCotizacion')?.invalid && form.get('idCotizacion')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>id_cobertura *</label>
+        <input type="text" formControlName="idCobertura">
+        <div *ngIf="form.get('idCobertura')?.invalid && form.get('idCobertura')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>id_deducible</label>
+        <input type="number" formControlName="idDeducible">
+      </div>
+
+      <div>
+        <label>prima_cobertura *</label>
+        <input type="number" step="0.01" formControlName="primaCobertura">
+        <div *ngIf="form.get('primaCobertura')?.invalid && form.get('primaCobertura')?.touched">
+          Este campo es obligatorio y debe ser un valor positivo
+        </div>
+      </div>
+
+      <div *ngIf="modo !== 'ver'">
+        <button type="submit">Guardar</button>
+        <button type="button" (click)="cancelar()">Cancelar</button>
+      </div>
+
+      <button type="button" *ngIf="registroSeleccionado" (click)="eliminar(registroSeleccionado)">Eliminar</button>
+    </form>
+  </div>
+</div>
