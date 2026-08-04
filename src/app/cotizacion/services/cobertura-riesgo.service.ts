@@ -9,7 +9,7 @@ import { CoberturaRiesgo } from '../models/cobertura-riesgo.model';
 })
 export class CoberturaRiesgoService {
 
-  private apiUrl = 'http://localhost:8080/coberturariesgo';
+  private apiUrl = 'http://localhost:9090/coberturariesgo';
 
   private coberturasSubject = new BehaviorSubject<CoberturaRiesgo[]>([]);
   coberturas$ = this.coberturasSubject.asObservable();
