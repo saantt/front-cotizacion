@@ -7,9 +7,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
 
+  menuColapsado = false;
+
   constructor() { }
 
   ngOnInit(): void {
+    
   }
 
 }

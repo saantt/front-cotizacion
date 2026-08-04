@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Coverage } from '../../models/coverage.model';
 import { CoverageService } from '../../services/coverage.service';
 
@@ -24,10 +24,16 @@ export class CoverageComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      id_cobertura: [''],
-      nombre_cobertura: [''],
-      tasa_publico: [0],
-      tasa_particular: [0]
+      id_cobertura: ['', Validators.required],
+      nombre_cobertura: ['', Validators.required],
+      tasa_publico: [null, [
+        Validators.required,
+        Validators.min(0.0000001)
+      ]],
+      tasa_particular: [null, [
+        Validators.required,
+        Validators.min(0.0000001)
+      ]]
     });
     this.mode = 'create';
     this.listCoverages();
