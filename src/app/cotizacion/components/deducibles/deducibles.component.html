@@ -1,3 +1,8 @@
+<div class="toast" *ngIf="toastMessage" [class.success]="toastType === 'success'" [class.error]="toastType === 'error'">
+    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '!' }}</span>
+    <span>{{ toastMessage }}</span>
+</div>
+
 <div class="crud-container">
 
     <!-- ==========================================
@@ -41,8 +46,6 @@
 
                     <tr>
 
-                        <th>ID</th>
-
                         <th>Porcentaje</th>
 
                         <th>Monto Mínimo</th>
@@ -58,8 +61,6 @@
                     <tr
                         *ngFor="let d of deducibles"
                         [class.selected]="registroSeleccionado?.id_deducible === d.id_deducible">
-
-                        <td>#{{d.id_deducible}}</td>
 
                         <td>{{d.porcentaje}} %</td>
 
@@ -153,19 +154,6 @@
             [formGroup]="form"
             (ngSubmit)="guardar()">
 
-            <!-- ID -->
-
-            <div class="form-group">
-
-                <label>ID Deducible</label>
-
-                <input
-                    type="text"
-                    [value]="registroSeleccionado?.id_deducible || 'Autogenerado'"
-                    disabled>
-
-            </div>
-
             <!-- Porcentaje -->
 
             <div class="form-group">
@@ -173,17 +161,15 @@
                 <label>Porcentaje *</label>
 
                 <input
-                    type="number"
+                    type="text"
+                    inputmode="numeric"
                     formControlName="porcentaje"
-                    [readonly]="modo === 'ver'">
+                    [readonly]="modo === 'ver'"
+                    maxlength="5"
+                    (input)="onPorcentajeInput($event)">
 
-                <small
-                    class="error"
-                    *ngIf="form.get('porcentaje')?.invalid &&
-                           form.get('porcentaje')?.touched">
-
-                    Este campo es obligatorio
-
+                <small class="error" *ngIf="porcentajeErrorMessage">
+                    {{ porcentajeErrorMessage }}
                 </small>
 
             </div>
@@ -195,17 +181,15 @@
                 <label>Monto Mínimo *</label>
 
                 <input
-                    type="number"
+                    type="text"
+                    inputmode="numeric"
                     formControlName="monto_minimo"
-                    [readonly]="modo === 'ver'">
+                    [readonly]="modo === 'ver'"
+                    maxlength="10"
+                    (input)="onMontoMinimoInput($event)">
 
-                <small
-                    class="error"
-                    *ngIf="form.get('monto_minimo')?.invalid &&
-                           form.get('monto_minimo')?.touched">
-
-                    Este campo es obligatorio
-
+                <small class="error" *ngIf="montoMinimoErrorMessage">
+                    {{ montoMinimoErrorMessage }}
                 </small>
 
             </div>
@@ -218,9 +202,10 @@
 
                 <button
                     class="btn-save"
-                    type="submit">
+                    type="submit"
+                    [disabled]="form.invalid || isLoading">
 
-                    Guardar
+                    {{ isLoading ? 'Procesando...' : 'Guardar' }}
 
                 </button>
 
@@ -237,9 +222,10 @@
                     *ngIf="registroSeleccionado"
                     class="btn-delete"
                     type="button"
-                    (click)="eliminar(registroSeleccionado)">
+                    [disabled]="isLoading"
+                    (click)="confirmarEliminacion(registroSeleccionado)">
 
-                    Eliminar
+                    {{ isLoading ? 'Procesando...' : 'Eliminar' }}
 
                 </button>
 

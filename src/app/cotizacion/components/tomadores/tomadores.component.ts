@@ -110,10 +110,15 @@ export class TomadoresComponent implements OnInit {
   }
   }
 
+  limpiarCaracteresInvalidos(event: Event) {
+  const input = event.target as HTMLInputElement;
+  // Reemplaza cualquier carácter que no sea un número (0-9)
+  input.value = input.value.replace(/[^0-9]/g, '');
+  }
+
   ver(t: any): void {
   this.tomador = { ...t };
   this.editando = false;
-
-}
+  }
 
 }
