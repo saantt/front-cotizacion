@@ -56,6 +56,22 @@
         </div>
       </div>
 
+      <div>
+        <label>Fecha Inicio *</label>
+        <input type="date" formControlName="fec_inicio">
+        <div *ngIf="form.get('fec_inicio')?.invalid && form.get('fec_inicio')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
+      <div>
+        <label>Fecha Fin *</label>
+        <input type="date" formControlName="fec_fin">
+        <div *ngIf="form.get('fec_fin')?.invalid && form.get('fec_fin')?.touched">
+          Este campo es obligatorio
+        </div>
+      </div>
+
       <div *ngIf="modo !== 'ver'">
         <button type="submit">Guardar</button>
         <button type="button" (click)="cancelar()">Cancelar</button>
