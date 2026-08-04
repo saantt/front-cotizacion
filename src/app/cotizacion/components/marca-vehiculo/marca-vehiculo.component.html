@@ -135,12 +135,6 @@
 
             </h2>
 
-            <span *ngIf="registroSeleccionado">
-
-                REG {{registroSeleccionado.id_marca_vehiculo}}
-
-            </span>
-
         </div>
 
         <form [formGroup]="form" (ngSubmit)="guardar()">
@@ -153,11 +147,19 @@
 
                 <input type="text" formControlName="nombre_marca_vehiculo">
 
-                <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.invalid &&
-                           form.get('nombre_marca_vehiculo')?.touched">
+                <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.hasError('required') &&
+               form.get('nombre_marca_vehiculo')?.touched">
+                    El nombre de la marca es obligatorio.
+                </small>
 
-                    Este campo es obligatorio
+                <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.hasError('minlength') &&
+               form.get('nombre_marca_vehiculo')?.touched">
+                    Debe tener al menos 3 caracteres.
+                </small>
 
+                <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.hasError('maxlength') &&
+               form.get('nombre_marca_vehiculo')?.touched">
+                    No puede superar los 50 caracteres.
                 </small>
 
             </div>
@@ -170,11 +172,19 @@
 
                 <input type="text" formControlName="pais_origen_vehiculo">
 
-                <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.invalid &&
-                           form.get('pais_origen_vehiculo')?.touched">
+                <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.hasError('required') &&
+               form.get('pais_origen_vehiculo')?.touched">
+                    El país de origen es obligatorio.
+                </small>
 
-                    Este campo es obligatorio
+                <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.hasError('minlength') &&
+               form.get('pais_origen_vehiculo')?.touched">
+                    Debe tener al menos 3 caracteres.
+                </small>
 
+                <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.hasError('maxlength') &&
+               form.get('pais_origen_vehiculo')?.touched">
+                    No puede superar los 50 caracteres.
                 </small>
 
             </div>
@@ -187,11 +197,14 @@
 
                 <input type="text" formControlName="abreviatura_vehiculo">
 
-                <small class="error" *ngIf="form.get('abreviatura_vehiculo')?.invalid &&
-                           form.get('abreviatura_vehiculo')?.touched">
+                <small class="error" *ngIf="form.get('abreviatura_vehiculo')?.hasError('required') &&
+               form.get('abreviatura_vehiculo')?.touched">
+                    La abreviatura es obligatoria.
+                </small>
 
-                    Este campo es obligatorio
-
+                <small class="error" *ngIf="form.get('abreviatura_vehiculo')?.hasError('pattern') &&
+               form.get('abreviatura_vehiculo')?.touched">
+                    La abreviatura debe tener exactamente 3 caracteres.
                 </small>
 
             </div>

@@ -12,7 +12,7 @@ export class MarcaVehiculoComponent implements OnInit {
 
   marcavehiculo: MarcaVehiculo[] = [];
   registroSeleccionado: MarcaVehiculo | null = null;
-  modo: 'crear' | 'editar' | 'ver' | null = null;
+  modo: 'crear' | 'editar' | 'ver' = 'crear';
   form!: FormGroup;
 
   constructor(
@@ -23,9 +23,9 @@ export class MarcaVehiculoComponent implements OnInit {
   ngOnInit(): void {
 
     this.form = this.fb.group({
-      nombre_marca_vehiculo: ['', Validators.required],
-      pais_origen_vehiculo: ['', Validators.required],
-      abreviatura_vehiculo: ['', Validators.required]
+      nombre_marca_vehiculo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      pais_origen_vehiculo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+      abreviatura_vehiculo: ['', [Validators.required, Validators.pattern(/^[A-Za-z]{3}$/)]]
     });
 
     this.marcaVehiculoService.marcas$
