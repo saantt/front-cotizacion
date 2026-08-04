@@ -5,4 +5,5 @@ export interface DatosRiesgoRequest {
   estadoId: number;
   modelo: number;
   servicio: string;
+  marcaId: number;
 }

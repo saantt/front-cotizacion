@@ -11,6 +11,7 @@ export class DatosRiesgoComponent implements OnInit {
   @ViewChild(ListDatosRiesgosComponent) listDatosRiesgosComponent!: ListDatosRiesgosComponent;
 
   selectedDatosRiesgo: any;
+  
 
   constructor() { }
 

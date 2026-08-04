@@ -20,6 +20,7 @@
                     <th>Matrícula</th>
                     <th>Cédula</th>
                     <th>Estado</th>
+                    <th>Marca</th>
                     <th>Modelo</th>
                     <th>Servicio</th>
                     <th>Fecha</th>
@@ -41,15 +42,18 @@
                             {{ riesgo.estadoId === 1 ? 'Activo' : 'Pendiente' }}
                         </span>
                     </td>
+                    <td>
+                        {{ getMarcaNombre(riesgo.marcaId) }}
+                    </td>
                     <td>{{ riesgo.modelo }}</td>
                     <td>
                         <span
                             class="badge"
                             [ngClass]="{
-                                'badge-juridica': riesgo.tipoServicio?.toLowerCase() === 'publico',
-                                'badge-natural': riesgo.tipoServicio?.toLowerCase() === 'particular'
+                                'badge-juridica': riesgo.servicio?.toLowerCase() === 'publico',
+                                'badge-natural': riesgo.servicio?.toLowerCase() === 'particular'
                             }">
-                            {{ riesgo.tipoServicio | titlecase }}
+                            {{ riesgo.servicio | titlecase }}
                         </span>
                     </td>
                     <td>{{ riesgo.fecha | date: 'dd/MM/yyyy' }}</td>

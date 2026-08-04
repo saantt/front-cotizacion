@@ -4,7 +4,8 @@ import { DatosRiesgoResponse } from '../../../models/datos-riesgos/datosRiesgoRe
 import { DatosRiesgoService } from '../../../services/datos-riesgo.service';
 import { TomadorModule } from '../../../models/tomador/tomador.module';
 import { TomadorServiceService } from '../../../services/tomador-service.service';
-
+import { MarcaVehiculoService } from '../../../services/marca-vehiculo.service';
+import { MarcaVehiculo } from 'src/app/cotizacion/models/marca-vehiculo.model';
 @Component({
   selector: 'app-form-datos-riesgo',
   templateUrl: './form-datos-riesgo.component.html',
@@ -18,12 +19,14 @@ export class FormDatosRiesgoComponent implements OnInit {
 
   datosRiesgoForm!: FormGroup;
   tomadores: TomadorModule[] = [];
+  marcasVehiculo: MarcaVehiculo[] = [];
   isEditMode: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     private datosRiesgoService: DatosRiesgoService,
-    private tomadorService: TomadorServiceService
+    private tomadorService: TomadorServiceService,
+    private marcaService: MarcaVehiculoService  
   ) { }
 
   ngOnInit(): void {
@@ -32,12 +35,14 @@ export class FormDatosRiesgoComponent implements OnInit {
       matricula: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(10)]],
       cedula: ['', Validators.required],
       estadoId: [1, Validators.required],
+      marcaId: [null, Validators.required],
       modelo: ['', [Validators.required, Validators.maxLength(4)]],
       servicio: ['PARTICULAR', [Validators.required, Validators.maxLength(20)]],
     });
 
     this.setNextId();
     this.loadTomadores();
+    this.loadMarcaVehiculo();
   }
 
   private setNextId(): void {
@@ -59,6 +64,19 @@ export class FormDatosRiesgoComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar los tomadores:', error);
+      }
+    });
+  }
+
+  loadMarcaVehiculo(): void {
+    this.marcaService.cargarMarcasVehiculo();
+    this.marcaService.marcas$.subscribe({
+      next: (marcas) => {
+        this.marcasVehiculo = marcas;
+        console.log('Marcas de vehículo cargadas:', marcas);
+      },
+      error: (error) => {
+        console.error('Error al cargar las marcas de vehículo:', error);
       }
     });
   }
@@ -103,6 +121,7 @@ export class FormDatosRiesgoComponent implements OnInit {
           matricula: '',
           cedula: '',
           estadoId: 1,
+          marcaId: null,
           modelo: '',
           servicio: 'PARTICULAR'
         });
@@ -131,6 +150,15 @@ export class FormDatosRiesgoComponent implements OnInit {
       next: (datosRiesgo) => {
         console.log('Datos de riesgo creados:', datosRiesgo);
         this.formSubmit.emit();
+        this.datosRiesgoForm.reset({
+          id: '',
+          matricula: '',
+          cedula: '',
+          estadoId: 1,
+          marcaId: null,
+          modelo: '',
+          servicio: 'PARTICULAR'
+        });
       },
       error: (error) => {
         console.error('Error al crear datos de riesgo:', error);
