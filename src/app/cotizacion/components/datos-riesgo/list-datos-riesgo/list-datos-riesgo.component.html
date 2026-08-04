@@ -50,10 +50,10 @@
                         <span
                             class="badge"
                             [ngClass]="{
-                                'badge-juridica': riesgo.tipoServicio?.toLowerCase() === 'publico',
-                                'badge-natural': riesgo.tipoServicio?.toLowerCase() === 'particular'
+                                'badge-juridica': riesgo.servicio?.toLowerCase() === 'publico',
+                                'badge-natural': riesgo.servicio?.toLowerCase() === 'particular'
                             }">
-                            {{ riesgo.tipoServicio | titlecase }}
+                            {{ riesgo.servicio | titlecase }}
                         </span>
                     </td>
                     <td>{{ riesgo.fecha | date: 'dd/MM/yyyy' }}</td>

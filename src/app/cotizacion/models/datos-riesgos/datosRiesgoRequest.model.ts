@@ -4,6 +4,6 @@ export interface DatosRiesgoRequest {
   cedula: string;
   estadoId: number;
   modelo: number;
-  tipoServicio: string;
+  servicio: string;
   marcaId: number;
 }

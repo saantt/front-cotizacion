@@ -37,7 +37,7 @@ export class FormDatosRiesgoComponent implements OnInit {
       estadoId: [1, Validators.required],
       marcaId: [null, Validators.required],
       modelo: ['', [Validators.required, Validators.maxLength(4)]],
-      tipoServicio: ['PARTICULAR', [Validators.required, Validators.maxLength(20)]],
+      servicio: ['PARTICULAR', [Validators.required, Validators.maxLength(20)]],
     });
 
     this.setNextId();
@@ -123,7 +123,7 @@ export class FormDatosRiesgoComponent implements OnInit {
           estadoId: 1,
           marcaId: null,
           modelo: '',
-          tipoServicio: 'PARTICULAR'
+          servicio: 'PARTICULAR'
         });
         this.datosRiesgoForm.get('id')?.disable();
         this.datosRiesgoForm.updateValueAndValidity();
@@ -157,7 +157,7 @@ export class FormDatosRiesgoComponent implements OnInit {
           estadoId: 1,
           marcaId: null,
           modelo: '',
-          tipoServicio: 'PARTICULAR'
+          servicio: 'PARTICULAR'
         });
       },
       error: (error) => {
@@ -195,7 +195,7 @@ export class FormDatosRiesgoComponent implements OnInit {
         this.datosRiesgoForm.enable();
         this.datosRiesgoForm.reset({
           estadoId: 1,
-          tipoServicio: 'PARTICULAR'
+          servicio: 'PARTICULAR'
         });
         this.datosRiesgoForm.get('id')?.disable();
         this.setNextId();
@@ -212,7 +212,7 @@ export class FormDatosRiesgoComponent implements OnInit {
     this.datosRiesgoForm.enable();
     this.datosRiesgoForm.reset({
       estadoId: 1,
-      tipoServicio: 'PARTICULAR'
+      servicio: 'PARTICULAR'
     });
     this.datosRiesgoForm.get('id')?.disable();
     this.setNextId();

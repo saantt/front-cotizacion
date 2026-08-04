@@ -76,13 +76,13 @@
         </div>
 
         <div class="form-group">
-            <label for="tipoServicio">Servicio</label>
-            <select id="tipoServicio" formControlName="tipoServicio">
+            <label for="servicio">Servicio</label>
+            <select id="servicio" formControlName="servicio">
                 <option value="PARTICULAR">Particular</option>
                 <option value="PUBLICO">Público</option>
             </select>
-            <div class="error-message" *ngIf="isControlInvalid('tipoServicio')">
-                <span *ngIf="getControl('tipoServicio')?.errors?.required">El servicio es obligatorio.</span>
+            <div class="error-message" *ngIf="isControlInvalid('servicio')">
+                <span *ngIf="getControl('servicio')?.errors?.required">El servicio es obligatorio.</span>
             </div>
         </div>
 
