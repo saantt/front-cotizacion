@@ -86,8 +86,6 @@ npm start
 
 La aplicación queda disponible en [http://localhost:4200](http://localhost:4200). Los cambios en el código se recargan automáticamente.
 
-Antes de levantar el proyecto, verifica que la URL del backend esté correctamente configurada en `src/environments/environment.ts`.
-
 ## Build de producción
 
 ```bash
