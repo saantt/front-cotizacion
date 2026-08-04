@@ -1,27 +1,142 @@
-# FrontCotizacion
+# Front Cotización
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.19.
+> Frontend web para la gestión de entidades relacionadas con **cotizaciones de seguros vehiculares**.
 
-## Development server
+Aplicación desarrollada en **Angular** que centraliza los datos maestros necesarios para el proceso de cotización: riesgos, tomadores, marcas de vehículo, coberturas, deducibles, impuestos y estados. Expone una interfaz con menú lateral y pantallas CRUD (crear, leer, actualizar, eliminar) para cada entidad del dominio, comunicándose con un backend REST mediante `HttpClient`.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## Tabla de contenidos
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- [Funcionalidades](#funcionalidades)
+- [Tecnologías](#tecnologías)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Requisitos previos](#requisitos-previos)
+- [Instalación](#instalación)
+- [Ejecución en desarrollo](#ejecución-en-desarrollo)
+- [Build de producción](#build-de-producción)
+- [Configuración de la API](#configuración-de-la-api)
+- [Scripts disponibles](#scripts-disponibles)
+- [Tests](#tests)
+- [Convenciones de código](#convenciones-de-código)
+- [Licencia](#licencia)
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## Funcionalidades
 
-## Running unit tests
+| Módulo | Ruta | Descripción |
+|--------|------|-------------|
+| Datos del Riesgo | `/datos-riesgo` | Gestión de la información del riesgo asegurado |
+| Tomadores | `/tomadores` | Administración de tomadores de póliza |
+| Marcas de Vehículo | `/marcavehiculo` | Catálogo de marcas de vehículos |
+| Coberturas | `/coberturas` | Definición de coberturas del seguro |
+| Deducibles | `/deducibles` | Configuración de deducibles |
+| Impuestos de Cotización | `/impuestos-cotizacion` | Gestión de impuestos aplicables |
+| Estados de Cotización | `/estados-cotizacion` | Catálogo de estados del flujo de cotización |
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Tecnologías
 
-## Running end-to-end tests
+- [Angular](https://angular.io/) 11.2
+- [TypeScript](https://www.typescriptlang.org/) 4.1
+- [RxJS](https://rxjs.dev/) 6.6
+- Angular Forms (reactivos y por plantilla)
+- Angular Router con lazy loading del módulo principal
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Estructura del proyecto
 
-## Further help
+```
+src/
+├── app/
+│   ├── cotizacion/                   # Módulo principal de cotización
+│   │   ├── components/               # Componentes CRUD por entidad
+│   │   ├── models/                   # Interfaces y modelos de datos
+│   │   ├── services/                 # Servicios HTTP hacia la API
+│   │   └── cotizacion-routing.module.ts
+│   ├── shared/                       # Componentes compartidos (menú lateral, etc.)
+│   ├── app-routing.module.ts
+│   └── app.module.ts
+└── environments/                     # Configuración por entorno (dev, prod)
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Requisitos previos
+
+- [Node.js](https://nodejs.org/) v12 o superior
+- [npm](https://www.npmjs.com/) v6 o superior
+- [Angular CLI](https://angular.io/cli) 11.x (`npm install -g @angular/cli@11`)
+- Backend REST en ejecución y accesible (ver [Configuración de la API](#configuración-de-la-api))
+
+## Instalación
+
+```bash
+# Clonar el repositorio
+git clone <url-del-repositorio>
+cd front-cotizacion
+
+# Instalar dependencias
+npm install
+```
+
+## Ejecución en desarrollo
+
+```bash
+npm start
+# equivalente a: ng serve
+```
+
+La aplicación queda disponible en [http://localhost:4200](http://localhost:4200). Los cambios en el código se recargan automáticamente.
+
+## Build de producción
+
+```bash
+npm run build
+# equivalente a: ng build --prod
+```
+
+Los artefactos compilados se generan en el directorio `dist/`, listos para desplegar en cualquier servidor de archivos estáticos.
+
+## Configuración de la API
+
+Los endpoints consumidos actualmente son:
+
+| Servicio | Endpoint |
+|----------|----------|
+| Datos del Riesgo | `/api/datos-riesgo` |
+| Tomadores | `/api/tomadores` |
+| Marcas de Vehículo | `/api/marcavehiculo` |
+| Coberturas | `/api/coberturas` |
+| Deducibles | `/api/deducibles` |
+| Impuestos | `/api/impuestos-cotizacion` |
+| Estados | `/api/estados-cotizacion` |
+
+
+## Scripts disponibles
+
+| Comando | Descripción |
+|---------|-------------|
+| `npm start` | Levanta el servidor de desarrollo |
+| `npm run build` | Compila el proyecto para producción |
+| `npm test` | Ejecuta los tests unitarios (Karma + Jasmine) |
+| `npm run lint` | Análisis estático con TSLint |
+| `npm run e2e` | Ejecuta los tests end-to-end (Protractor) |
+
+## Tests
+
+```bash
+# Tests unitarios
+npm test
+
+# Tests end-to-end
+npm run e2e
+```
+
+## Convenciones de código
+
+- Sigue la [guía de estilo oficial de Angular](https://angular.io/guide/styleguide).
+- Un componente por entidad, con su respectivo servicio HTTP en `services/`.
+- Los modelos de datos deben tiparse en `models/` en lugar de usar `any`.
+- Ejecuta `npm run lint` antes de abrir un pull request.
+
+## Licencia
+
+Proyecto privado. Consultar al propietario del repositorio para condiciones de uso.
