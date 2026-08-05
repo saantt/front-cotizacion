@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 import { RegisterModel } from '../../cotizacion/models/register.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -76,6 +78,7 @@ export class RegisterComponent implements OnInit {
         this.registerForm.reset();
         this.submitted = false;
         this.isSubmitting = false;
+        this.login(payload.username, payload.password);
       },
       error: (error) => {
         this.feedbackMessage = 'No se pudo completar el registro. Verifica los datos o intenta más tarde.';
@@ -84,5 +87,15 @@ export class RegisterComponent implements OnInit {
         this.isSubmitting = false;
       }
     });
+
   }
+
+  login(username: string, password: string): void{
+      this.authService.login(username, password).subscribe({
+        next: () => this.router.navigate(['/']),
+        error: () => {
+          console.error(username, password);
+        }
+      });
+    }
 }
