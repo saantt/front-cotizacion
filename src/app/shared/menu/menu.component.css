@@ -96,6 +96,46 @@ nav a {
     white-space: nowrap;
 }
 
+nav a.menu-action {
+    margin-bottom: 12px;
+    justify-content: center;
+    padding: 12px 18px;
+    background: #1d4ed8;
+    color: white;
+    border: 1px solid transparent;
+    box-shadow: 0 12px 30px rgba(29, 78, 216, 0.18);
+    border-radius: 999px;
+    text-align: center;
+}
+
+nav a.menu-action:hover {
+    background: #2563eb;
+    color: white;
+}
+
+nav a.menu-action.active {
+    background: #143d8a;
+    box-shadow: 0 12px 30px rgba(20, 61, 138, 0.24);
+}
+
+nav a.menu-action .dot {
+    width: 8px;
+    height: 8px;
+}
+
+nav a.menu-action span:not(.dot) {
+    font-weight: 700;
+}
+
+.sidebar.collapsed nav a.menu-action {
+    justify-content: center;
+    padding: 12px;
+}
+
+.sidebar.collapsed nav a.menu-action span:not(.dot) {
+    display: none;
+}
+
 nav a:hover {
     background: rgba(37, 99, 235, .08);
 }
