@@ -51,20 +51,16 @@
             </div>
 
             <div class="pagination">
-
                 <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
                     &lt;
                 </button>
-
                 <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
                     (click)="goToPage(page)">
                     {{ page }}
                 </button>
-
                 <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
                     &gt;
                 </button>
-
             </div>
         </section>
 
@@ -82,7 +78,7 @@
                 </span>
             </div>
 
-            <form [formGroup]="form" (ngSubmit)="save()" class="crud-form">
+            <form class="crud-form" [formGroup]="form" (ngSubmit)="save()">
                 <div class="form-group">
                     <label>ID Cobertura</label>
                     <input type="text" formControlName="id_cobertura" [readonly]="mode !== 'create'">

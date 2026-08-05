@@ -520,3 +520,40 @@ a {
     line-height: 18px;
 }
 
+
+/*==================================================
+=                COLORES DE PUNTOS
+==================================================*/
+
+.dot.blue {
+  background: #3B82F6; /* Azul */
+}
+
+.dot.teal {
+  background: #14B8A6; /* Verde agua */
+}
+
+.dot.cyan {
+  background: #06B6D4; /* Cian */
+}
+
+.dot.purple {
+  background: #8B5CF6; /* Morado */
+}
+
+.dot.green {
+  background: #22C55E; /* Verde */
+}
+
+.dot.orange {
+  background: #F59E0B; /* Naranja */
+}
+
+.dot.red {
+  background: #EF4444; /* Rojo */
+}
+
+.dot.yellow {
+  background: #EAB308; /* Amarillo */
+}
+

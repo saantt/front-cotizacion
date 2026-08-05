@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MarcaVehiculoService } from '../../services/marca-vehiculo.service';
 import { MarcaVehiculo } from '../../models/marca-vehiculo.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-marca-vehiculo',
@@ -10,11 +11,64 @@ import { MarcaVehiculo } from '../../models/marca-vehiculo.model';
 })
 export class MarcaVehiculoComponent implements OnInit {
 
-  marcavehiculo: MarcaVehiculo[] = [];
+  /*==========================
+    FORMULARIO Y VALIDACIONES
+  ==========================*/
+  showForm = false;
+  form!: FormGroup;
   registroSeleccionado: MarcaVehiculo | null = null;
   modo: 'crear' | 'editar' | 'ver' = 'crear';
-  form!: FormGroup;
 
+  closeForm() {
+    this.showForm = false;
+  }
+
+  /*===========
+    PAGINACIÓN
+  ============*/
+  pageSize = 7;
+  currentPage = 1;
+  paginatedCoverages: MarcaVehiculo[] = [];
+  pages: number[] = [];
+
+  changePage(): void {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    this.paginatedCoverages = this.marcavehiculo.slice(start, end);
+
+    this.pages = Array.from(
+      { length: this.totalPages() },
+      (_, index) => index + 1
+    );
+  }
+  
+  nextPage(): void {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
+      this.changePage();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.changePage();
+    }
+  }
+  
+  totalPages(): number {
+    return Math.ceil(this.marcavehiculo.length / this.pageSize);
+  }
+  
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.changePage();
+  }
+
+
+  marcavehiculo: MarcaVehiculo[] = [];
+ 
   constructor(
     private fb: FormBuilder,
     private marcaVehiculoService: MarcaVehiculoService
@@ -31,6 +85,8 @@ export class MarcaVehiculoComponent implements OnInit {
     this.marcaVehiculoService.marcas$
       .subscribe(lista => {
         this.marcavehiculo = lista;
+        this.currentPage = 1;
+        this.changePage();
       });
     this.marcaVehiculoService.cargarMarcasVehiculo();
   }
@@ -40,6 +96,7 @@ export class MarcaVehiculoComponent implements OnInit {
   // =========================
 
   nuevo(): void {
+    this.showForm = true;
     this.modo = 'crear';
     this.registroSeleccionado = null;
     this.form.reset();
@@ -51,6 +108,7 @@ export class MarcaVehiculoComponent implements OnInit {
   // =========================
 
   ver(mv: MarcaVehiculo): void {
+    this.showForm = true;
     this.modo = 'ver';
     this.registroSeleccionado = mv;
     this.form.patchValue(mv);
@@ -62,6 +120,7 @@ export class MarcaVehiculoComponent implements OnInit {
   // =========================
 
   editar(mv: MarcaVehiculo): void {
+    this.showForm = true;
     this.modo = 'editar';
     this.registroSeleccionado = mv;
     this.form.enable();
@@ -88,10 +147,25 @@ export class MarcaVehiculoComponent implements OnInit {
       this.marcaVehiculoService.crearMarcaVehiculo(marca)
         .subscribe({
           next: () => {
-            this.cancelar();
+            this.marcaVehiculoService.cargarMarcasVehiculo();
+            this.form.reset();
+            this.form.enable();
+            this.showForm = false;
+            Swal.fire({
+              title: 'Guardado',
+              text: 'La marca de vehículo fue creada correctamente.',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
           },
           error: (error) => {
             console.error('Error creando marca:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo crear la marca de vehículo.',
+              icon: 'error'
+            });
           }
         });
     } else if (this.modo === 'editar') {
@@ -101,10 +175,25 @@ export class MarcaVehiculoComponent implements OnInit {
       )
         .subscribe({
           next: () => {
-            this.cancelar();
+            this.marcaVehiculoService.cargarMarcasVehiculo();
+            this.form.reset();
+            this.form.enable();
+            this.showForm = false;
+            Swal.fire({
+              title: 'Actualizado',
+              text: 'La marca de vehículo fue actualizada correctamente.',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
           },
           error: (error) => {
             console.error('Error actualizando marca:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo actualizar la marca de vehículo.',
+              icon: 'error'
+            });
           }
         });
     }
@@ -119,34 +208,42 @@ export class MarcaVehiculoComponent implements OnInit {
       return;
     }
 
-    const confirmar = confirm(
-      `¿Desea eliminar la marca ${mv.nombre_marca_vehiculo}?`
-    );
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `¿Desea eliminar la marca ${mv.nombre_marca_vehiculo}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2563EB',
+      cancelButtonColor: '#6B7280'
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
+      }
 
-    if (!confirmar) {
-      return;
-    }
-
-    this.marcaVehiculoService.eliminarMarcaVehiculo(mv.id_marca_vehiculo)
-      .subscribe({
-        next: () => {
-          this.cancelar();
-        },
-        error: (error) => {
-          console.error('Error eliminando marca:', error);
-        }
-      });
-  }
-
-  // =========================
-  // CANCELAR
-  // =========================
-
-  cancelar(): void {
-    this.modo = null;
-    this.registroSeleccionado = null;
-    this.form.reset();
-    this.form.enable();
+      this.marcaVehiculoService.eliminarMarcaVehiculo(mv.id_marca_vehiculo)
+        .subscribe({
+          next: () => {
+            this.marcaVehiculoService.cargarMarcasVehiculo();
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'La marca de vehículo fue eliminada correctamente.',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          },
+          error: (error) => {
+            console.error('Error eliminando marca:', error);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo eliminar la marca de vehículo.',
+              icon: 'error'
+            });
+          }
+        });
+    });
   }
 
   trackById(index: number, item: MarcaVehiculo): number {

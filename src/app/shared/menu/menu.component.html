@@ -12,18 +12,13 @@
   <h4 *ngIf="!menuColapsado">ENTIDADES</h4>
 
   <nav>
-    <a class="menu-link" routerLink="/cobertura-riesgo" routerLinkActive="active">
-      <span class="dot red"></span>
-      <span *ngIf="!menuColapsado">Coberturas del Riesgo</span>
-    </a>
-
     <a class="menu-link" routerLink="/datos-riesgo" routerLinkActive="active">
       <span class="dot blue"></span>
       <span *ngIf="!menuColapsado">Datos del Riesgo</span>
     </a>
 
     <a class="menu-link" routerLink="/tomadores" routerLinkActive="active">
-      <span class="dot orange"></span>
+      <span class="dot teal"></span>
       <span *ngIf="!menuColapsado">Tomadores</span>
     </a>
 
@@ -32,14 +27,19 @@
       <span *ngIf="!menuColapsado">Marcas de Vehículo</span>
     </a>
 
+    <a class="menu-link" routerLink="/deducibles" routerLinkActive="active">
+      <span class="dot purple"></span>
+      <span *ngIf="!menuColapsado">Deducibles</span>
+    </a>
+
     <a class="menu-link" routerLink="/coberturas" routerLinkActive="active">
       <span class="dot green"></span>
       <span *ngIf="!menuColapsado">Coberturas</span>
     </a>
 
-    <a class="menu-link" routerLink="/deducibles" routerLinkActive="active">
-      <span class="dot violet"></span>
-      <span *ngIf="!menuColapsado">Deducibles</span>
+    <a class="menu-link" routerLink="/cobertura-riesgo" routerLinkActive="active">
+      <span class="dot orange"></span>
+      <span *ngIf="!menuColapsado">Coberturas del Riesgo</span>
     </a>
 
     <a class="menu-link" routerLink="/impuestos-cotizacion" routerLinkActive="active">
@@ -51,7 +51,6 @@
       <span class="dot yellow"></span>
       <span *ngIf="!menuColapsado">Estados de Cotización</span>
     </a>
-
   </nav>
 
 </div>
