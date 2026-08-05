@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Deducible } from '../../models/deducible.model';
 import { DeducibleService } from '../../services/deducible-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'deducible',
@@ -11,9 +12,11 @@ import { DeducibleService } from '../../services/deducible-service.service';
 
 export class DeducibleComponent implements OnInit, OnDestroy {
 
-  deducibles: Deducible[] = [];
+  /*==========================
+    FORMULARIO Y VALIDACIONES
+  ==========================*/
+  showForm = false;
   form!: FormGroup;
-
   // controla si el panel derecho está en modo ver / editar / crear
   modo: 'ver' | 'editar' | 'crear' | null = null;
   registroSeleccionado: Deducible | null = null;
@@ -24,6 +27,56 @@ export class DeducibleComponent implements OnInit, OnDestroy {
   montoMinimoErrorMessage: string | null = null;
   private toastTimeoutId: number | null = null;
 
+  closeForm() {
+    this.showForm = false;
+  }
+
+  /*===========
+    PAGINACIÓN
+  ============*/
+  pageSize = 7;
+  currentPage = 1;
+  paginatedCoverages: Deducible[] = [];
+  pages: number[] = [];
+
+  changePage(): void {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    this.paginatedCoverages = this.deducibles.slice(start, end);
+
+    this.pages = Array.from(
+      { length: this.totalPages() },
+      (_, index) => index + 1
+    );
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
+      this.changePage();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.changePage();
+    }
+  }
+
+  totalPages(): number {
+    return Math.ceil(this.deducibles.length / this.pageSize);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.changePage();
+  }
+
+
+  deducibles: Deducible[] = [];
+  
   constructor(
     private fb: FormBuilder,
     private deducibleService: DeducibleService
@@ -31,6 +84,7 @@ export class DeducibleComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
+    this.modo = 'crear';
     this.listarDeducibles();
   }
 
@@ -110,6 +164,8 @@ export class DeducibleComponent implements OnInit, OnDestroy {
     this.deducibleService.getAll().subscribe({
       next: (data: Deducible[]) => {
         this.deducibles = data;
+        this.currentPage = 1;
+        this.changePage();
         this.isLoading = false;
       },
       error: (err: any) => {
@@ -121,14 +177,17 @@ export class DeducibleComponent implements OnInit, OnDestroy {
   }
 
   nuevo(): void {
+    this.showForm = true;
     this.modo = 'crear';
     this.registroSeleccionado = null;
     this.form.reset({ porcentaje: 0, monto_minimo: 0 });
+    this.form.enable();
     this.porcentajeErrorMessage = null;
     this.montoMinimoErrorMessage = null;
   }
 
   ver(deducible: Deducible): void {
+    this.showForm = true;
     this.modo = 'ver';
     this.registroSeleccionado = deducible;
     this.form.patchValue(deducible);
@@ -138,6 +197,7 @@ export class DeducibleComponent implements OnInit, OnDestroy {
   }
 
   editar(deducible: Deducible): void {
+    this.showForm = true;
     this.modo = 'editar';
     this.registroSeleccionado = deducible;
     this.form.enable();
@@ -155,18 +215,51 @@ export class DeducibleComponent implements OnInit, OnDestroy {
   }
 
   eliminar(deducible: Deducible): void {
-    this.isLoading = true;
-    this.deducibleService.delete(deducible.id_deducible).subscribe({
-      next: () => {
-        this.listarDeducibles();
-        this.isLoading = false;
-        this.showToast('Deducible eliminado correctamente.', 'success');
-      },
-      error: (err: any) => {
-        console.error('Error al eliminar deducible', err);
-        this.isLoading = false;
-        this.showToast(this.getErrorMessage(err), 'error');
+    if (!deducible?.id_deducible) {
+      return;
+    }
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `¿Desea eliminar el deducible ${deducible.porcentaje}% ?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2563EB',
+      cancelButtonColor: '#6B7280'
+    }).then((result) => {
+      if (!result.isConfirmed) {
+        return;
       }
+
+      this.isLoading = true;
+      this.deducibleService.delete(deducible.id_deducible).subscribe({
+        next: () => {
+          if (this.registroSeleccionado?.id_deducible === deducible.id_deducible) {
+            this.cancelar();
+            this.closeForm();
+          }
+          this.listarDeducibles();
+          this.isLoading = false;
+          Swal.fire({
+            title: 'Eliminado',
+            text: 'Deducible eliminado correctamente.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        },
+        error: (err: any) => {
+          console.error('Error al eliminar deducible', err);
+          this.isLoading = false;
+          Swal.fire({
+            title: 'Error',
+            text: this.getErrorMessage(err),
+            icon: 'error'
+          });
+        }
+      });
     });
   }
 
@@ -184,7 +277,11 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const request = this.form.value;
+    const request = {
+      porcentaje: Number(this.form.value.porcentaje),
+      monto_minimo: Number(this.form.value.monto_minimo)
+    };
+    
     this.isLoading = true;
 
     if (this.modo === 'crear') {
@@ -192,13 +289,24 @@ export class DeducibleComponent implements OnInit, OnDestroy {
         next: () => {
           this.listarDeducibles();
           this.cancelar();
+          this.closeForm();
           this.isLoading = false;
-          this.showToast('Deducible creado correctamente.', 'success');
+          Swal.fire({
+            title: 'Guardado',
+            text: 'Deducible creado correctamente.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
         },
         error: (err: any) => {
           console.error('Error al crear deducible', err);
           this.isLoading = false;
-          this.showToast(this.getErrorMessage(err), 'error');
+          Swal.fire({
+            title: 'Error',
+            text: this.getErrorMessage(err),
+            icon: 'error'
+          });
         }
       });
     } else if (this.modo === 'editar' && this.registroSeleccionado) {
@@ -206,19 +314,31 @@ export class DeducibleComponent implements OnInit, OnDestroy {
         next: () => {
           this.listarDeducibles();
           this.cancelar();
+          this.closeForm();
           this.isLoading = false;
-          this.showToast('Deducible actualizado correctamente.', 'success');
+          Swal.fire({
+            title: 'Actualizado',
+            text: 'Deducible actualizado correctamente.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+          });
         },
         error: (err: any) => {
           console.error('Error al actualizar deducible', err);
           this.isLoading = false;
-          this.showToast(this.getErrorMessage(err), 'error');
+          Swal.fire({
+            title: 'Error',
+            text: this.getErrorMessage(err),
+            icon: 'error'
+          });
         }
       });
     }
   }
 
   cancelar(): void {
+    this.showForm = false;
     this.modo = null;
     this.registroSeleccionado = null;
     this.form.reset({ porcentaje: 0, monto_minimo: 0 });
