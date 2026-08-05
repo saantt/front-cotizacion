@@ -10,3 +10,513 @@ a {
   color: inherit;
 }
 
+/*==================================================
+=            CONTENEDOR GENERAL
+==================================================*/
+.crud-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.crud-panel {
+    display: grid;
+    grid-template-columns: 1fr;
+    height: 100%;
+    background: #fff;
+    border: 1px solid #dde4ee;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: grid-template-columns .3s ease;
+}
+
+.crud-panel.form-open {
+    grid-template-columns: minmax(0, 2fr) 360px;
+}
+
+/*==================================================
+=            PANEL TABLA
+==================================================*/
+.table-section {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.table-content {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/*==================================================
+=            HEADER
+==================================================*/
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e9eef5;
+}
+
+.section-title {
+    display: flex;
+    flex-direction: column;
+}
+
+.section-title h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.section-title span {
+    margin: 2px 0 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+/*==================================================
+=            BUSCADOR
+==================================================*/
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: auto;
+    flex: 1;
+    max-width: none;
+    height: 42px;
+    padding: 0 14px;
+    margin-left: 25px;
+    background: #fff;
+    border: 1px solid #d7dde5;
+    border-radius: 8px;
+}
+
+.search-box mat-icon {
+    font-size: 20px;
+    color: #94a3b8;
+}
+
+.search {
+    flex: 1;
+    border: none !important;
+    outline: none;
+    box-shadow: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    background: transparent;
+}
+
+/*==================================================
+=            BOTÓN
+==================================================*/
+.btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    justify-self: end;
+    height: 42px;
+    padding: 0 18px;
+    border: none;
+    border-radius: 8px;
+    background: #2F6BFF;
+    color: #fff;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.btn-primary:hover {
+    background: #2558d8;
+}
+
+/*==================================================
+=            TABLA
+==================================================*/
+.custom-table {
+    width: 100%;
+    min-width: 820px;
+    border-collapse: collapse;
+}
+
+.custom-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 16px;
+    background: #f8fafc;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #64748b;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.custom-table td {
+    padding: 16px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-size: 14px;
+    color: #334155;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.custom-table tbody tr {
+    transition: background .2s;
+}
+
+.custom-table tbody tr:hover {
+    background: #f8fbff;
+}
+
+.custom-table tbody tr.selected {
+    background: #eaf2ff;
+}
+
+.custom-table tbody tr:hover td:first-child {
+    font-weight: 600;
+}
+
+/*==================================================
+=            ACCIONES
+==================================================*/
+.acciones{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+.btn-icon{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:36px;
+    height:36px;
+    border:none;
+    border-radius:50%;
+    background:#f1f5f9;
+    transition:.2s;
+    cursor:pointer;
+}
+
+.btn-view {
+    color: #2563eb;
+}
+
+.btn-view:hover {
+    background: #DBEAFE;
+}
+
+.btn-edit {
+    color: #F59E0B;
+}
+
+.btn-edit:hover {
+    background: #FEF3C7;
+}
+
+.btn-delete {
+    color: #dc2626; 
+}
+
+.btn-delete:hover {
+    background: #FEE2E2;
+}
+
+/*==================================================
+=            FORMULARIO
+==================================================*/
+.form-section {
+    padding: 24px;
+    background: #fbfcfe;
+    border-left: 1px solid #e9eef5;
+}
+
+.form-section .section-title {
+    margin-bottom: 24px;
+}
+
+.form-section h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+/*==================================================
+=            SCROLL TABLA
+==================================================*/
+.table-content::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-content::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.table-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 20px;
+}
+
+.table-content::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/*==================================================
+=            RESPONSIVE
+==================================================*/
+@media (max-width: 1100px) {
+
+    .crud-panel {
+        grid-template-columns: minmax(0, 1fr) 320px;
+    }
+
+    .search-box {
+        width: 240px;
+        margin-left: 0;
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .crud-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .form-section {
+        border-left: none;
+        border-top: 1px solid #e9eef5;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .section-header {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .section-title {
+        text-align: center;
+    }
+
+    .search-box {
+        width: 100%;
+        margin: 0;
+    }
+
+    .btn-primary {
+        width: 100%;
+        justify-self: stretch;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .custom-table {
+        min-width: 650px;
+    }
+
+    .custom-table th,
+    .custom-table td {
+        padding: 12px;
+        font-size: 13px;
+
+    }
+
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .crud-panel {
+        border-radius: 8px;
+    }
+
+    .section-header,
+    .form-section {
+        padding: 16px;
+    }
+
+}
+
+/*==================================================
+                    FROM
+==================================================*/
+.crud-form {
+    height: 100%;
+    overflow-y: auto;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.crud-form h2 {
+    margin: 0 0 20px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.crud-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 18px;
+}
+
+.crud-form .form-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.crud-form .form-group input {
+    height: 38px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #374151;
+    transition: .2s ease;
+}
+
+.crud-form .form-group input:hover {
+    border-color: #9ca3af;
+}
+
+.crud-form .form-group input:focus {
+    outline: none;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+
+.crud-form .form-group input:read-only {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.crud-form .error {
+    font-size: 12px;
+    color: #dc2626;
+}
+
+.crud-form .buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.crud-form .btn-save {
+    height: 38px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 6px;
+    background: #2563EB;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+
+.crud-form .btn-save:hover {
+    background: #1D4ED8;
+}
+
+.crud-form .btn-cancel {
+    height: 38px;
+    padding: 0 22px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.crud-form .btn-cancel:hover {
+    background: #f3f4f6;
+}
+
+
+/*==================================================
+=                 PAGINACIÓN
+==================================================*/
+.pagination {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-right: 10px;
+    padding: 10px;
+}
+
+.page-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #d7dde5;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #f3f4f6;
+    border-color: #cbd5e1;
+}
+
+.page-btn.active {
+    background: #2563EB;
+    border-color: #2563EB;
+    color: #ffffff;
+}
+
+.page-btn:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.page-btn mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+}
+

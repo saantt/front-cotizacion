@@ -1,5 +1,5 @@
 export interface TomadorModule {
-  ccTomador:number;
+  ccTomador: string | number;
   nombreTomador: string;
   email: string;
   telefono: string;

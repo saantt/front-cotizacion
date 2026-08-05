@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { TomadorModule } from '../models/tomador/tomador.module';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { TomadorModule } from '../models/tomador/tomador.module';
 })
 export class TomadorServiceService {
 
-    private apiURL = 'http://localhost:9090/api/tomadores'
+    private apiURL = `${environment.apiUrl}/api/tomadores`;
 
   constructor(private http: HttpClient) { }
 
@@ -25,7 +26,7 @@ export class TomadorServiceService {
     return this.http.put<TomadorModule>(`${this.apiURL}/${cctomador}`,tomador);
   }
 
-  deleteTomador(tomador: TomadorModule): Observable<void> {
-    return this.http.delete<void>(`${this.apiURL}/${tomador.ccTomador}`);
+  deleteTomador(ccTomador: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiURL}/${ccTomador}`);
   }
 }

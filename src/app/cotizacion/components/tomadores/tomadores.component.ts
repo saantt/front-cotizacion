@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { TomadorModule } from '../../models/tomador/tomador.module';
 import { TomadorServiceService } from '../../services/tomador-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tomadores',
@@ -9,10 +11,75 @@ import { TomadorServiceService } from '../../services/tomador-service.service';
 })
 export class TomadoresComponent implements OnInit {
 
+  /*==========================
+    FORMULARIO Y VALIDACIONES
+  ==========================*/
+  formError = '';
+  showForm = false;
+  editando = false;
+  vista = false;
+  mode: 'view' | 'edit' | 'create' | null = null;
+  seleccionarRegistro: TomadorModule | null = null;
+
+  closeForm() {
+    this.showForm = false;
+    this.formError = '';
+    this.limpiarFormulario();
+  }
+  
+  /*===========
+    PAGINACIÓN
+  ============*/
+  pageSize = 7;
+  currentPage = 1;
+  paginatedTomadores: TomadorModule[] = [];
+  pages: number[] = [];
+
+  changePage(): void {
+    const total = this.totalPages();
+    if (total > 0 && this.currentPage > total) {
+      this.currentPage = total;
+    }
+
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+
+    this.paginatedTomadores = this.tomadores.slice(start, end);
+
+    this.pages = Array.from(
+      { length: total },
+      (_, index) => index + 1
+    );
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages()) {
+      this.currentPage++;
+      this.changePage();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.changePage();
+    }
+  }
+
+  totalPages(): number {
+    return Math.ceil(this.tomadores.length / this.pageSize);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.changePage();
+  }
+  
+
   tomadores: TomadorModule[] = [];
 
   tomador: TomadorModule = {
-    ccTomador: 0,
+    ccTomador: '',
     nombreTomador: '',
     email: '',
     telefono: '',
@@ -23,40 +90,102 @@ export class TomadoresComponent implements OnInit {
     tipPersona: ''
   };
 
-  editando = false;
-  vista = false;
-
-  constructor(private tomadorService: TomadorServiceService) { }
+  constructor(
+    private tomadorService: TomadorServiceService
+  ) { }
 
   ngOnInit(): void {
+    this.mode = 'create';
     this.cargarTomadores();
   }
 
   cargarTomadores(): void {
-    this.tomadorService.getTomadores().subscribe(data => {
-      console.log(data);
-      this.tomadores = data;
+    this.tomadorService.getTomadores().subscribe({
+      next: (data: TomadorModule[]) => {
+        this.tomadores = data;
+        this.changePage();
+      },
+      error: (err: any) => console.error('Error cargando tomadores: ', err)
     });
   }
 
-  guardar(): void {
+  ver(t: TomadorModule): void {
+    this.showForm = true;
+    this.formError = '';
+    this.mode = 'view';
+    this.seleccionarRegistro = t;
+    this.tomador = { ...t, ccTomador: t.ccTomador.toString() };
+    this.editando = false;
+    this.vista = true;
+  }
+
+  guardar(tomadorForm: NgForm): void {
+    if (tomadorForm.invalid) {
+      tomadorForm.form.markAllAsTouched();
+      this.formError = 'Faltan campos por llenar o contienen errores.';
+      return;
+    }
+
+    this.formError = '';
 
     if (this.editando) {
 
-      this.tomadorService.updateTomador(this.tomador.ccTomador, this.tomador)
-        .subscribe(() => {
-          alert('Tomador actualizado correctamente');
-          this.limpiarFormulario();
-          this.cargarTomadores();
+      this.tomadorService.updateTomador(Number(this.tomador.ccTomador), {
+        ...this.tomador,
+        ccTomador: Number(this.tomador.ccTomador)
+      } as TomadorModule)
+        .subscribe({
+          next: () => {
+            this.cargarTomadores();
+            this.limpiarFormulario();
+            this.showForm = false;
+            Swal.fire({
+              title: 'Actualizado',
+              text: 'Tomador actualizado correctamente',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error('Error actualizando tomador:', err);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo actualizar el tomador.',
+              icon: 'error'
+            });
+          }
         });
 
     } else {
 
-      this.tomadorService.crearTomador(this.tomador)
-        .subscribe(() => {
-          alert('Tomador creado correctamente');
-          this.limpiarFormulario();
-          this.cargarTomadores();
+      const payload = {
+      ...this.tomador,
+      ccTomador: Number(this.tomador.ccTomador)
+    } as TomadorModule;
+
+    this.tomadorService.crearTomador(payload)
+        .subscribe({
+          next: () => {
+            this.cargarTomadores();
+            this.limpiarFormulario();
+            this.showForm = false;
+            Swal.fire({
+              title: 'Guardado',
+              text: 'Tomador creado correctamente',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error('Error creando tomador:', err);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo crear el tomador.',
+              icon: 'error'
+            });
+          }
         });
 
     }
@@ -64,34 +193,77 @@ export class TomadoresComponent implements OnInit {
   }
 
   editar(t: TomadorModule): void {
-
-    this.tomador = { ...t };
+    this.showForm = true;
+    this.formError = '';
+    this.mode = 'edit';
+    this.seleccionarRegistro = t;
+    this.tomador = { ...t, ccTomador: t.ccTomador.toString() };
     this.editando = true;
     this.vista = false;
-
   }
 
   eliminar(t: TomadorModule): void {
 
-    if (confirm('¿Desea eliminar este tomador?')) {
-
-      this.tomadorService.deleteTomador(t)
-        .subscribe(() => {
-
-          alert('Tomador eliminado');
-
-          this.cargarTomadores();
-
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `¿Desea eliminar el tomador ${t.nombreTomador}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#2563EB',
+      cancelButtonColor: '#6B7280'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tomadorService.deleteTomador(Number(t.ccTomador)).subscribe({
+          next: () => {
+            this.cargarTomadores();
+            Swal.fire({
+              title: 'Eliminado',
+              text: 'El tomador fue eliminado correctamente',
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false
+            });
+          },
+          error: (err) => {
+            console.error('Error eliminando tomador:', err);
+            Swal.fire({
+              title: 'Error',
+              text: 'No se pudo eliminar el tomador.',
+              icon: 'error'
+            });
+          }
         });
+      }
+    });
+  }
 
-    }
+  nuevoTomador(): void {
+    this.showForm = true;
+    this.formError = '';
 
+    this.mode = 'create';
+    this.seleccionarRegistro = null;
+    this.editando = false;
+    this.vista = false;
+    this.tomador = {
+      ccTomador: '',
+      nombreTomador: '',
+      email: '',
+      telefono: '',
+      fecNacimiento: new Date(),
+      ocupacion: '',
+      direccion: '',
+      genero: '',
+      tipPersona: ''
+    };
   }
 
   limpiarFormulario(): void {
-
+    this.formError = '';
     this.tomador = {
-      ccTomador: 0,
+      ccTomador: '',
       nombreTomador: '',
       email: '',
       telefono: '',
@@ -104,25 +276,22 @@ export class TomadoresComponent implements OnInit {
 
     this.editando = false;
     this.vista = false;
-
+    this.seleccionarRegistro = null;
+    this.mode = 'create';
   }
 
   bloquearTeclasInvalidas(event: KeyboardEvent) {
-  if (['e', 'E', '+', '-', '.',','].includes(event.key)) {
-    event.preventDefault();
-  }
+    if (['e', 'E', '+', '-', '.', ','].includes(event.key)) {
+      event.preventDefault();
+    }
   }
 
   limpiarCaracteresInvalidos(event: Event) {
-  const input = event.target as HTMLInputElement;
-  // Reemplaza cualquier carácter que no sea un número (0-9)
-  input.value = input.value.replace(/[^0-9]/g, '');
+    const input = event.target as HTMLInputElement;
+    // Reemplaza cualquier carácter que no sea un número (0-9)
+    input.value = input.value.replace(/[^0-9]/g, '');
   }
 
-  ver(t: any): void {
-  this.tomador = { ...t };
-  this.vista = true;
-  this.editando = false;
-  }
+  
 
 }

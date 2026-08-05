@@ -11,50 +11,26 @@ import Swal from 'sweetalert2';
 })
 
 export class CoverageComponent implements OnInit {
-  showForm = false;
 
+  /*==========================
+    FORMULARIO Y VALIDACIONES
+  ==========================*/
+  showForm = false;
+  form!: FormGroup;
+  selectedRecord: Coverage | null = null;
+  mode: 'view' | 'edit' | 'create' | null = null;
+
+  closeForm() {
+    this.showForm = false;
+  }
+
+  /*===========
+    PAGINACIÓN
+  ============*/
   pageSize = 7;
   currentPage = 1;
   paginatedCoverages: Coverage[] = [];
   pages: number[] = [];
-
-  coverages: Coverage[] = [];
-  form!: FormGroup;
-
-  mode: 'view' | 'edit' | 'create' | null = null;
-  selectedRecord: Coverage | null = null;
-
-  constructor(
-    private coverageService: CoverageService,
-    private fb: FormBuilder
-  ) {}
-
-  ngOnInit(): void {
-    this.form = this.fb.group({
-      id_cobertura: ['', Validators.required],
-      nombre_cobertura: ['', Validators.required],
-      tasa_publico: [null, [
-        Validators.required,
-        Validators.min(0.0000001)
-      ]],
-      tasa_particular: [null, [
-        Validators.required,
-        Validators.min(0.0000001)
-      ]]
-    });
-    this.mode = 'create';
-    this.listCoverages();
-  }
-
-  listCoverages(): void {
-    this.coverageService.getAll().subscribe({
-      next: (data: Coverage[]) => {
-        this.coverages = data,
-        this.changePage();
-      },
-      error: (err: any) => console.error('Error listing Coverages: ', err)
-    });
-  }
 
   changePage(): void {
     const start = (this.currentPage - 1) * this.pageSize;
@@ -91,6 +67,41 @@ export class CoverageComponent implements OnInit {
     this.changePage();
   }
 
+
+  coverages: Coverage[] = [];
+
+  constructor(
+    private coverageService: CoverageService,
+    private fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      id_cobertura: ['', Validators.required],
+      nombre_cobertura: ['', Validators.required],
+      tasa_publico: [null, [
+        Validators.required,
+        Validators.min(0.0000001)
+      ]],
+      tasa_particular: [null, [
+        Validators.required,
+        Validators.min(0.0000001)
+      ]]
+    });
+    this.mode = 'create';
+    this.listCoverages();
+  }
+
+  listCoverages(): void {
+    this.coverageService.getAll().subscribe({
+      next: (data: Coverage[]) => {
+        this.coverages = data,
+        this.changePage();
+      },
+      error: (err: any) => console.error('Error listing Coverages: ', err)
+    });
+  }
+
   newCoverage(): void {
     this.showForm = true;
 
@@ -105,10 +116,6 @@ export class CoverageComponent implements OnInit {
       tasa_publico: 0,
       tasa_particular: 0
     });
-  }
-
-  closeForm() {
-    this.showForm = false;
   }
 
   view(coverage: Coverage): void {
@@ -144,7 +151,6 @@ export class CoverageComponent implements OnInit {
         this.coverageService.delete(coverage.id_cobertura).subscribe({
           next: () => {
             this.listCoverages();
-            this.clearForm();
 
             Swal.fire({
               title: 'Eliminado',
