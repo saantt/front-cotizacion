@@ -10,6 +10,7 @@ import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado
 import { CoberturaRiesgoComponent } from './components/cobertura-riesgo/cobertura-riesgo.component';
 import { LoginComponent } from '../shared/login/login.component';
 import { AuthGuard } from '../core/guards/auth.guard';
+import { RegisterComponent } from '../shared/register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'datos-riesgo', pathMatch: 'full' },
@@ -21,7 +22,8 @@ const routes: Routes = [
   { path: 'coberturas', component: CoverageComponent, canActivate: [AuthGuard] },
   { path: 'impuestos-cotizacion', component: ImpuestoCotizacionComponent, canActivate: [AuthGuard] },
   { path: 'estados-cotizacion', component: EstadoCotizacionComponent, canActivate: [AuthGuard] },
-  { path: 'login', component: LoginComponent }
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent }
 ];
 
 @NgModule({
