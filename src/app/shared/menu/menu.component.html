@@ -9,16 +9,22 @@
     <p *ngIf="!menuColapsado">Sistema de riesgos vehiculares</p>
   </div>
 
-  <a class="menu-link menu-action" routerLink="/login" routerLinkActive="active" *ngIf="!authService.isLoggedIn()">
+  <nav>
+
+    <a class="menu-link menu-action" routerLink="/login" routerLinkActive="active" *ngIf="!authService.isLoggedIn()">
       <span *ngIf="!menuColapsado">Login</span>
-  </a>
+    </a>
 
-  <a routerLink="/login" *ngIf="authService.isLoggedIn()" (click)="authService.logout()" class="menu-link menu-action">
-      <span class="dot red"></span>
+    <a class="menu-link menu-action" routerLink="/login" *ngIf="authService.isLoggedIn()"
+      (click)="authService.logout()">
       <span *ngIf="!menuColapsado">Logout</span>
-  </a>
+    </a>
 
-  <h4 *ngIf="!menuColapsado">ENTIDADES</h4>
+    <h4 *ngIf="!menuColapsado">ENTIDADES</h4>
+
+    <!-- resto del menú -->
+
+  </nav>
 
   <nav>
     <a class="menu-link" routerLink="/datos-riesgo" routerLinkActive="active">
