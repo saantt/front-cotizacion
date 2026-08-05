@@ -5,9 +5,19 @@
   </button>
 
   <div class="logo">
-    <h2 *ngIf="!menuColapsado">CRUDs · Cotización</h2>
+    <h2 *ngIf="!menuColapsado">Cotización</h2>
     <p *ngIf="!menuColapsado">Sistema de riesgos vehiculares</p>
   </div>
+
+  <a class="menu-link" routerLink="/login" routerLinkActive="active" *ngIf="!authService.isLoggedIn()">
+      <span class="dot yellow"></span>
+      <span *ngIf="!menuColapsado">Login</span>
+  </a>
+
+  <a routerLink="/login" *ngIf="authService.isLoggedIn()" (click)="authService.logout()" class="menu-link">
+      <span class="dot red"></span>
+      <span *ngIf="!menuColapsado">Logout</span>
+  </a>
 
   <h4 *ngIf="!menuColapsado">ENTIDADES</h4>
 
@@ -50,11 +60,6 @@
     <a class="menu-link" routerLink="/estados-cotizacion" routerLinkActive="active">
       <span class="dot yellow"></span>
       <span *ngIf="!menuColapsado">Estados de Cotización</span>
-    </a>
-    
-    <a class="menu-link" routerLink="/login" routerLinkActive="active">
-      <span class="dot yellow"></span>
-      <span *ngIf="!menuColapsado">Login</span>
     </a>
   </nav>
 

@@ -5,7 +5,6 @@ import { ReactiveFormsModule } from '@angular/forms';
  
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CotizacionModule } from './cotizacion/cotizacion.module';
 import { SharedModule } from './shared/shared.module';
  
 @NgModule({
@@ -17,7 +16,6 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CotizacionModule,
     SharedModule,
   ],
   providers: [],
