@@ -1,0 +1,11 @@
+<h1>Login (simulado)</h1>
+<p>
+  La PokéAPI es pública y no tiene login real: este formulario solo guarda un
+  usuario en <code>localStorage</code> para que el <code>AuthGuard</code> tenga algo que validar.
+</p>
+ 
+<form (ngSubmit)="login()">
+  <label for="username">Usuario</label>
+  <input id="username" name="username" placeholder="ej: profesor" required [(ngModel)]="username" />
+  <button type="submit">Ingresar</button>
+</form>

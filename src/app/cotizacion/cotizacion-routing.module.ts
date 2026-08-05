@@ -8,17 +8,20 @@ import { CoverageComponent } from './components/coverages/coverage.component';
 import { ImpuestoCotizacionComponent } from './components/impuesto-cotizacion/impuesto-cotizacion.component';
 import { EstadoCotizacionComponent } from './components/estado-cotizacion/estado-cotizacion.component';
 import { CoberturaRiesgoComponent } from './components/cobertura-riesgo/cobertura-riesgo.component';
+import { LoginComponent } from '../shared/login/login.component';
+import { AuthGuard } from '../core/guards/auth.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'datos-riesgo', pathMatch: 'full' },
-  { path: 'cobertura-riesgo', component: CoberturaRiesgoComponent },
-  { path: 'datos-riesgo', component: DatosRiesgoComponent },
-  { path: 'deducibles', component: DeducibleComponent },
-  { path: 'tomadores', component: TomadoresComponent },
-  { path: 'marcavehiculo', component: MarcaVehiculoComponent },
-  { path: 'coberturas', component: CoverageComponent },
-  { path: 'impuestos-cotizacion', component: ImpuestoCotizacionComponent },
-  { path: 'estados-cotizacion', component: EstadoCotizacionComponent }
+  { path: 'cobertura-riesgo', component: CoberturaRiesgoComponent, canActivate: [AuthGuard] },
+  { path: 'datos-riesgo', component: DatosRiesgoComponent, canActivate: [AuthGuard] },
+  { path: 'deducibles', component: DeducibleComponent, canActivate: [AuthGuard] },
+  { path: 'tomadores', component: TomadoresComponent, canActivate: [AuthGuard] },
+  { path: 'marcavehiculo', component: MarcaVehiculoComponent, canActivate: [AuthGuard] },
+  { path: 'coberturas', component: CoverageComponent, canActivate: [AuthGuard] },
+  { path: 'impuestos-cotizacion', component: ImpuestoCotizacionComponent, canActivate: [AuthGuard] },
+  { path: 'estados-cotizacion', component: EstadoCotizacionComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent }
 ];
 
 @NgModule({

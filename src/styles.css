@@ -557,3 +557,6 @@ a {
   background: #EAB308; /* Amarillo */
 }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
