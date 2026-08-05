@@ -1,10 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import {
   ImpuestoCotizacion,
-  ImpuestoCotizacionRequest
+  ImpuestoCotizacionRequest,
+  PaginaResponse
 } from '../models/impuesto-cotizacion/impuesto-cotizacion.model';
 
 @Injectable({
@@ -18,6 +20,39 @@ export class ImpuestoCotizacionService {
 
   getAll(): Observable<ImpuestoCotizacion[]> {
     return this.http.get<ImpuestoCotizacion[]>(this.baseUrl);
+  }
+
+  getPage(page: number, size: number): Observable<PaginaResponse<ImpuestoCotizacion>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http
+      .get<PaginaResponse<ImpuestoCotizacion> | ImpuestoCotizacion[]>(this.baseUrl, { params })
+      .pipe(
+        map(response => {
+          // Compatibilidad temporal con el backend actual, que aun devuelve un arreglo.
+          // Cuando el backend devuelva una pagina, esta rama deja de utilizarse.
+          if (Array.isArray(response)) {
+            const start = page * size;
+            const content = response.slice(start, start + size);
+            const totalElements = response.length;
+            const totalPages = Math.ceil(totalElements / size);
+
+            return {
+              content,
+              totalElements,
+              totalPages,
+              number: page,
+              size,
+              first: page === 0,
+              last: totalPages === 0 || page >= totalPages - 1
+            };
+          }
+
+          return response;
+        })
+      );
   }
 
   getById(id: number): Observable<ImpuestoCotizacion> {

@@ -20,6 +20,11 @@ export class ImpuestoCotizacionComponent implements OnInit {
   error = '';
   mensaje = '';
 
+  paginaActual = 0;
+  cantidadPorPagina = 10;
+  totalRegistros = 0;
+  totalPaginas = 0;
+
   modo: 'ver' | 'editar' | 'crear' | null = null;
   registroSeleccionado: ImpuestoCotizacion | null = null;
 
@@ -41,13 +46,20 @@ export class ImpuestoCotizacionComponent implements OnInit {
     });
   }
 
-  listarImpuestos(): void {
+  listarImpuestos(pagina: number = this.paginaActual): void {
+    if (pagina < 0 || (this.totalPaginas > 0 && pagina >= this.totalPaginas)) {
+      return;
+    }
+
     this.cargando = true;
     this.error = '';
 
-    this.impuestoCotizacionService.getAll().subscribe({
-      next: (data: ImpuestoCotizacion[]) => {
-        this.impuestos = data;
+    this.impuestoCotizacionService.getPage(pagina, this.cantidadPorPagina).subscribe({
+      next: response => {
+        this.impuestos = response.content;
+        this.paginaActual = response.number;
+        this.totalRegistros = response.totalElements;
+        this.totalPaginas = response.totalPages;
         this.cargando = false;
       },
       error: (err: any) => {
@@ -56,6 +68,18 @@ export class ImpuestoCotizacionComponent implements OnInit {
         console.error('Error al listar impuestos de cotizacion', err);
       }
     });
+  }
+
+  paginaAnterior(): void {
+    if (this.paginaActual > 0) {
+      this.listarImpuestos(this.paginaActual - 1);
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.paginaActual + 1 < this.totalPaginas) {
+      this.listarImpuestos(this.paginaActual + 1);
+    }
   }
 
   nuevo(): void {
@@ -98,6 +122,11 @@ export class ImpuestoCotizacionComponent implements OnInit {
     this.impuestoCotizacionService.delete(impuesto.idImpuestoCot).subscribe({
       next: () => {
         this.mensaje = 'Impuesto eliminado correctamente.';
+
+        if (this.impuestos.length === 1 && this.paginaActual > 0) {
+          this.paginaActual--;
+        }
+
         this.listarImpuestos();
 
         if (this.registroSeleccionado?.idImpuestoCot === impuesto.idImpuestoCot) {
