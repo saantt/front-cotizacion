@@ -20,6 +20,10 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
   datosRiesgo: DatosRiesgoResponse[] = [];
   coberturas: Coverage[] = [];
   deducibles: Deducible[] = [];
+  pageSize = 7;
+  currentPage = 1;
+  paginatedCoberturasRiesgo: CoberturaRiesgo[] = [];
+  pages: number[] = [];
 
   form!: FormGroup;
   modo: 'ver' | 'editar' | 'crear' | null = null;
@@ -84,6 +88,7 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
     this.coberturaRiesgoService.coberturas$.subscribe({
       next: (lista: CoberturaRiesgo[]) => {
         this.coberturasRiesgo = lista;
+        this.changePage();
         this.isLoading = false;
       },
       error: () => {
@@ -226,6 +231,44 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
   trackById(index: number, item: CoberturaRiesgo): string {
     return `${item.idCotizacion}-${item.idCobertura}`;
   }
+  changePage(): void {
+  const total = this.totalPages();
+  if (total === 0) {
+    this.paginatedCoberturasRiesgo = [];
+    this.pages = [];
+    return;
+  }
+  if (this.currentPage > total) this.currentPage = total;
+  const start = (this.currentPage - 1) * this.pageSize;
+  const end = start + this.pageSize;
+  this.paginatedCoberturasRiesgo = this.coberturasRiesgo.slice(start, end);
+  this.pages = Array.from({ length: total }, (_, i) => i + 1);
+}
+
+totalPages(): number {
+  return Math.ceil(this.coberturasRiesgo.length / this.pageSize);
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages()) {
+    this.currentPage++;
+    this.changePage();
+  }
+}
+
+previousPage(): void {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.changePage();
+  }
+}
+
+goToPage(page: number): void {
+  if (page >= 1 && page <= this.totalPages()) {
+    this.currentPage = page;
+    this.changePage();
+  }
+}
 
   private getErrorMessage(error: any): string {
     const messages = this.getErrorMessages(error);
