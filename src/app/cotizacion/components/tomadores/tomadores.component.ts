@@ -32,8 +32,8 @@ export class TomadoresComponent implements OnInit {
     PAGINACIÓN
   ============*/
   tomadoresPage!: Page<TomadorModule>;
-  pageSize = 10;
   currentPage = 0;
+  pageSize = 10;
   pages: number[] = [];
 
   tomadores: TomadorModule[] = [];
@@ -73,7 +73,7 @@ export class TomadoresComponent implements OnInit {
     this.currentPage = nuevaPagina;
     this.cargarTomadores();
   }
-  
+
   ver(t: TomadorModule): void {
     this.showForm = true;
     this.formError = '';

@@ -1,256 +1,204 @@
 <div class="crud-container">
-    <div class="crud-panel" [class.form-open]="showForm">
-        <section class="table-section">
+  <div class="crud-panel" [class.form-open]="showForm">
+    <section class="table-section">
 
-            <div class="section-header">
-                <div class="section-title">
-                    <h2>Tomadores</h2>
-                    <span *ngIf="tomadoresPage">{{ tomadoresPage.totalElements }} registros</span>
-                </div>
-                <div class="search-box">
-                    <mat-icon>search</mat-icon>
-                    <input type="text" placeholder="Buscar cobertura..." class="search">
-                </div>
-                <button class="btn-primary" (click)="nuevoTomador()">
-                    <mat-icon>add</mat-icon>
-                    Nuevo
+      <div class="section-header">
+        <div class="section-title">
+          <h2>Tomadores</h2>
+          <span *ngIf="tomadoresPage">{{ tomadoresPage.totalElements }} registros</span>
+        </div>
+        <div class="search-box">
+          <mat-icon>search</mat-icon>
+          <input type="text" placeholder="Buscar cobertura..." class="search">
+        </div>
+        <button class="btn-primary" (click)="nuevoTomador()">
+          <mat-icon>add</mat-icon>
+          Nuevo
+        </button>
+      </div>
+
+      <div class="table-content">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>C.C</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Teléfono</th>
+              <th width="120">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="tomadoresPage">
+            <tr *ngFor="let t of tomadoresPage.content" [class.selected]="tomador.ccTomador == t.ccTomador">
+
+              <td>{{t.ccTomador}}</td>
+              <td>{{t.nombreTomador}}</td>
+              <td>{{t.email}}</td>
+              <td>{{t.telefono}}</td>
+
+              <td class="acciones">
+                <button class="btn-icon btn-view" (click)="ver(t)">
+                  <mat-icon>visibility</mat-icon>
                 </button>
-            </div>
-
-            <div class="table-content">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>C.C</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Teléfono</th>
-                            <th width="120">Acciones</th>
-                        </tr>
-                    </thead>
-
-                    <tbody *ngIf="tomadoresPage">
-                        <tr *ngFor="let t of tomadoresPage.content"
-                            [class.selected]="tomador.ccTomador == t.ccTomador">
-
-                            <td>{{t.ccTomador}}</td>
-                            <td>{{t.nombreTomador}}</td>
-                            <td>{{t.email}}</td>
-                            <td>{{t.telefono}}</td>
-
-                            <td class="acciones">
-                                <button class="btn-icon btn-view" (click)="ver(t)">
-                                    <mat-icon>visibility</mat-icon>
-                                </button>
-                                <button class="btn-icon btn-edit" (click)="editar(t)">
-                                    <mat-icon>edit</mat-icon>
-                                </button>
-                                <button class="btn-icon btn-delete" (click)="eliminar(t)">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Paginación conectada con la respuesta Page de Spring Boot -->
-            <div class="pagination" *ngIf="tomadoresPage">
-                <button class="page-btn" (click)="cambiarPagina(currentPage - 1)" [disabled]="tomadoresPage.first">
-                    &lt;
+                <button class="btn-icon btn-edit" (click)="editar(t)">
+                  <mat-icon>edit</mat-icon>
                 </button>
-
-                <span class="page-info">
-                    Página {{ (tomadoresPage.number !== undefined ? tomadoresPage.number : 0) + 1 }} de {{ tomadoresPage.totalPages }}
-                </span>
-
-                <button class="page-btn" (click)="cambiarPagina(currentPage + 1)" [disabled]="tomadoresPage.last">
-                    &gt;
+                <button class="btn-icon btn-delete" (click)="eliminar(t)">
+                  <mat-icon>delete</mat-icon>
                 </button>
-            </div>
-        </section>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-        <section class="form-section" *ngIf="showForm">
+      <!-- Paginación conectada con la respuesta Page de Spring Boot -->
+      <div class="pagination" *ngIf="tomadoresPage">
+        <button class="page-btn" (click)="cambiarPagina(currentPage - 1)" [disabled]="tomadoresPage.first">
+          &lt;
+        </button>
 
-            <div class="section-title">
-                <h2>
-                    {{ mode === 'create'
-                    ? 'Nuevo registro'
-                    : (mode === 'edit'
-                    ? 'Editar registro'
-                    : 'Ver registro') }}
-                </h2>
-                <span *ngIf="tomador.ccTomador">
-                    REG {{ tomador.ccTomador }}
-                </span>
-            </div>
+        <span class="page-info">
+          Página {{ (tomadoresPage.number !== undefined ? tomadoresPage.number : 0) + 1 }} de {{
+          tomadoresPage.totalPages }}
+        </span>
 
-            <form class="crud-form" #tomadorForm="ngForm" (ngSubmit)="guardar(tomadorForm)" novalidate>
+        <button class="page-btn" (click)="cambiarPagina(currentPage + 1)" [disabled]="tomadoresPage.last">
+          &gt;
+        </button>
+      </div>
+    </section>
 
-                <div class="ErrorMessage" *ngIf="formError">{{ formError }}</div>
+    <section class="form-section" *ngIf="showForm">
 
-                <div class="form-group">
-                    <label>C.C Tomador *</label>
-                    <input
-                        type="text"
-                        inputmode="numeric"
-                        [(ngModel)]="tomador.ccTomador"
-                        name="ccTomador"
-                        #ccTomador="ngModel"
-                        [disabled]="vista || editando"
-                        required
-                        minlength="10"
-                        maxlength="10"
-                        pattern="^[0-9]+$"
-                        (keydown)="bloquearTeclasInvalidas($event)"
-                        (input)="limpiarCaracteresInvalidos($event)">
+      <div class="section-title">
+        <h2>
+          {{ mode === 'create'
+          ? 'Nuevo registro'
+          : (mode === 'edit'
+          ? 'Editar registro'
+          : 'Ver registro') }}
+        </h2>
+        <span *ngIf="tomador.ccTomador">
+          REG {{ tomador.ccTomador }}
+        </span>
+      </div>
 
-                    <small class="error" *ngIf="ccTomador.invalid && (ccTomador.touched || ccTomador.dirty || tomadorForm.submitted)">
-                        <span *ngIf="ccTomador.hasError('required')">La cédula es obligatoria.</span>
-                        <span *ngIf="ccTomador.hasError('pattern')">Ingrese solo números enteros.</span>
-                        <span *ngIf="ccTomador.hasError('minlength') || ccTomador.hasError('maxlength')">La cédula debe tener exactamente 10 dígitos.</span>
-                    </small>
-                </div>
+      <form class="crud-form" #tomadorForm="ngForm" (ngSubmit)="guardar(tomadorForm)" novalidate>
 
-                <div class="form-group">
-                    <label>Nombre *</label>
-                    <input
-                        type="text"
-                        [(ngModel)]="tomador.nombreTomador"
-                        name="nombreTomador"
-                        #nombreTomador="ngModel"
-                        required
-                        [disabled]="vista"
-                        minlength="3">
+        <div class="ErrorMessage" *ngIf="formError">{{ formError }}</div>
 
-                    <small class="error" *ngIf="nombreTomador.invalid && (nombreTomador.touched || tomadorForm.submitted)">
-                        <span *ngIf="nombreTomador.hasError('required')">El nombre es obligatorio.</span>
-                        <span *ngIf="nombreTomador.hasError('minlength')">Debe tener al menos 3 caracteres.</span>
-                    </small>
-                </div>
+        <div class="form-group">
+          <label>C.C Tomador *</label>
+          <input type="text" inputmode="numeric" [(ngModel)]="tomador.ccTomador" name="ccTomador" #ccTomador="ngModel"
+            [disabled]="vista || editando" required minlength="10" maxlength="10" pattern="^[0-9]+$"
+            (keydown)="bloquearTeclasInvalidas($event)" (input)="limpiarCaracteresInvalidos($event)">
 
-                <div class="form-group">
-                    <label>Email *</label>
-                    <input
-                        type="email"
-                        [(ngModel)]="tomador.email"
-                        name="email"
-                        #email="ngModel"
-                        required
-                        [disabled]="vista"
-                        email>
-                    <small class="error" *ngIf="email.invalid && (email.touched || tomadorForm.submitted)">
-                        <span *ngIf="email.hasError('required')">El correo es obligatorio.</span>
-                        <span *ngIf="email.hasError('email')">Ingrese un formato de email válido.</span>
-                    </small>
-                </div>
+          <small class="error"
+            *ngIf="ccTomador.invalid && (ccTomador.touched || ccTomador.dirty || tomadorForm.submitted)">
+            <span *ngIf="ccTomador.hasError('required')">La cédula es obligatoria.</span>
+            <span *ngIf="ccTomador.hasError('pattern')">Ingrese solo números enteros.</span>
+            <span *ngIf="ccTomador.hasError('minlength') || ccTomador.hasError('maxlength')">La cédula debe tener
+              exactamente 10 dígitos.</span>
+          </small>
+        </div>
 
-                <div class="form-group">
-                    <label>Teléfono *</label>
-                    <input
-                        type="number"
-                        [(ngModel)]="tomador.telefono"
-                        name="telefono"
-                        #telefono="ngModel"
-                        [disabled]="vista"
-                        required
-                        pattern="^[0-9]{7,10}$"
-                        (keydown)="bloquearTeclasInvalidas($event)"
-                        (input)="limpiarCaracteresInvalidos($event)">
-                    <small class="error" *ngIf="telefono.invalid && (telefono.touched || tomadorForm.submitted)">
-                        <span *ngIf="telefono.hasError('required')">El teléfono es obligatorio.</span>
-                        <span *ngIf="telefono.hasError('pattern')">Debe ingresar entre 7 y 10 dígitos.</span>
-                    </small>
-                </div>
+        <div class="form-group">
+          <label>Nombre *</label>
+          <input type="text" [(ngModel)]="tomador.nombreTomador" name="nombreTomador" #nombreTomador="ngModel" required
+            [disabled]="vista" minlength="3">
 
-                <div class="form-group">
-                    <label>Fecha Nacimiento *</label>
-                    <input
-                        type="date"
-                        [(ngModel)]="tomador.fecNacimiento"
-                        name="fecha"
-                        #fecha="ngModel"
-                        [disabled]="vista"
-                        required>
-                    <small class="error" *ngIf="fecha.invalid && (fecha.touched || tomadorForm.submitted)">
-                        <span *ngIf="fecha.hasError('required')">La fecha de nacimiento es obligatoria.</span>
-                    </small>
-                </div>
+          <small class="error" *ngIf="nombreTomador.invalid && (nombreTomador.touched || tomadorForm.submitted)">
+            <span *ngIf="nombreTomador.hasError('required')">El nombre es obligatorio.</span>
+            <span *ngIf="nombreTomador.hasError('minlength')">Debe tener al menos 3 caracteres.</span>
+          </small>
+        </div>
 
-                <div class="form-group">
-                    <label>Ocupación *</label>
-                    <input
-                        type="text"
-                        [(ngModel)]="tomador.ocupacion"
-                        name="ocupacion"
-                        #ocupacion="ngModel"
-                        [disabled]="vista"
-                        required>
-                    <small class="error" *ngIf="ocupacion.invalid && (ocupacion.touched || tomadorForm.submitted)">
-                        <span *ngIf="ocupacion.hasError('required')">La ocupación es obligatoria.</span>
-                    </small>
-                </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" [(ngModel)]="tomador.email" name="email" #email="ngModel" required [disabled]="vista"
+            email>
+          <small class="error" *ngIf="email.invalid && (email.touched || tomadorForm.submitted)">
+            <span *ngIf="email.hasError('required')">El correo es obligatorio.</span>
+            <span *ngIf="email.hasError('email')">Ingrese un formato de email válido.</span>
+          </small>
+        </div>
 
-                <div class="form-group">
-                    <label>Dirección *</label>
-                    <input
-                        type="text"
-                        [(ngModel)]="tomador.direccion"
-                        name="direccion"
-                        #direccion="ngModel"
-                        [disabled]="vista"
-                        required>
-                    <small class="error" *ngIf="direccion.invalid && (direccion.touched || tomadorForm.submitted)">
-                        <span *ngIf="direccion.hasError('required')">La dirección es obligatoria.</span>
-                    </small>
-                </div>
+        <div class="form-group">
+          <label>Teléfono *</label>
+          <input type="number" [(ngModel)]="tomador.telefono" name="telefono" #telefono="ngModel" [disabled]="vista"
+            required pattern="^[0-9]{7,10}$" (keydown)="bloquearTeclasInvalidas($event)"
+            (input)="limpiarCaracteresInvalidos($event)">
+          <small class="error" *ngIf="telefono.invalid && (telefono.touched || tomadorForm.submitted)">
+            <span *ngIf="telefono.hasError('required')">El teléfono es obligatorio.</span>
+            <span *ngIf="telefono.hasError('pattern')">Debe ingresar entre 7 y 10 dígitos.</span>
+          </small>
+        </div>
 
-                <div class="form-group">
-                    <label>Género *</label>
-                    <select
-                        [(ngModel)]="tomador.genero"
-                        [disabled]="vista"
-                        name="genero"
-                        #genero="ngModel"
-                        required>
-                        <option value="">Seleccione</option>
-                        <option value="M">Masculino</option>
-                        <option value="F">Femenino</option>
-                    </select>
-                    <small class="error" *ngIf="genero.invalid && (genero.touched || tomadorForm.submitted)">
-                        <span *ngIf="genero.hasError('required')">Seleccione un género.</span>
-                    </small>
-                </div>
+        <div class="form-group">
+          <label>Fecha Nacimiento *</label>
+          <input type="date" [(ngModel)]="tomador.fecNacimiento" name="fecha" #fecha="ngModel" [disabled]="vista"
+            required>
+          <small class="error" *ngIf="fecha.invalid && (fecha.touched || tomadorForm.submitted)">
+            <span *ngIf="fecha.hasError('required')">La fecha de nacimiento es obligatoria.</span>
+          </small>
+        </div>
 
-                <div class="form-group">
-                    <label>Tipo Persona *</label>
-                    <select
-                        [(ngModel)]="tomador.tipPersona"
-                        [disabled]="vista"
-                        name="tipPersona"
-                        #tipPersona="ngModel"
-                        required>
-                        <option value="">Seleccione</option>
-                        <option value="NATURAL">Natural</option>
-                        <option value="JURIDICA">Jurídica</option>
-                    </select>
+        <div class="form-group">
+          <label>Ocupación *</label>
+          <input type="text" [(ngModel)]="tomador.ocupacion" name="ocupacion" #ocupacion="ngModel" [disabled]="vista"
+            required>
+          <small class="error" *ngIf="ocupacion.invalid && (ocupacion.touched || tomadorForm.submitted)">
+            <span *ngIf="ocupacion.hasError('required')">La ocupación es obligatoria.</span>
+          </small>
+        </div>
 
-                    <small class="error" *ngIf="tipPersona.invalid && (tipPersona.touched || tomadorForm.submitted)">
-                        <span *ngIf="tipPersona.hasError('required')">Seleccione un tipo de persona.</span>
-                    </small>
-                </div>
+        <div class="form-group">
+          <label>Dirección *</label>
+          <input type="text" [(ngModel)]="tomador.direccion" name="direccion" #direccion="ngModel" [disabled]="vista"
+            required>
+          <small class="error" *ngIf="direccion.invalid && (direccion.touched || tomadorForm.submitted)">
+            <span *ngIf="direccion.hasError('required')">La dirección es obligatoria.</span>
+          </small>
+        </div>
 
-                <div class="buttons">
-                    <button *ngIf="mode !== 'view'" class="btn-save" type="submit">
-                        {{ mode === 'edit' ? 'Actualizar' : 'Guardar' }}
-                    </button>
-                    <button class="btn-cancel" type="button" (click)="closeForm()">
-                        Cancelar
-                    </button>
-                </div>
+        <div class="form-group">
+          <label>Género *</label>
+          <select [(ngModel)]="tomador.genero" [disabled]="vista" name="genero" #genero="ngModel" required>
+            <option value="">Seleccione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Femenino</option>
+          </select>
+          <small class="error" *ngIf="genero.invalid && (genero.touched || tomadorForm.submitted)">
+            <span *ngIf="genero.hasError('required')">Seleccione un género.</span>
+          </small>
+        </div>
 
-            </form>
+        <div class="form-group">
+          <label>Tipo Persona *</label>
+          <select [(ngModel)]="tomador.tipPersona" [disabled]="vista" name="tipPersona" #tipPersona="ngModel" required>
+            <option value="">Seleccione</option>
+            <option value="NATURAL">Natural</option>
+            <option value="JURIDICA">Jurídica</option>
+          </select>
 
-        </section>
-    </div>
+          <small class="error" *ngIf="tipPersona.invalid && (tipPersona.touched || tomadorForm.submitted)">
+            <span *ngIf="tipPersona.hasError('required')">Seleccione un tipo de persona.</span>
+          </small>
+        </div>
+
+        <div class="buttons">
+          <button *ngIf="mode !== 'view'" class="btn-save" type="submit">
+            {{ mode === 'edit' ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button class="btn-cancel" type="button" (click)="closeForm()">
+            Cancelar
+          </button>
+        </div>
+
+      </form>
+
+    </section>
+  </div>
 </div>
