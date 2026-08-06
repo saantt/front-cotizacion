@@ -21,7 +21,7 @@ export class ImpuestoCotizacionComponent implements OnInit {
   mensaje = '';
 
   paginaActual = 0;
-  cantidadPorPagina = 10;
+  cantidadPorPagina = 5;
   totalRegistros = 0;
   totalPaginas = 0;
 
