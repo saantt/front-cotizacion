@@ -26,7 +26,7 @@ export class FormDatosRiesgoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private datosRiesgoService: DatosRiesgoService,
     private tomadorService: TomadorServiceService,
-    private marcaService: MarcaVehiculoService  
+    private marcaService: MarcaVehiculoService
   ) { }
 
   ngOnInit(): void {
@@ -58,9 +58,9 @@ export class FormDatosRiesgoComponent implements OnInit {
   }
 
   private loadTomadores(): void {
-    this.tomadorService.getTomadores().subscribe({
-      next: (tomadores) => {
-        this.tomadores = tomadores;
+    this.tomadorService.getTomadoresPaginados().subscribe({
+      next: (response) => {
+        this.tomadores = response.content;
       },
       error: (error) => {
         console.error('Error al cargar los tomadores:', error);

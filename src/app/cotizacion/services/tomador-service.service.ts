@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { TomadorModule } from '../models/tomador/tomador.module';
+import { Page } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,12 @@ export class TomadorServiceService {
 
   constructor(private http: HttpClient) { }
 
-  getTomadores(): Observable<TomadorModule[]> {
-     return this.http.get<TomadorModule[]>(this.apiURL);
+  getTomadoresPaginados(page: number = 0, size: number = 10): Observable<Page<TomadorModule>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Page<TomadorModule>>(`${this.apiURL}/page`, { params });
   }
 
   crearTomador(tomador: TomadorModule): Observable<TomadorModule> {

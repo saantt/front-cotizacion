@@ -5,7 +5,7 @@
             <div class="section-header">
                 <div class="section-title">
                     <h2>Tomadores</h2>
-                    <span>{{ tomadores.length }} registros</span>
+                    <span *ngIf="tomadoresPage">{{ tomadoresPage.totalElements }} registros</span>
                 </div>
                 <div class="search-box">
                     <mat-icon>search</mat-icon>
@@ -29,9 +29,9 @@
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr *ngFor="let t of paginatedTomadores"
-                            [class.selected]="tomador.ccTomador==t.ccTomador">
+                    <tbody *ngIf="tomadoresPage">
+                        <tr *ngFor="let t of tomadoresPage.content"
+                            [class.selected]="tomador.ccTomador == t.ccTomador">
 
                             <td>{{t.ccTomador}}</td>
                             <td>{{t.nombreTomador}}</td>
@@ -54,15 +54,17 @@
                 </table>
             </div>
 
-            <div class="pagination">
-                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+            <!-- Paginación conectada con la respuesta Page de Spring Boot -->
+            <div class="pagination" *ngIf="tomadoresPage">
+                <button class="page-btn" (click)="cambiarPagina(currentPage - 1)" [disabled]="tomadoresPage.first">
                     &lt;
                 </button>
-                <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
-                    (click)="goToPage(page)">
-                    {{ page }}
-                </button>
-                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+
+                <span class="page-info">
+                    Página {{ (tomadoresPage.number !== undefined ? tomadoresPage.number : 0) + 1 }} de {{ tomadoresPage.totalPages }}
+                </span>
+
+                <button class="page-btn" (click)="cambiarPagina(currentPage + 1)" [disabled]="tomadoresPage.last">
                     &gt;
                 </button>
             </div>
@@ -248,9 +250,7 @@
                 </div>
 
             </form>
-        
+
         </section>
-    </div> 
+    </div>
 </div>
-
-

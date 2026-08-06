@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { TomadorModule } from '../../models/tomador/tomador.module';
 import { TomadorServiceService } from '../../services/tomador-service.service';
 import Swal from 'sweetalert2';
+import { Page } from '../../models/page.model';
 
 @Component({
   selector: 'app-tomadores',
@@ -26,55 +27,14 @@ export class TomadoresComponent implements OnInit {
     this.formError = '';
     this.limpiarFormulario();
   }
-  
+
   /*===========
     PAGINACIÓN
   ============*/
-  pageSize = 7;
-  currentPage = 1;
-  paginatedTomadores: TomadorModule[] = [];
+  tomadoresPage!: Page<TomadorModule>;
+  pageSize = 10;
+  currentPage = 0;
   pages: number[] = [];
-
-  changePage(): void {
-    const total = this.totalPages();
-    if (total > 0 && this.currentPage > total) {
-      this.currentPage = total;
-    }
-
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-
-    this.paginatedTomadores = this.tomadores.slice(start, end);
-
-    this.pages = Array.from(
-      { length: total },
-      (_, index) => index + 1
-    );
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-      this.changePage();
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.changePage();
-    }
-  }
-
-  totalPages(): number {
-    return Math.ceil(this.tomadores.length / this.pageSize);
-  }
-
-  goToPage(page: number): void {
-    this.currentPage = page;
-    this.changePage();
-  }
-  
 
   tomadores: TomadorModule[] = [];
 
@@ -100,15 +60,20 @@ export class TomadoresComponent implements OnInit {
   }
 
   cargarTomadores(): void {
-    this.tomadorService.getTomadores().subscribe({
-      next: (data: TomadorModule[]) => {
-        this.tomadores = data;
-        this.changePage();
-      },
-      error: (err: any) => console.error('Error cargando tomadores: ', err)
-    });
-  }
+  this.tomadorService.getTomadoresPaginados(this.currentPage, this.pageSize).subscribe({
+    next: (data) => {
+      console.log('Respuesta del backend:', data);
+      this.tomadoresPage = data;
+    },
+    error: (err) => console.error('Error al consultar tomadores:', err)
+  });
+}
 
+  cambiarPagina(nuevaPagina: number): void {
+    this.currentPage = nuevaPagina;
+    this.cargarTomadores();
+  }
+  
   ver(t: TomadorModule): void {
     this.showForm = true;
     this.formError = '';
@@ -160,11 +125,11 @@ export class TomadoresComponent implements OnInit {
     } else {
 
       const payload = {
-      ...this.tomador,
-      ccTomador: Number(this.tomador.ccTomador)
-    } as TomadorModule;
+        ...this.tomador,
+        ccTomador: Number(this.tomador.ccTomador)
+      } as TomadorModule;
 
-    this.tomadorService.crearTomador(payload)
+      this.tomadorService.crearTomador(payload)
         .subscribe({
           next: () => {
             this.cargarTomadores();
@@ -292,6 +257,6 @@ export class TomadoresComponent implements OnInit {
     input.value = input.value.replace(/[^0-9]/g, '');
   }
 
-  
+
 
 }
