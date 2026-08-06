@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { DatosRiesgoResponse } from '../models/datos-riesgos/datosRiesgoResponse.model';
 import { Observable } from 'rxjs';
 import { DatosRiesgoRequest } from '../models/datos-riesgos/datosRiesgoRequest.model';
+import { PageResponse } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,15 @@ export class DatosRiesgoService {
 
   getDatosRiesgo(): Observable<DatosRiesgoResponse[]> {
     return this.htppClient.get<DatosRiesgoResponse[]>(`${this.apiURL}/api/datos-riesgo`);
+  }
+
+  getDatosRiesgoPages(page: number, size: number): Observable<PageResponse<DatosRiesgoResponse>> {
+    
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    
+    return this.htppClient.get<PageResponse<DatosRiesgoResponse>>(`${this.apiURL}/api/datos-riesgo/page`, { params });
   }
 
   createDatosRiesgo(datosRiesgo: DatosRiesgoRequest): Observable<DatosRiesgoRequest> {

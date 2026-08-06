@@ -13,8 +13,16 @@ export class ListDatosRiesgosComponent implements OnInit {
 
   @Output() edit = new EventEmitter<any>();
 
+  showForm = false;
+
   datosRiesgos: DatosRiesgoResponse[] = [];
   marcasVehiculo: MarcaVehiculo[] = [];
+
+  totalElements = 0;
+  totalPages = 0;
+
+  pageSize = 8;
+  currentPage = 0;
 
   constructor(
     private datosRiesgoService: DatosRiesgoService,
@@ -27,10 +35,12 @@ export class ListDatosRiesgosComponent implements OnInit {
   }
 
   cargarDatosRiesgos(): void {
-    this.datosRiesgoService.getDatosRiesgo().subscribe({
-      next: (datosRiesgos) => {
-        this.datosRiesgos = datosRiesgos;
-        console.log('Datos de riesgos cargados:', datosRiesgos);
+    this.datosRiesgoService.getDatosRiesgoPages(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        this.datosRiesgos = response.content;
+        this.totalElements = response.totalElements;
+        this.totalPages = response.totalPages;
+        console.log('Datos de riesgos cargados:', response);
       },
       error: (error) => {
         console.error('Error al cargar datos de riesgos:', error);
@@ -70,5 +80,28 @@ export class ListDatosRiesgosComponent implements OnInit {
         console.error('Error al cargar las marcas de vehículo:', error);
       }
     });
+  }
+
+  nextPage(): void {
+
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.cargarDatosRiesgos();
+    }
+
+  }
+
+  previousPage(): void {
+
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.cargarDatosRiesgos();
+    }
+
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.cargarDatosRiesgos();
   }
 }

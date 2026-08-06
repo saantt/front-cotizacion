@@ -98,11 +98,11 @@
 
     <!-- Paginación -->
     <div class="pagination">
-        <span>Mostrando registros de riesgo</span>
-        <div>
-            <button type="button" class="active">1</button>
-            <button type="button">2</button>
-            <button type="button">></button>
-        </div>
+        <button class="page-btn" (click)="previousPage()" [disabled]="currentPage==0"><</button>
+        <button *ngFor="let page of [].constructor(totalPages); let i=index" class="page-btn"
+        [class.active]="i===currentPage" (click)="goToPage(i)">
+            {{i+1}}
+        </button>
+        <button class="page-btn" (click)="nextPage()" [disabled]="currentPage==totalPages-1">></button>
     </div>
 </div>
