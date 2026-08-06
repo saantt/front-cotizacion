@@ -115,7 +115,7 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
 
   cargarDeducibles(): void {
     this.deducibleService.getAll().subscribe({
-      next: (data) => this.deducibles = data,
+      next: (data) => this.deducibles = data.content,
       error: (err) => console.error('Error al cargar deducibles:', err)
     });
   }

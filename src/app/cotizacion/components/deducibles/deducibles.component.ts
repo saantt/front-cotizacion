@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
   templateUrl: './deducibles.component.html',
   styleUrls: ['./deducibles.component.css']
 })
-
 export class DeducibleComponent implements OnInit, OnDestroy {
 
   /*==========================
@@ -17,7 +16,6 @@ export class DeducibleComponent implements OnInit, OnDestroy {
   ==========================*/
   showForm = false;
   form!: FormGroup;
-  // controla si el panel derecho está en modo ver / editar / crear
   modo: 'ver' | 'editar' | 'crear' | null = null;
   registroSeleccionado: Deducible | null = null;
   toastMessage: string | null = null;
@@ -32,51 +30,46 @@ export class DeducibleComponent implements OnInit, OnDestroy {
   }
 
   /*===========
-    PAGINACIÓN
+    PAGINACIÓN (server-side)
   ============*/
-  pageSize = 7;
-  currentPage = 1;
-  paginatedCoverages: Deducible[] = [];
-  pages: number[] = [];
+  deducibles: Deducible[] = [];   // elementos de la página actual (ya vienen paginados del backend)
+  currentPage = 0;                // 0-based, como espera Spring Pageable
+  pageSize = 2;                   // tamaño de página que pides al backend
+  totalPages = 0;
+  totalElements = 0;
 
-  changePage(): void {
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
+  }
 
-    this.paginatedCoverages = this.deducibles.slice(start, end);
+  get isFirstPage(): boolean {
+    return this.currentPage === 0;
+  }
 
-    this.pages = Array.from(
-      { length: this.totalPages() },
-      (_, index) => index + 1
-    );
+  get isLastPage(): boolean {
+    return this.currentPage >= this.totalPages - 1;
   }
 
   nextPage(): void {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-      this.changePage();
+    if (!this.isLastPage) {
+      this.goToPage(this.currentPage + 1);
     }
   }
 
   previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.changePage();
+    if (!this.isFirstPage) {
+      this.goToPage(this.currentPage - 1);
     }
   }
 
-  totalPages(): number {
-    return Math.ceil(this.deducibles.length / this.pageSize);
-  }
-
   goToPage(page: number): void {
+    if (page < 0 || page >= this.totalPages) {
+      return;
+    }
     this.currentPage = page;
-    this.changePage();
+    this.listarDeducibles();
   }
 
-
-  deducibles: Deducible[] = [];
-  
   constructor(
     private fb: FormBuilder,
     private deducibleService: DeducibleService
@@ -109,7 +102,6 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       if (control.value === null || control.value === '' || control.value === undefined) {
         return null;
       }
-
       const value = Number(control.value);
       return !Number.isNaN(value) && value < min ? { min: true } : null;
     };
@@ -120,7 +112,6 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       if (control.value === null || control.value === '' || control.value === undefined) {
         return null;
       }
-
       const value = Number(control.value);
       return !Number.isNaN(value) && value > max ? { max: true } : null;
     };
@@ -131,7 +122,6 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       if (control.value === null || control.value === '' || control.value === undefined) {
         return null;
       }
-
       const value = Number(control.value);
       return !Number.isNaN(value) && value <= 0 ? { positive: true } : null;
     };
@@ -142,7 +132,6 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       if (control.value === null || control.value === '' || control.value === undefined) {
         return null;
       }
-
       const digitsOnly = String(control.value).replace(/\D/g, '');
       return digitsOnly.length < minDigits ? { minDigits: true } : null;
     };
@@ -153,7 +142,6 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       if (control.value === null || control.value === '' || control.value === undefined) {
         return null;
       }
-
       const digitsOnly = String(control.value).replace(/\D/g, '');
       return digitsOnly.length > maxDigits ? { maxDigits: true } : null;
     };
@@ -161,12 +149,14 @@ export class DeducibleComponent implements OnInit, OnDestroy {
 
   listarDeducibles(): void {
     this.isLoading = true;
-    this.deducibleService.getAll().subscribe({
-      next: (data: Deducible[]) => {
-        this.deducibles = data;
-        this.currentPage = 1;
-        this.changePage();
+    this.deducibleService.getAll(this.currentPage, this.pageSize).subscribe({
+      next: (data) => {
+        this.deducibles = data.content || [];
+        this.totalPages = data.totalPages;
+        this.totalElements = data.totalElements;
         this.isLoading = false;
+        console.log('Total de páginas:', this.totalPages);
+        console.log('Deducibles cargados:', data);
       },
       error: (err: any) => {
         console.error('Error al listar deducibles', err);
@@ -240,6 +230,12 @@ export class DeducibleComponent implements OnInit, OnDestroy {
             this.cancelar();
             this.closeForm();
           }
+
+          // Si eliminamos el último elemento de la página actual (y no es la primera), retrocede una página
+          if (this.deducibles.length === 1 && this.currentPage > 0) {
+            this.currentPage--;
+          }
+
           this.listarDeducibles();
           this.isLoading = false;
           Swal.fire({
@@ -281,7 +277,7 @@ export class DeducibleComponent implements OnInit, OnDestroy {
       porcentaje: Number(this.form.value.porcentaje),
       monto_minimo: Number(this.form.value.monto_minimo)
     };
-    
+
     this.isLoading = true;
 
     if (this.modo === 'crear') {
