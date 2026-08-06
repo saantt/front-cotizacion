@@ -33,7 +33,7 @@ export class TomadoresComponent implements OnInit {
   ============*/
   tomadoresPage!: PageResponse<TomadorModule>;
   currentPage = 0;
-  pageSize = 1;
+  pageSize = 10;
 
   totalElements = 0;
   totalPages = 0;
