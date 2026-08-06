@@ -4,7 +4,7 @@
             <div class="section-header">
                 <div class="section-title">
                     <h2>Marcas de Vehículo</h2>
-                    <span>{{ marcavehiculo.length }} registros</span>
+                    <span>{{ totalElements }} registros</span>
                 </div>
                 <div class="search-box">
                     <mat-icon>search</mat-icon>
@@ -27,7 +27,7 @@
                     </thead>
 
                     <tbody>
-                        <tr *ngFor="let mv of paginatedCoverages; trackBy: trackById"
+                        <tr *ngFor="let mv of marcavehiculo; trackBy: trackById"
                             [class.selected]="registroSeleccionado?.id_marca_vehiculo === mv.id_marca_vehiculo">
                             <td>{{mv.nombre_marca_vehiculo}}</td>
                             <td>{{mv.pais_origen_vehiculo}}</td>
@@ -48,16 +48,15 @@
             </div>
 
             <div class="pagination">
-                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
-                    &lt;
-                </button>
-                <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
-                    (click)="goToPage(page)">
-                    {{ page }}
-                </button>
-                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
-                    &gt;
-                </button>
+                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage==0">
+                    < </button>
+                        <button *ngFor="let page of [].constructor(totalPages); let i=index" class="page-btn"
+                            [class.active]="i===currentPage" (click)="goToPage(i)">
+                            {{i+1}}
+                        </button>
+                        <button class="page-btn" (click)="nextPage()" [disabled]="currentPage==totalPages-1">
+                            >
+                        </button>
             </div>
         </section>
 
@@ -136,5 +135,3 @@
         </section>
     </div>
 </div>
-
-    

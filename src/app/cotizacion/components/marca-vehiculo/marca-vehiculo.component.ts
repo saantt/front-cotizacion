@@ -19,76 +19,30 @@ export class MarcaVehiculoComponent implements OnInit {
   registroSeleccionado: MarcaVehiculo | null = null;
   modo: 'crear' | 'editar' | 'ver' = 'crear';
 
-  closeForm() {
-    this.showForm = false;
-  }
-
   /*===========
     PAGINACIÓN
   ============*/
-  pageSize = 7;
-  currentPage = 1;
-  paginatedCoverages: MarcaVehiculo[] = [];
-  pages: number[] = [];
-
-  changePage(): void {
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-
-    this.paginatedCoverages = this.marcavehiculo.slice(start, end);
-
-    this.pages = Array.from(
-      { length: this.totalPages() },
-      (_, index) => index + 1
-    );
-  }
-  
-  nextPage(): void {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-      this.changePage();
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.changePage();
-    }
-  }
-  
-  totalPages(): number {
-    return Math.ceil(this.marcavehiculo.length / this.pageSize);
-  }
-  
-  goToPage(page: number): void {
-    this.currentPage = page;
-    this.changePage();
-  }
-
-
   marcavehiculo: MarcaVehiculo[] = [];
- 
+
+  totalElements = 0;
+  totalPages = 0;
+
+  pageSize = 4;
+  currentPage = 0;
+
+
   constructor(
     private fb: FormBuilder,
     private marcaVehiculoService: MarcaVehiculoService
   ) { }
 
   ngOnInit(): void {
-
     this.form = this.fb.group({
       nombre_marca_vehiculo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       pais_origen_vehiculo: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       abreviatura_vehiculo: ['', [Validators.required, Validators.pattern(/^[A-Za-z]{3}$/)]]
     });
-
-    this.marcaVehiculoService.marcas$
-      .subscribe(lista => {
-        this.marcavehiculo = lista;
-        this.currentPage = 1;
-        this.changePage();
-      });
-    this.marcaVehiculoService.cargarMarcasVehiculo();
+    this.cargarPagina();
   }
 
   // =========================
@@ -147,7 +101,7 @@ export class MarcaVehiculoComponent implements OnInit {
       this.marcaVehiculoService.crearMarcaVehiculo(marca)
         .subscribe({
           next: () => {
-            this.marcaVehiculoService.cargarMarcasVehiculo();
+            this.cargarPagina();
             this.form.reset();
             this.form.enable();
             this.showForm = false;
@@ -175,7 +129,7 @@ export class MarcaVehiculoComponent implements OnInit {
       )
         .subscribe({
           next: () => {
-            this.marcaVehiculoService.cargarMarcasVehiculo();
+            this.cargarPagina();
             this.form.reset();
             this.form.enable();
             this.showForm = false;
@@ -225,7 +179,7 @@ export class MarcaVehiculoComponent implements OnInit {
       this.marcaVehiculoService.eliminarMarcaVehiculo(mv.id_marca_vehiculo)
         .subscribe({
           next: () => {
-            this.marcaVehiculoService.cargarMarcasVehiculo();
+            this.cargarPagina();
             Swal.fire({
               title: 'Eliminado',
               text: 'La marca de vehículo fue eliminada correctamente.',
@@ -248,6 +202,46 @@ export class MarcaVehiculoComponent implements OnInit {
 
   trackById(index: number, item: MarcaVehiculo): number {
     return item.id_marca_vehiculo;
+  }
+
+  nextPage(): void {
+
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.cargarPagina();
+    }
+
+  }
+
+  previousPage(): void {
+
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.cargarPagina();
+    }
+
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.cargarPagina();
+  }
+
+  closeForm() {
+    this.showForm = false;
+  }
+
+  cargarPagina(): void {
+    this.marcaVehiculoService
+      .obtenerPagina(this.currentPage, this.pageSize)
+      .subscribe({
+        next: (page) => {
+          this.marcavehiculo = page.content;
+          this.totalElements = page.totalElements;
+          this.totalPages = page.totalPages;
+        },
+        error: error => console.error(error)
+      });
   }
 
 }

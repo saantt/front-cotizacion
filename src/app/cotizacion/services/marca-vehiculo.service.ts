@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { MarcaVehiculo } from '../models/marca-vehiculo.model';
+import { PageResponse } from '../models/page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -146,6 +147,21 @@ export class MarcaVehiculoService {
       {
         responseType: 'text'
       }
+    );
+  }
+
+  obtenerPagina(
+    page: number,
+    size: number
+  ): Observable<PageResponse<MarcaVehiculo>> {
+
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<PageResponse<MarcaVehiculo>>(
+      `${this.apiURL}/page`,
+      { params }
     );
   }
 
