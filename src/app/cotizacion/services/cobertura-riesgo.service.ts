@@ -21,6 +21,18 @@ export class CoberturaRiesgoService {
       .subscribe((lista: CoberturaRiesgo[]) => this.coberturasSubject.next(lista));
   }
 
+  /**
+   * Obtiene coberturas de riesgo de forma paginada (server-side).
+   * El backend debe exponer un endpoint /page que acepte parámetros page,size
+   */
+  getCoberturaRiesgoPage(page: number, size: number) {
+    const params: any = {
+      page: page.toString(), size: size.toString()
+    };
+    // Usamos /page para seguir el mismo patrón que otros servicios
+    return this.http.get<any>(`${this.apiUrl}/page`, { params });
+  }
+
   crearCoberturaRiesgo(cobertura: CoberturaRiesgoRequest): Observable<CoberturaRiesgo> {
     return this.http.post<CoberturaRiesgo>(this.apiUrl, cobertura)
       .pipe(tap(() => this.cargarCoberturasRiesgo()));

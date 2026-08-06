@@ -21,9 +21,13 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
   coberturas: Coverage[] = [];
   deducibles: Deducible[] = [];
   pageSize = 7;
-  currentPage = 1;
+  currentPage = 0;
   paginatedCoberturasRiesgo: CoberturaRiesgo[] = [];
-  pages: number[] = [];
+  totalPages = 0;
+
+  get pages(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
+  }
 
   form!: FormGroup;
   modo: 'ver' | 'editar' | 'crear' | null = null;
@@ -85,10 +89,12 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
 
   listarCoberturasRiesgo(): void {
     this.isLoading = true;
-    this.coberturaRiesgoService.coberturas$.subscribe({
-      next: (lista: CoberturaRiesgo[]) => {
-        this.coberturasRiesgo = lista;
-        this.changePage();
+    // Usamos paginación server-side mediante el servicio
+    this.coberturaRiesgoService.getCoberturaRiesgoPage(this.currentPage, this.pageSize).subscribe({
+      next: (page: any) => {
+        this.coberturasRiesgo = page.content || [];
+        this.paginatedCoberturasRiesgo = this.coberturasRiesgo;
+        this.totalPages = page.totalPages || 0;
         this.isLoading = false;
       },
       error: () => {
@@ -96,7 +102,6 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
         this.showToast('No se pudieron cargar las coberturas de riesgo.', 'error');
       }
     });
-    this.coberturaRiesgoService.cargarCoberturasRiesgo();
   }
 
   cargarDatosRiesgo(): void {
@@ -231,44 +236,26 @@ export class CoberturaRiesgoComponent implements OnInit, OnDestroy {
   trackById(index: number, item: CoberturaRiesgo): string {
     return `${item.idCotizacion}-${item.idCobertura}`;
   }
-  changePage(): void {
-  const total = this.totalPages();
-  if (total === 0) {
-    this.paginatedCoberturasRiesgo = [];
-    this.pages = [];
-    return;
+  // server-side pagination helpers (0-based pages)
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.listarCoberturasRiesgo();
+    }
   }
-  if (this.currentPage > total) this.currentPage = total;
-  const start = (this.currentPage - 1) * this.pageSize;
-  const end = start + this.pageSize;
-  this.paginatedCoberturasRiesgo = this.coberturasRiesgo.slice(start, end);
-  this.pages = Array.from({ length: total }, (_, i) => i + 1);
-}
 
-totalPages(): number {
-  return Math.ceil(this.coberturasRiesgo.length / this.pageSize);
-}
-
-nextPage(): void {
-  if (this.currentPage < this.totalPages()) {
-    this.currentPage++;
-    this.changePage();
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.listarCoberturasRiesgo();
+    }
   }
-}
 
-previousPage(): void {
-  if (this.currentPage > 1) {
-    this.currentPage--;
-    this.changePage();
-  }
-}
-
-goToPage(page: number): void {
-  if (page >= 1 && page <= this.totalPages()) {
+  goToPage(page: number): void {
+    if (page < 0 || page >= this.totalPages) return;
     this.currentPage = page;
-    this.changePage();
+    this.listarCoberturasRiesgo();
   }
-}
 
   private getErrorMessage(error: any): string {
     const messages = this.getErrorMessages(error);

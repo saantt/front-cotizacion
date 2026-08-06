@@ -59,15 +59,15 @@
                 </table>
             </div>
 
-            <div class="pagination">
-                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+            <div class="pagination" *ngIf="totalPages > 1">
+                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 0">
                     &lt;
                 </button>
                 <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
                     (click)="goToPage(page)">
-                    {{ page }}
+                    {{ page + 1 }}
                 </button>
-                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages - 1">
                     &gt;
                 </button>
             </div>
