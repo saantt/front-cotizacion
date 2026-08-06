@@ -1,0 +1,117 @@
+<div class="toast" *ngIf="toastMessage" [class.success]="toastType === 'success'" [class.error]="toastType === 'error'">
+    <span class="toast-icon">{{ toastType === 'success' ? '✓' : '!' }}</span>
+    <span>{{ toastMessage }}</span>
+</div>
+
+<div class="crud-container">
+
+    <div class="table-panel">
+
+        <div class="toolbar">
+            <h2>Coberturas de Riesgo</h2>
+            <button class="btn-new" (click)="nuevo()">+ Nuevo</button>
+        </div>
+
+        <div class="table-wrapper">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Cotización</th>
+                        <th>Cobertura</th>
+                        <th>Deducible</th>
+                        <th>Prima</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let cr of coberturasRiesgo; trackBy: trackById"
+                        [class.selected]="registroSeleccionado?.idCotizacion === cr.idCotizacion && registroSeleccionado?.idCobertura === cr.idCobertura">
+                        <td>{{ cr.idCotizacion }}</td>
+                        <td>{{ cr.idCobertura }}</td>
+                        <td>{{ cr.idDeducible !== null && cr.idDeducible !== undefined ? cr.idDeducible : '-' }}</td>
+                        <td>{{ cr.primaCobertura | currency:'COP':'symbol':'1.0-0' }}</td>
+                        <td class="acciones">
+                            <button class="btn-icon btn-view" (click)="ver(cr)" title="Ver">👁</button>
+                            <button class="btn-icon btn-edit" (click)="editar(cr)" title="Editar">✏️</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <span>Mostrando {{ coberturasRiesgo.length }} registros</span>
+            <div>
+                <button>&lt;</button>
+                <button class="active">1</button>
+                <button>&gt;</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-panel">
+
+        <div class="form-header">
+            <h2>{{ modo === 'crear' ? 'Nuevo registro' : (modo === 'editar' ? 'Editar registro' : 'Ver registro') }}</h2>
+            <span *ngIf="registroSeleccionado">{{ registroSeleccionado.idCotizacion }} / {{ registroSeleccionado.idCobertura }}</span>
+        </div>
+
+        <form *ngIf="modo" [formGroup]="form" (ngSubmit)="guardar()">
+
+            <div class="form-group">
+                <label for="idCotizacion">Cotización *</label>
+                <select id="idCotizacion" formControlName="idCotizacion">
+                    <option value="" disabled>Seleccione una cotización</option>
+                    <option *ngFor="let dr of datosRiesgo" [value]="dr.id">{{ dr.id }} - {{ dr.matricula }}</option>
+                </select>
+                <small class="error" *ngIf="form.get('idCotizacion')?.invalid && form.get('idCotizacion')?.touched">
+                    La cotización es obligatoria
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="idCobertura">Cobertura *</label>
+                <select id="idCobertura" formControlName="idCobertura">
+                    <option value="" disabled>Seleccione una cobertura</option>
+                    <option *ngFor="let c of coberturas" [value]="c.id_cobertura">{{ c.id_cobertura }} - {{ c.nombre_cobertura }}</option>
+                </select>
+                <small class="error" *ngIf="form.get('idCobertura')?.invalid && form.get('idCobertura')?.touched">
+                    La cobertura es obligatoria
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="idDeducible">Deducible</label>
+                <select id="idDeducible" formControlName="idDeducible">
+                    <option [ngValue]="null">Sin deducible</option>
+                    <option *ngFor="let d of deducibles" [ngValue]="d.id_deducible">{{ d.id_deducible }} - {{ d.porcentaje }}%</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="primaCobertura">Prima de Cobertura *</label>
+                <input type="text" inputmode="decimal" id="primaCobertura" formControlName="primaCobertura" placeholder="Ej: 150000.50">
+                <small class="error" *ngIf="primaErrorMessage">{{ primaErrorMessage }}</small>
+            </div>
+
+            <div class="buttons" *ngIf="modo !== 'ver'">
+                <button class="btn-save" type="submit" [disabled]="form.invalid || isLoading">
+                    {{ isLoading ? 'Procesando...' : 'Guardar' }}
+                </button>
+                <button class="btn-cancel" type="button" (click)="cancelar()">Cancelar</button>
+                <button *ngIf="registroSeleccionado" class="btn-delete" type="button" [disabled]="isLoading"
+                        (click)="confirmarEliminacion(registroSeleccionado)">
+                    {{ isLoading ? 'Procesando...' : 'Eliminar' }}
+                </button>
+            </div>
+
+        </form>
+
+        <p *ngIf="!modo" style="color:#777; font-size:14px;">
+            Selecciona un registro de la tabla o crea uno nuevo para comenzar.
+        </p>
+
+    </div>
+
+</div>

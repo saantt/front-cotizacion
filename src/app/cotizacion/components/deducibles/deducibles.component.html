@@ -1,0 +1,120 @@
+<div class="crud-container">
+    <div class="crud-panel" [class.form-open]="showForm">
+        <section class="table-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>Deducibles</h2>
+                    <span>{{ deducibles.length }} registros</span>
+                </div>
+                <div class="search-box">
+                    <mat-icon>search</mat-icon>
+                    <input type="text" placeholder="Buscar deducible..." class="search">
+                </div>
+                <button class="btn-primary" (click)="nuevo()">
+                    <mat-icon>add</mat-icon>
+                    Nuevo
+                </button>
+            </div>
+
+            <div class="table-content">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Porcentaje</th>
+                            <th>Monto Mínimo</th>
+                            <th width="120">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let d of paginatedCoverages"
+                            [class.selected]="registroSeleccionado?.id_deducible === d.id_deducible">
+                            <td>{{d.porcentaje}} %</td>
+                            <td>{{d.monto_minimo | currency:'COP ':'symbol':'1.0-0'}}</td>
+                            <td class="acciones">
+                                <button class="btn-icon btn-view" (click)="ver(d)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button class="btn-icon btn-edit" (click)="editar(d)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="btn-icon btn-delete" (click)="eliminar(d)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+                    &lt;
+                </button>
+                <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
+                    (click)="goToPage(page)">
+                    {{ page }}
+                </button>
+                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+                    &gt;
+                </button>
+            </div>
+        </section>
+
+        <section class="form-section" *ngIf="showForm">
+            <div class="section-title">
+                <h2>
+                    {{ modo === 'crear'
+                        ? 'Nuevo registro'
+                        : (modo === 'editar'
+                            ? 'Editar registro'
+                            : 'Ver registro') }}
+                </h2>
+                <span *ngIf="form.get('id_deducible')?.value">
+                    REG {{form.get('id_deducible')?.value}}
+                </span>
+            </div>
+
+            <form class="crud-form" [formGroup]="form" (ngSubmit)="guardar()">
+                <div class="form-group">
+                    <label>Porcentaje *</label>
+                    <input
+                        type="text"
+                        inputmode="numeric"
+                        formControlName="porcentaje"
+                        [readonly]="modo === 'ver'"
+                        maxlength="5"
+                        (input)="onPorcentajeInput($event)">
+
+                    <small class="error" *ngIf="porcentajeErrorMessage">
+                        {{ porcentajeErrorMessage }}
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Monto Mínimo *</label>
+                    <input
+                        type="text"
+                        inputmode="numeric"
+                        formControlName="monto_minimo"
+                        [readonly]="modo === 'ver'"
+                        maxlength="10"
+                        (input)="onMontoMinimoInput($event)">
+                    <small class="error" *ngIf="montoMinimoErrorMessage">
+                        {{ montoMinimoErrorMessage }}
+                    </small>
+                </div>
+
+                <div class="buttons">
+                    <button *ngIf="modo !== 'ver'" class="btn-save" type="submit">
+                        {{ modo === 'editar' ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                    <button class="btn-cancel" type="button" (click)="closeForm()">
+                        Cancelar
+                    </button>
+                </div>
+
+            </form>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,82 @@
+/* ==========================================================
+   CONFIGURACIÓN GENERAL & CONTENEDOR PRINCIPAL
+========================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit !important;
+}
+
+.crud-container {
+    display: flex !important;
+    flex-direction: row !important;
+    height: calc(100vh - 20px);
+    width: 100%;
+    background: #f8f5ef;
+    border: 1px solid #d7d0c5;
+    border-radius: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+    font-family: inherit !important;
+}
+
+/* Forzado de tipografía en todos los elementos hijos */
+.crud-container *,
+.crud-container input,
+.crud-container select,
+.crud-container textarea,
+.crud-container button,
+.crud-container th,
+.crud-container td,
+.crud-container h2,
+.crud-container span {
+    font-family: inherit !important;
+    color: #1a1a1a;
+}
+
+/* ==========================================================
+   DISTRIBUCIÓN DE PÁNELES (ANGULAR TAGS)
+========================================================== */
+
+app-list-datos-riesgos {
+    width: 60% !important;
+    min-width: 60% !important;
+    max-width: 60% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-right: 1px solid #d6d0c6;
+    background: #faf8f5;
+    box-sizing: border-box;
+}
+
+app-form-datos-riesgo {
+    width: 40% !important;
+    min-width: 40% !important;
+    max-width: 40% !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #ffffff !important;
+    box-sizing: border-box;
+}
+
+/* ==========================================================
+   RESPONSIVE
+========================================================== */
+
+@media(max-width: 1200px) {
+    .crud-container {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+
+    app-list-datos-riesgos,
+    app-form-datos-riesgo {
+        width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
+    }
+}

@@ -1,0 +1,71 @@
+<div class="sidebar" [class.collapsed]="menuColapsado">
+
+  <button class="toggle-btn" (click)="menuColapsado = !menuColapsado">
+    <span>☰</span>
+  </button>
+
+  <div class="logo">
+    <h2 *ngIf="!menuColapsado">Cotización</h2>
+    <p *ngIf="!menuColapsado">Sistema de riesgos vehiculares</p>
+  </div>
+
+  <nav>
+
+    <a class="menu-link menu-action" routerLink="/login" routerLinkActive="active" *ngIf="!authService.isLoggedIn()">
+      <span *ngIf="!menuColapsado">Login</span>
+    </a>
+
+    <a class="menu-link menu-action" routerLink="/login" *ngIf="authService.isLoggedIn()"
+      (click)="authService.logout()">
+      <span *ngIf="!menuColapsado">Logout</span>
+    </a>
+
+    <h4 *ngIf="!menuColapsado">ENTIDADES</h4>
+
+    <!-- resto del menú -->
+
+  </nav>
+
+  <nav>
+    <a class="menu-link" routerLink="/datos-riesgo" routerLinkActive="active">
+      <span class="dot blue"></span>
+      <span *ngIf="!menuColapsado">Datos del Riesgo</span>
+    </a>
+
+    <a class="menu-link" routerLink="/tomadores" routerLinkActive="active">
+      <span class="dot teal"></span>
+      <span *ngIf="!menuColapsado">Tomadores</span>
+    </a>
+
+    <a class="menu-link" routerLink="/marcavehiculo" routerLinkActive="active">
+      <span class="dot cyan"></span>
+      <span *ngIf="!menuColapsado">Marcas de Vehículo</span>
+    </a>
+
+    <a class="menu-link" routerLink="/deducibles" routerLinkActive="active">
+      <span class="dot purple"></span>
+      <span *ngIf="!menuColapsado">Deducibles</span>
+    </a>
+
+    <a class="menu-link" routerLink="/coberturas" routerLinkActive="active">
+      <span class="dot green"></span>
+      <span *ngIf="!menuColapsado">Coberturas</span>
+    </a>
+
+    <a class="menu-link" routerLink="/cobertura-riesgo" routerLinkActive="active">
+      <span class="dot orange"></span>
+      <span *ngIf="!menuColapsado">Coberturas del Riesgo</span>
+    </a>
+
+    <a class="menu-link" routerLink="/impuestos-cotizacion" routerLinkActive="active">
+      <span class="dot red"></span>
+      <span *ngIf="!menuColapsado">Impuestos de Cotización</span>
+    </a>
+
+    <a class="menu-link" routerLink="/estados-cotizacion" routerLinkActive="active">
+      <span class="dot yellow"></span>
+      <span *ngIf="!menuColapsado">Estados de Cotización</span>
+    </a>
+  </nav>
+
+</div>

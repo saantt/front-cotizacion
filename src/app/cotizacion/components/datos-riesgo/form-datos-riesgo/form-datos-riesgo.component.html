@@ -1,0 +1,105 @@
+<div class="form-panel">
+    <!-- Encabezado del Formulario -->
+    <div class="form-header">
+        <h2>Datos de Riesgo</h2>
+        <span>Vehículo</span>
+    </div>
+
+    <!-- Formulario Reactive -->
+    <form [formGroup]="datosRiesgoForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+            <label for="matricula">Matrícula</label>
+            <input
+                type="text"
+                id="matricula"
+                formControlName="matricula"
+                placeholder="Ej: ABC123"
+            />
+            <div class="error-message" *ngIf="isControlInvalid('matricula')">
+                <span *ngIf="getControl('matricula')?.errors?.required">La matrícula es obligatoria.</span>
+                <span *ngIf="getControl('matricula')?.errors?.minlength">La matrícula debe tener 7 caracteres.</span>
+                <span *ngIf="getControl('matricula')?.errors?.maxlength">La matrícula debe tener 7 caracteres.</span>
+                <span *ngIf="getControl('matricula')?.errors?.pattern">La matrícula debe tener el formato UFO-924.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="cedula">Cédula del Propietario</label>
+            <select id="cedula" formControlName="cedula">
+                <option value="" disabled>Seleccione una cédula</option>
+                <option *ngFor="let tomador of tomadores" [value]="tomador.ccTomador.toString()">
+                    {{ tomador.ccTomador }} - {{ tomador.nombreTomador }}
+                </option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('cedula')">
+                <span *ngIf="getControl('cedula')?.errors?.required">La cédula es obligatoria.</span>
+            </div>
+        </div>
+
+        <div class="form-group" *ngIf="isEditMode">
+            <label for="estadoId">Estado</label>
+            <select id="estadoId" formControlName="estadoId">
+                <option [value]="1">Activo</option>
+                <option [value]="2">Pendiente</option>
+                <option [value]="3">Inactivo</option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('estadoId')">
+                <span *ngIf="getControl('estadoId')?.errors?.required">El estado es obligatorio.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="marcaId">Marca</label>
+            <select id="marcaId" formControlName="marcaId">
+                <option value="" disabled>Seleccione una marca</option>
+                <option *ngFor="let marca of marcasVehiculo" [value]="marca.id_marca_vehiculo">
+                    {{ marca.nombre_marca_vehiculo }}
+                </option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('marcaId')">
+                <span *ngIf="getControl('marcaId')?.errors?.required">La marca es obligatoria.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="modelo">Modelo</label>
+            <input
+                type="text"
+                id="modelo"
+                formControlName="modelo"
+                placeholder="Ej: 2024"
+            />
+            <div class="error-message" *ngIf="isControlInvalid('modelo')">
+                <span *ngIf="getControl('modelo')?.errors?.required">El modelo es obligatorio.</span>
+                <span *ngIf="getControl('modelo')?.errors?.maxlength">El modelo no puede tener más de 4 caracteres.</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="servicio">Servicio</label>
+            <select id="servicio" formControlName="servicio">
+                <option value="PARTICULAR">Particular</option>
+                <option value="PUBLICO">Público</option>
+            </select>
+            <div class="error-message" *ngIf="isControlInvalid('servicio')">
+                <span *ngIf="getControl('servicio')?.errors?.required">El servicio es obligatorio.</span>
+            </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="buttons">
+            <button
+                type="submit"
+                class="btn-save"
+                [disabled]="!datosRiesgoForm.valid"
+            >
+                {{ isEditMode ? 'Actualizar' : 'Guardar' }}
+            </button>
+           <button type="button" *ngIf="isEditMode" (click)="onCancel()">
+              Cancelar
+          </button>
+        </div>
+
+    </form>
+</div>

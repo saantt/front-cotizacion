@@ -1,0 +1,140 @@
+<div class="crud-container">
+    <div class="crud-panel" [class.form-open]="showForm">
+        <section class="table-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>Marcas de Vehículo</h2>
+                    <span>{{ marcavehiculo.length }} registros</span>
+                </div>
+                <div class="search-box">
+                    <mat-icon>search</mat-icon>
+                    <input type="text" placeholder="Buscar marca..." class="search">
+                </div>
+                <button class="btn-primary" (click)="nuevo()">
+                    <mat-icon>add</mat-icon>
+                    Nuevo
+                </button>
+            </div>
+
+            <div class="table-content">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Marca</th>
+                            <th>País</th>
+                            <th width="120">Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let mv of paginatedCoverages; trackBy: trackById"
+                            [class.selected]="registroSeleccionado?.id_marca_vehiculo === mv.id_marca_vehiculo">
+                            <td>{{mv.nombre_marca_vehiculo}}</td>
+                            <td>{{mv.pais_origen_vehiculo}}</td>
+                            <td class="acciones">
+                                <button class="btn-icon btn-view" (click)="ver(mv)">
+                                    <mat-icon>visibility</mat-icon>
+                                </button>
+                                <button class="btn-icon btn-edit" (click)="editar(mv)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button class="btn-icon btn-delete" (click)="eliminar(mv)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+                    &lt;
+                </button>
+                <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
+                    (click)="goToPage(page)">
+                    {{ page }}
+                </button>
+                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+                    &gt;
+                </button>
+            </div>
+        </section>
+
+        <section class="form-section" *ngIf="showForm">
+            <div class="section-title">
+                <h2>
+                    {{ modo === 'crear'
+                    ? 'Nuevo registro'
+                    : (modo === 'editar'
+                    ? 'Editar registro'
+                    : 'Ver registro') }}
+                </h2>
+                <span *ngIf="form.get('id_marca_vehiculo')?.value">
+                    REG {{form.get('id_marca_vehiculo')?.value}}
+                </span>
+            </div>
+
+            <form class="crud-form" [formGroup]="form" (ngSubmit)="guardar()">
+                <div class="form-group">
+                    <label>Nombre Marca *</label>
+                    <input type="text" formControlName="nombre_marca_vehiculo">
+                    <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.hasError('required') &&
+                            form.get('nombre_marca_vehiculo')?.touched">
+                        El nombre de la marca es obligatorio.
+                    </small>
+                    <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.hasError('minlength') &&
+                            form.get('nombre_marca_vehiculo')?.touched">
+                        Debe tener al menos 3 caracteres.
+                    </small>
+
+                    <small class="error" *ngIf="form.get('nombre_marca_vehiculo')?.hasError('maxlength') &&
+                            form.get('nombre_marca_vehiculo')?.touched">
+                        No puede superar los 50 caracteres.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>País Origen *</label>
+                    <input type="text" formControlName="pais_origen_vehiculo">
+                    <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.hasError('required') &&
+                            form.get('pais_origen_vehiculo')?.touched">
+                        El país de origen es obligatorio.
+                    </small>
+                    <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.hasError('minlength') &&
+                            form.get('pais_origen_vehiculo')?.touched">
+                        Debe tener al menos 3 caracteres.
+                    </small>
+                    <small class="error" *ngIf="form.get('pais_origen_vehiculo')?.hasError('maxlength') &&
+                            form.get('pais_origen_vehiculo')?.touched">
+                        No puede superar los 50 caracteres.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Abreviatura *</label>
+                    <input type="text" formControlName="abreviatura_vehiculo">
+                    <small class="error" *ngIf="form.get('abreviatura_vehiculo')?.hasError('required') &&
+                            form.get('abreviatura_vehiculo')?.touched">
+                        La abreviatura es obligatoria.
+                    </small>
+                    <small class="error" *ngIf="form.get('abreviatura_vehiculo')?.hasError('pattern') &&
+                            form.get('abreviatura_vehiculo')?.touched">
+                        La abreviatura debe tener exactamente 3 caracteres.
+                    </small>
+                </div>
+
+                <div class="buttons">
+                    <button *ngIf="modo !== 'ver'" class="btn-save" type="submit">
+                        {{ modo === 'editar' ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                    <button class="btn-cancel" type="button" (click)="closeForm()">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+    
