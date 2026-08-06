@@ -4,7 +4,7 @@
             <div class="section-header">
                 <div class="section-title">
                     <h2>Deducibles</h2>
-                    <span>{{ deducibles.length }} registros</span>
+                    <span>{{ totalElements }} registros</span>
                 </div>
                 <div class="search-box">
                     <mat-icon>search</mat-icon>
@@ -27,7 +27,7 @@
                     </thead>
 
                     <tbody>
-                        <tr *ngFor="let d of paginatedCoverages"
+                        <tr *ngFor="let d of deducibles"
                             [class.selected]="registroSeleccionado?.id_deducible === d.id_deducible">
                             <td>{{d.porcentaje}} %</td>
                             <td>{{d.monto_minimo | currency:'COP ':'symbol':'1.0-0'}}</td>
@@ -43,19 +43,23 @@
                                 </button>
                             </td>
                         </tr>
+
+                        <tr *ngIf="!isLoading && deducibles.length === 0">
+                            <td colspan="3" class="empty-state">No hay deducibles registrados.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
 
-            <div class="pagination">
-                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+            <div class="pagination" *ngIf="totalPages > 1">
+                <button class="page-btn" (click)="previousPage()" [disabled]="isFirstPage">
                     &lt;
                 </button>
                 <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
                     (click)="goToPage(page)">
-                    {{ page }}
+                    {{ page + 1 }}
                 </button>
-                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+                <button class="page-btn" (click)="nextPage()" [disabled]="isLastPage">
                     &gt;
                 </button>
             </div>
