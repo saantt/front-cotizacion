@@ -5,7 +5,7 @@
             <div class="section-header">
                 <div class="section-title">
                     <h2>Tomadores</h2>
-                    <span>{{ tomadores.length }} registros</span>
+                    <span>{{ totalElements }} registros</span>
                 </div>
                 <div class="search-box">
                     <mat-icon>search</mat-icon>
@@ -29,9 +29,9 @@
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr *ngFor="let t of paginatedTomadores"
-                            [class.selected]="tomador.ccTomador==t.ccTomador">
+                    <tbody *ngIf="tomadoresPage">
+                        <tr *ngFor="let t of tomadoresPage.content"
+                            [class.selected]="tomador.ccTomador == t.ccTomador">
 
                             <td>{{t.ccTomador}}</td>
                             <td>{{t.nombreTomador}}</td>
@@ -55,14 +55,14 @@
             </div>
 
             <div class="pagination">
-                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+                <button class="page-btn" (click)="previousPage()" [disabled]="currentPage == 0">
                     &lt;
                 </button>
-                <button *ngFor="let page of pages" class="page-btn" [class.active]="page === currentPage"
-                    (click)="goToPage(page)">
-                    {{ page }}
+                <button *ngFor="let page of [].constructor(totalPages); let i=index" class="page-btn"
+                    [class.active]="i === currentPage" (click)="goToPage(i)">
+                    {{ i + 1 }}
                 </button>
-                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage === totalPages()">
+                <button class="page-btn" (click)="nextPage()" [disabled]="currentPage == totalPages - 1">
                     &gt;
                 </button>
             </div>
@@ -248,9 +248,7 @@
                 </div>
 
             </form>
-        
+
         </section>
-    </div> 
+    </div>
 </div>
-
-

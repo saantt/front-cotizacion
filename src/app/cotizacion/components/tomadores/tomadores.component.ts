@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { TomadorModule } from '../../models/tomador/tomador.module';
 import { TomadorServiceService } from '../../services/tomador-service.service';
 import Swal from 'sweetalert2';
+import { PageResponse } from '../../models/page.model';
 
 @Component({
   selector: 'app-tomadores',
@@ -26,55 +27,16 @@ export class TomadoresComponent implements OnInit {
     this.formError = '';
     this.limpiarFormulario();
   }
-  
+
   /*===========
     PAGINACIÓN
   ============*/
-  pageSize = 7;
-  currentPage = 1;
-  paginatedTomadores: TomadorModule[] = [];
-  pages: number[] = [];
+  tomadoresPage!: PageResponse<TomadorModule>;
+  currentPage = 0;
+  pageSize = 1;
 
-  changePage(): void {
-    const total = this.totalPages();
-    if (total > 0 && this.currentPage > total) {
-      this.currentPage = total;
-    }
-
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-
-    this.paginatedTomadores = this.tomadores.slice(start, end);
-
-    this.pages = Array.from(
-      { length: total },
-      (_, index) => index + 1
-    );
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.totalPages()) {
-      this.currentPage++;
-      this.changePage();
-    }
-  }
-
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.changePage();
-    }
-  }
-
-  totalPages(): number {
-    return Math.ceil(this.tomadores.length / this.pageSize);
-  }
-
-  goToPage(page: number): void {
-    this.currentPage = page;
-    this.changePage();
-  }
-  
+  totalElements = 0;
+  totalPages = 0;
 
   tomadores: TomadorModule[] = [];
 
@@ -100,13 +62,38 @@ export class TomadoresComponent implements OnInit {
   }
 
   cargarTomadores(): void {
-    this.tomadorService.getTomadores().subscribe({
-      next: (data: TomadorModule[]) => {
-        this.tomadores = data;
-        this.changePage();
+    this.tomadorService.getTomadoresPaginados(this.currentPage, this.pageSize).subscribe({
+      next: (data) => {
+        this.tomadoresPage = data;
+        this.totalElements = data.totalElements;
+        this.totalPages = data.totalPages;
       },
-      error: (err: any) => console.error('Error cargando tomadores: ', err)
+      error: (err) => console.error('Error al consultar tomadores:', err)
     });
+  }
+
+  cambiarPagina(nuevaPagina: number): void {
+    this.currentPage = nuevaPagina;
+    this.cargarTomadores();
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages - 1) {
+      this.currentPage++;
+      this.cargarTomadores();
+    }
+  }
+
+  previousPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.cargarTomadores();
+    }
+  }
+
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.cargarTomadores();
   }
 
   ver(t: TomadorModule): void {
@@ -129,7 +116,6 @@ export class TomadoresComponent implements OnInit {
     this.formError = '';
 
     if (this.editando) {
-
       this.tomadorService.updateTomador(Number(this.tomador.ccTomador), {
         ...this.tomador,
         ccTomador: Number(this.tomador.ccTomador)
@@ -158,13 +144,12 @@ export class TomadoresComponent implements OnInit {
         });
 
     } else {
-
       const payload = {
-      ...this.tomador,
-      ccTomador: Number(this.tomador.ccTomador)
-    } as TomadorModule;
+        ...this.tomador,
+        ccTomador: Number(this.tomador.ccTomador)
+      } as TomadorModule;
 
-    this.tomadorService.crearTomador(payload)
+      this.tomadorService.crearTomador(payload)
         .subscribe({
           next: () => {
             this.cargarTomadores();
@@ -187,9 +172,7 @@ export class TomadoresComponent implements OnInit {
             });
           }
         });
-
     }
-
   }
 
   editar(t: TomadorModule): void {
@@ -203,7 +186,6 @@ export class TomadoresComponent implements OnInit {
   }
 
   eliminar(t: TomadorModule): void {
-
     Swal.fire({
       title: '¿Está seguro?',
       text: `¿Desea eliminar el tomador ${t.nombreTomador}?`,
@@ -242,7 +224,6 @@ export class TomadoresComponent implements OnInit {
   nuevoTomador(): void {
     this.showForm = true;
     this.formError = '';
-
     this.mode = 'create';
     this.seleccionarRegistro = null;
     this.editando = false;
@@ -288,10 +269,7 @@ export class TomadoresComponent implements OnInit {
 
   limpiarCaracteresInvalidos(event: Event) {
     const input = event.target as HTMLInputElement;
-    // Reemplaza cualquier carácter que no sea un número (0-9)
     input.value = input.value.replace(/[^0-9]/g, '');
   }
-
-  
 
 }

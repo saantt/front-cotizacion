@@ -49,7 +49,7 @@
 
             <div class="pagination">
                 <button class="page-btn" (click)="previousPage()" [disabled]="currentPage==0">
-                    < </button>
+                     </button>
                         <button *ngFor="let page of [].constructor(totalPages); let i=index" class="page-btn"
                             [class.active]="i===currentPage" (click)="goToPage(i)">
                             {{i+1}}
