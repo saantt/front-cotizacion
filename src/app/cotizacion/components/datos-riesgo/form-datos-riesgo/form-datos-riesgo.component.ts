@@ -1,19 +1,22 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DatosRiesgoResponse } from '../../../models/datos-riesgos/datosRiesgoResponse.model';
 import { DatosRiesgoService } from '../../../services/datos-riesgo.service';
 import { TomadorModule } from '../../../models/tomador/tomador.module';
 import { TomadorServiceService } from '../../../services/tomador-service.service';
 import { MarcaVehiculoService } from '../../../services/marca-vehiculo.service';
 import { MarcaVehiculo } from 'src/app/cotizacion/models/marca-vehiculo.model';
+
 @Component({
   selector: 'app-form-datos-riesgo',
   templateUrl: './form-datos-riesgo.component.html',
   styleUrls: ['./form-datos-riesgo.component.css']
 })
-export class FormDatosRiesgoComponent implements OnInit {
+export class FormDatosRiesgoComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() selectedDatosRiesgo: any;
+  @Input() selectedDatosRiesgo: DatosRiesgoResponse | null = null;
   @Output() cancelEdit = new EventEmitter<void>();
   @Output() formSubmit = new EventEmitter<void>();
 
@@ -21,6 +24,8 @@ export class FormDatosRiesgoComponent implements OnInit {
   tomadores: TomadorModule[] = [];
   marcasVehiculo: MarcaVehiculo[] = [];
   isEditMode: boolean = false;
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,50 +50,60 @@ export class FormDatosRiesgoComponent implements OnInit {
     this.loadMarcaVehiculo();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private setNextId(): void {
-    this.datosRiesgoService.getDatosRiesgo().subscribe({
-      next: (datosRiesgos) => {
-        const nextId = this.generateNextId(datosRiesgos);
-        this.datosRiesgoForm.get('id')?.setValue(nextId);
-      },
-      error: (error) => {
-        console.error('Error al obtener el último ID de datos de riesgo:', error);
-      }
-    });
+    this.datosRiesgoService.getDatosRiesgo()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (datosRiesgos) => {
+          const nextId = this.generateNextId(datosRiesgos);
+          this.datosRiesgoForm.get('id')?.setValue(nextId);
+        },
+        error: (error) => {
+          console.error('Error al obtener el último ID de datos de riesgo:', error);
+        }
+      });
   }
 
   private loadTomadores(): void {
-    this.tomadorService.getTomadoresPaginados().subscribe({
-      next: (response) => {
-        this.tomadores = response.content;
-      },
-      error: (error) => {
-        console.error('Error al cargar los tomadores:', error);
-      }
-    });
+    this.tomadorService.getTomadoresPaginados()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.tomadores = response.content;
+        },
+        error: (error) => {
+          console.error('Error al cargar los tomadores:', error);
+        }
+      });
   }
 
   loadMarcaVehiculo(): void {
     this.marcaService.cargarMarcasVehiculo();
-    this.marcaService.marcas$.subscribe({
-      next: (marcas) => {
-        this.marcasVehiculo = marcas;
-        console.log('Marcas de vehículo cargadas:', marcas);
-      },
-      error: (error) => {
-        console.error('Error al cargar las marcas de vehículo:', error);
-      }
-    });
+    this.marcaService.marcas$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (marcas) => {
+          this.marcasVehiculo = marcas;
+        },
+        error: (error) => {
+          console.error('Error al cargar las marcas de vehículo:', error);
+        }
+      });
   }
 
   private generateNextId(datosRiesgos: DatosRiesgoResponse[]): string {
     const currentYear = new Date().getFullYear();
     const prefix = `COT-${currentYear}-`;
+    const regex = new RegExp(`^${prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(\\d{4})$`);
     let maxSequence = 0;
 
     datosRiesgos.forEach(riesgo => {
       const id = riesgo.id || '';
-      const regex = new RegExp(`^${prefix.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}(\\d{4})$`);
       const match = id.match(regex);
       if (match) {
         const seq = Number(match[1]);
@@ -102,19 +117,15 @@ export class FormDatosRiesgoComponent implements OnInit {
     return `${prefix}${nextSequence.toString().padStart(4, '0')}`;
   }
 
-  ngOnChanges(changes: any): void {
-    if (changes.selectedDatosRiesgo && this.datosRiesgoForm) {
-
-      const value = changes.selectedDatosRiesgo.currentValue;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedDatosRiesgo'] && this.datosRiesgoForm) {
+      const value = changes['selectedDatosRiesgo'].currentValue as DatosRiesgoResponse | null;
 
       if (value) {
-
         this.datosRiesgoForm.patchValue(value);
         this.isEditMode = true;
         this.datosRiesgoForm.get('id')?.disable();
-
       } else {
-
         this.isEditMode = false;
         this.datosRiesgoForm.reset({
           id: '',
@@ -128,14 +139,11 @@ export class FormDatosRiesgoComponent implements OnInit {
         this.datosRiesgoForm.get('id')?.disable();
         this.datosRiesgoForm.updateValueAndValidity();
         this.setNextId();
-
       }
     }
   }
 
   onSubmit(): void {
-    console.log(this.datosRiesgoForm.value);
-
     if (this.isEditMode) {
       this.onUpdate();
       return;
@@ -146,24 +154,28 @@ export class FormDatosRiesgoComponent implements OnInit {
     this.datosRiesgoService.createDatosRiesgo({
       ...payload,
       fecha: new Date().toISOString(),
-    }).subscribe({
-      next: (datosRiesgo) => {
-        console.log('Datos de riesgo creados:', datosRiesgo);
-        this.formSubmit.emit();
-        this.datosRiesgoForm.reset({
-          id: '',
-          matricula: '',
-          cedula: '',
-          estadoId: 1,
-          marcaId: null,
-          modelo: '',
-          servicio: 'PARTICULAR'
-        });
-      },
-      error: (error) => {
-        console.error('Error al crear datos de riesgo:', error);
-      }
-    });
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isEditMode = false;
+          this.formSubmit.emit();
+          this.datosRiesgoForm.reset({
+            id: '',
+            matricula: '',
+            cedula: '',
+            estadoId: 1,
+            marcaId: null,
+            modelo: '',
+            servicio: 'PARTICULAR'
+          });
+          this.datosRiesgoForm.get('id')?.disable();
+          this.setNextId();
+        },
+        error: (error) => {
+          console.error('Error al crear datos de riesgo:', error);
+        }
+      });
   }
 
   getControl(controlName: string) {
@@ -176,9 +188,7 @@ export class FormDatosRiesgoComponent implements OnInit {
   }
 
   onUpdate(): void {
-    console.log(this.datosRiesgoForm.value);
-
-    const payload = this.datosRiesgoForm.getRawValue(); // Get the raw value including disabled fields
+    const payload = this.datosRiesgoForm.getRawValue();
 
     if (!payload.id) {
       console.error('No hay id para actualizar');
@@ -188,23 +198,24 @@ export class FormDatosRiesgoComponent implements OnInit {
     this.datosRiesgoService.updateDatosRiesgo(payload.id, {
       ...payload,
       fecha: new Date().toISOString(),
-    }).subscribe({
-      next: (datosRiesgo) => {
-        console.log('Datos de riesgo actualizados:', datosRiesgo);
-        this.isEditMode = false;
-        this.datosRiesgoForm.enable();
-        this.datosRiesgoForm.reset({
-          estadoId: 1,
-          servicio: 'PARTICULAR'
-        });
-        this.datosRiesgoForm.get('id')?.disable();
-        this.setNextId();
-        this.formSubmit.emit();
-      },
-      error: (error) => {
-        console.error('Error al actualizar datos de riesgo:', error);
-      }
-    });
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.isEditMode = false;
+          this.datosRiesgoForm.enable();
+          this.datosRiesgoForm.reset({
+            estadoId: 1,
+            servicio: 'PARTICULAR'
+          });
+          this.datosRiesgoForm.get('id')?.disable();
+          this.setNextId();
+          this.formSubmit.emit();
+        },
+        error: (error) => {
+          console.error('Error al actualizar datos de riesgo:', error);
+        }
+      });
   }
 
   onCancel(): void {

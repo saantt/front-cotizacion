@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ListDatosRiesgosComponent } from './list-datos-riesgo/list-datos-riesgo.component';
+import { DatosRiesgoResponse } from '../../models/datos-riesgos/datosRiesgoResponse.model';
 
 @Component({
   selector: 'app-datos-riesgo',
@@ -10,30 +11,25 @@ export class DatosRiesgoComponent implements OnInit {
 
   @ViewChild(ListDatosRiesgosComponent) listDatosRiesgosComponent!: ListDatosRiesgosComponent;
 
-  selectedDatosRiesgo: any;
-  
+  selectedDatosRiesgo: DatosRiesgoResponse | null = null;
 
   constructor() { }
 
-  ngOnInit(): void {
-    
-  }
+  ngOnInit(): void { }
 
-  onEdit(datosRiesgo: any): void {
+  onEdit(datosRiesgo: DatosRiesgoResponse): void {
     this.selectedDatosRiesgo = datosRiesgo;
   }
-  
+
   onCancelEdit(): void {
-    this.selectedDatosRiesgo = null
+    this.selectedDatosRiesgo = null;
   }
 
   onFormSubmit(): void {
     this.selectedDatosRiesgo = null;
-
     if (this.listDatosRiesgosComponent) {
       this.listDatosRiesgosComponent.cargarDatosRiesgos();
     }
-
   }
 
 }

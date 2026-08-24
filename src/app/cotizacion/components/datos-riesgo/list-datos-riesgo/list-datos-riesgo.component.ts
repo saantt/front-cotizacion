@@ -12,6 +12,7 @@ import { MarcaVehiculo } from 'src/app/cotizacion/models/marca-vehiculo.model';
 export class ListDatosRiesgosComponent implements OnInit {
 
   @Output() edit = new EventEmitter<any>();
+  @Output() newRecord = new EventEmitter<void>();
 
   showForm = false;
 
@@ -62,6 +63,10 @@ export class ListDatosRiesgosComponent implements OnInit {
 
   editDatosRiesgo(datosRiesgo: any): void {
     this.edit.emit(datosRiesgo);
+  }
+
+  nuevoRegistro(): void {
+    this.newRecord.emit();
   }
 
   getMarcaNombre(marcaId: number): string {
